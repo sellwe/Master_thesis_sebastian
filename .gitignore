@@ -1,3 +1,12 @@
+*.fasta
+*.fa
+*.fna
+*.faa
+*.log
+*jpeg
+**.html
+*fastq.gz
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
