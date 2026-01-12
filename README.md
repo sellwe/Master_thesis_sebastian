@@ -118,7 +118,7 @@ These files were imported to RStudio, where I:
 -used vst for count normalization with variance stabilization.  
 I combined the results with the structural and functional annotations and imported them to Visual Studio Code for plotting (PCA and Volcano Plot). 
 
-##Salmon-alingment based mode 
+## Salmon-alingment based mode 
 
 First had to rerun STAR to be compatible with salmon and transcript alignment files.  
 Still splice junction aware with twopassMode Basic.  
