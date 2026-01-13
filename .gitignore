@@ -3,9 +3,13 @@
 *.fna
 *.faa
 *.log
-*jpeg
+*.jpeg
 **.html
-*fastq.gz
+*.fastq.gz
+*.fastq
+*.bam
+*.sam
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
