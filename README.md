@@ -38,7 +38,7 @@ Then i ran salmon for mapping on dataset 1, using the flags:
 --qcBias  
 which corrects for GC-content during quantification,  
 --seqBias  
-which corrects for sequence specific bias where fragments starting with certain motifs might get preferential sequencing,
+which corrects for sequence specific bias where fragments starting with certain motifs might get preferential sequencing,  
 --ValidateMappings  
 which is the selective alignment mode (which is now default),  
 (**salmon_mapping_whole_genome_unfiltered.sh**). 
