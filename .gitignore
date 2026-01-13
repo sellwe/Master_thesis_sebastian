@@ -9,6 +9,13 @@
 *.fastq
 *.bam
 *.sam
+*.out
+*.err
+*.log
+*_index/
+*.gtf
+*.gff
+
 
 
 # Byte-compiled / optimized / DLL files
