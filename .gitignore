@@ -13,6 +13,8 @@
 *.err
 *.log
 *_index/
+*.gtf
+*.gff
 
 
 
