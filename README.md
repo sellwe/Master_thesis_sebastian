@@ -28,9 +28,12 @@ The reference genome comes from the paper "Y-Linked Copy Number Polymorphism of 
 
 Most scripts are titeled "_unfiltered" as they are based the non-isoform filtered annotation files, as i want to conserv that information. 
 
+### Annotation  
 I created a symbolic link to braker_proteins.aa in order to run eggNog to get functional annotation, which was combined with the structural annotation to create the "full annotation" in R (**run_eggnog.sh**).  
 
-In R, I first converted the non-isoform filtered gtf file to a gff3 file. This structural annotation file was merged with the results from eggnog as well as the results from OrthoFinder (N0.tsv file) to create a more comprehensive structural and functional annotation.
+I first converted the non-isoform filtered gtf file to a gff3 file (**run_agat_gtf_to_gff3.sh**). 
+
+In R, this structural annotation file was merged with the results from eggnog as well as the results from OrthoFinder (N0.tsv file) to create a more comprehensive structural + functional annotation (**create_full_annotation.R**).
 
 ## RNA Dataset 1
 
