@@ -2,16 +2,16 @@
 
 ## Repository Structure
 
-Master_thesis_sebastian/
-├── scripts/ # Shell scripts from UPPMAX 
-│ ├── c_mac_reference_genome/ # Reference genome, Genome annotation and preparation
-│ └── dataset_1_dominance_kaufmann/ # RNA-seq analysis pipeline
-├── analysis/ # Statistical analysis and visualization
-│ ├── r/ # R scripts 
-│ └── python/ # Python scripts for plotting and additional analysis
-├── metadata/ # Sample metadata and information
-├── .gitignore # Files to exclude from version control
-└── README.md # This file
+Master_thesis_sebastian/  
+├── scripts/ # Shell scripts from UPPMAX   
+│ ├── c_mac_reference_genome/ # Reference genome, Genome annotation and preparation  
+│ └── dataset_1_dominance_kaufmann/ # RNA-seq analysis pipeline  
+├── analysis/ # Statistical analysis and visualization  
+│ ├── r/ # R scripts   
+│ └── python/ # Python scripts for plotting and additional analysis  
+├── metadata/ # Sample metadata and information  
+├── .gitignore # Files to exclude from version control  
+└── README.md # This file  
 
 Analyses to be run:  
 Run salmon-align on Uppmax, continue with pipeline in R and python
