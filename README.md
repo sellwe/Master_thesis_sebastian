@@ -1,5 +1,10 @@
 # Master_thesis_sebastian
 
+Scripts that will be run:  
+Convert gtf to gff3  
+Run salmon-align  
+
+
 Below follows the pipeline used. 
 
 # Datasets
