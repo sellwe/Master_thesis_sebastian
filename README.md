@@ -17,7 +17,7 @@ Most scripts are titeled "_unfiltered" as they are based the non-isoform filtere
 
 I created a symbolic link to braker_proteins.aa in order to run eggNog to get functional annotation, which was combined with the structural annotation to create the "full annotation" in R (**run_eggnog.sh**).  
 
-*Data from Orthofinder will also be combined ...*
+In R, I first converted the non-isoform filtered gtf file to a gff3 file. This structural annotation file was merged with the results from eggnog as well as the results from OrthoFinder to create a more comprehensive structural and functional annotation.
 
 ## RNA Dataset 1
 
