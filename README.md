@@ -24,14 +24,28 @@ Below follows the pipeline used.
 
 ## Reference Genome and Annotaions 
 
-The reference genome comes from the paper "Y-Linked Copy Number Polymorphism of Target of Rapamycin Is Associated with Sexual Size Dimorphism in Seed Beetles" by Kaufmann et. al 2023. Male virgin C_maculatus abdominal tissue samples from the Lomé population. I am using the the small male Y haplotype assembly from the paper, as it is more continuous, and the small Y haplotype is the most abundant haplotype in the population.
-
-Most scripts are titeled "_unfiltered" as they are based the non-isoform filtered annotation files, as i want to conserv that information. 
+The reference genome comes from the paper "Y-Linked Copy Number Polymorphism of Target of Rapamycin Is Associated with Sexual Size Dimorphism in Seed Beetles" by Kaufmann et. al 2023. Male virgin C_maculatus abdominal tissue samples from the Lomé population. I am using the the small male Y haplotype assembly from the paper, as it is more continuous, and the small Y haplotype is the most abundant haplotype in the population.  
 
 ### Annotation  
-I created a symbolic link to braker_proteins.aa in order to run eggNog to get functional annotation, which was combined with the structural annotation to create the "full annotation" in R (**run_eggnog.sh**).  
+(Several scripts are titeled "_unfiltered" as they are based the non-isoform filtered annotation files, as i want to conserv that information).   
 
-I first converted the non-isoform filtered gtf file to a gff3 file (**run_agat_gtf_to_gff3.sh**). 
+Structural annotation:  
+The given non-isoform filtered annotation file braker.gtf (softlinked as C_maculatus_annotation_nonfiltered.gtf) was converted to a gff3 file using:   
+agat_convert_sp_gxf2gxf.pl \  
+    --gxf C_maculatus_annotation_nonfiltered.gtf \  
+    -o braker_unfiltered.gff3  
+
+Then, since STAR requires a gtf file to be run, this gff3 file was converted back to a .gtf file using:  
+gffread braker_unfiltered.gff3 -T -o C_maculatus_annotation_unfiltered_fixed.gtf 
+
+This creates a proper, standard .gtf file, fixes and normalizes some braker attribute formatting, skips start/stop codons and introns. For me, it made sure I had consistent transcript_id columns for each feature. 
+
+The annotation file C_maculatus_annotation_unfiltered_fixed.gtf was consistently used to create the transcriptome for Salmon and the STAR index to make sure the results are properly comparible (why some scripts are named _consistent).  
+
+After the softwares were finished the final a final gff3 file was created for merging with the functional annotation and downstream comparative genomic analyses (gff is easier to handle) (**run_agat_gtf_to_gff3.sh**). 
+
+Functional annotation:  
+I created a symbolic link to braker_proteins.aa in order to run eggNog to get functional annotation, which was combined with the structural annotation to create the "full annotation" in R (**run_eggnog.sh**).    
 
 In R, this structural annotation file was merged with the results from eggnog as well as the results from OrthoFinder (N0.tsv file) to create a more comprehensive structural + functional annotation (**create_full_annotation.R**).
 
@@ -55,12 +69,11 @@ Ran fastqc and multiqc again to confirm improvements (**run_fastqc_multiqc_post_
 
 Label corrected metadata for dataset 1 is found in **dominance_meta_corrected_outlier_corrected.xlsx** and **dominance_meta_corrected_outlier_corrected.csv**.  
 
-After PCA visualization one sample (ERR12383283) was changed from male to female due to clustering and suspected misidentification. Two samples (ERR12383297 male and ERR12383303 male) were removed due to ambiguous sexes. Three remaining samples are suspected of ambigous sex as they stray from the respective clusters, but are kept (ERR12383254 female, ERR12383278 male, ERR12383310 male). 
-
+After PCA visualization one sample (ERR12383283) was changed from male to female due to clustering and suspected misidentification. Two samples (ERR12383297 male and ERR12383303 male) were removed due to ambiguous sexes. Three remaining samples are suspected of ambigous sex as they stray from the respective clusters, but are kept (ERR12383254 female, ERR12383278 male, ERR12383310 male).  
 
 # Mapping methods
 
-Three different mapping methods are used and will be compared. Salmons mapping based mode/quasi mapping, STAR with featureCounts and the combined method of Salmons alignment based mode + STARs .bam files. For the main part of the project RNA-Seq data from dataset 1 was used. Analyses were run on the transcript level rather than gene level. 
+Three different mapping methods are used and will be compared. Salmons mapping based mode/quasi mapping/selective alignment, STAR with featureCounts and the combined method of Salmons alignment based mode + STARs .bam files. For the main part of the project RNA-Seq data from dataset 1 was used. Analyses were run on the transcript level rather than gene level. 
 
 Information about the two salmon modes are found here: https://salmon.readthedocs.io/en/latest/salmon.html#
 
@@ -68,11 +81,11 @@ Information about the two salmon modes are found here: https://salmon.readthedoc
 
 In this mode, salmon needs a transcriptome and a decoy file. 
 
-A transcriptome was created from the reference genome + the unfiltered annotation using gffread (**create_transcript_unfiltered.sh**) 
+A transcriptome was created from the reference genome + C_maculatus_annotation_unfiltered_fixed.gtf using gffread (**create_transcript_unfiltered_consistent.sh**) 
 
-I used the whole genome decoys approach (where genome sequences themselves serve as decoys for the transcripts), and generated a gentrome (all transcripts first, then the genome/decoy sequences), and a decoy .txt file (which includes the names/headers of the genome sequences) (**generate_decoys_whole_genome_unfiltered.sh**).
+I used the whole genome decoys approach (where genome sequences themselves serve as decoys for the transcripts), and generated a gentrome (all transcripts first, then the genome/decoy sequences), and a decoy .txt file (which includes the names/headers of the genome sequences) (**generate_gentrome_decoys_consistent.sh**).
 
-The salmon index was created from the gentrome and the decoy files (**salmon_index_whole_genome_unfiltered.sh**).
+The salmon index was created from the gentrome and the decoy files (**create_salmon_index_unfiltered_consistent.sh**).
 
 Then i ran salmon for mapping on dataset 1, using the flags:  
 --qcBias  
@@ -81,7 +94,7 @@ which corrects for GC-content during quantification,
 which corrects for sequence specific bias where fragments starting with certain motifs might get preferential sequencing,  
 --ValidateMappings  
 which is the selective alignment mode (which is now default),  
-(**salmon_mapping_whole_genome_unfiltered.sh**). 
+(**run_salmon_map_consistent.sh**). 
 
 The alignments were transferred to R, where I;  
 -ran txiimport on the transcript level,  
@@ -181,9 +194,15 @@ Nr alignmeds for a read, alignment index for multimappers, alignment score, nr o
 
 (**star_transcriptome_for_salmon_1.sh**, **star_transcriptome_for_salmon_2.sh**, **star_transcriptome_for_salmon_3.sh**)
 
-Im waiting for the UPPMAX node to be up and running before I can run Salmon and downstream R and python analyses. 
+Salmon was run using the transcriptome .bam files created by STAR and the same transcriptome as Salmon-map, using similar flags:  
+    --targets "$TRANSCRIPTS" \
+    --gcBias \
+    --seqBias \  
+(**run_salmon_align_star_consistent.sh**)
 
 # Mapping software comparison
+
+As the three softwares differ in their function and strategy they are difficult to compare directly. I created an R script for parsing the available information from each softwares log files and averaging across all samples and summing this in a table. I also included information that is downstream from all three DE analyses (**mapping_software_comparison.R**)
 
 ## Correlation tests  
 Average baseMean per sex per gene between the three softwares. 
