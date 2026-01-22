@@ -42,12 +42,12 @@ This creates a proper, standard .gtf file, fixes and normalizes some braker attr
 
 The annotation file C_maculatus_annotation_unfiltered_fixed.gtf was consistently used to create the transcriptome for Salmon and the STAR index to make sure the results are properly comparible (why some scripts are named _consistent).  
 
-After the softwares were finished the final a final gff3 file was created for merging with the functional annotation and downstream comparative genomic analyses (gff is easier to handle) (**run_agat_gtf_to_gff3.sh**). 
+After the softwares were finished a final gff3 file was created for merging with the functional annotation and downstream comparative genomic analyses (gff is easier to handle) (**run_agat_gtf_to_gff3.sh**). 
 
 Functional annotation:  
 I created a symbolic link to braker_proteins.aa in order to run eggNog to get functional annotation, which was combined with the structural annotation to create the "full annotation" in R (**run_eggnog.sh**).    
 
-In R, this structural annotation file was merged with the results from eggnog as well as the results from OrthoFinder (N0.tsv file) to create a more comprehensive structural + functional annotation (**create_full_annotation.R**).
+In R, this structural annotation file was merged with the results from eggnog as well as the results from OrthoFinder (N0.tsv file) to create a more comprehensive structural + functional annotation (**create_full_annotation.R**).  
 
 ## RNA Dataset 1
 
@@ -200,7 +200,25 @@ Salmon was run using the transcriptome .bam files created by STAR and the same t
     --seqBias \  
 (**run_salmon_align_star_consistent.sh**)
 
-# Mapping software comparison
+# Mapping software comparison  
+
+## PCA Plots 
+### Salmon-Map  
+![alt text](image.png)  
+### Salmon-Align  
+![alt text](image-2.png)  
+### STAR  
+![alt text](image-4.png)  
+
+## Volcano Plots  
+### Salmon-Map  
+![alt text](image-1.png)  
+### Salmon-Align  
+![alt text](image-3.png) 
+### STAR  
+![alt text](image-5.png)  
+
+## Summary table  
 
 As the three softwares differ in their function and strategy they are difficult to compare directly. I created an R script for parsing the available information from each softwares log files and averaging across all samples and summing this in a table. I also included information that is downstream from all three DE analyses (**mapping_software_comparison.R**)
 
@@ -213,7 +231,7 @@ I used the read data from ...
 ## HOG size and sex bias 
 First I looked at the mean logFoldChange (male vs female) within each Hierarchical Orthogroup (HOG) against the size of each HOG, with the hypothesis that the more paralogs each HOG have, the higher the average logFC will be. 
 
-## Paralog ancestry and 
+## Paralog ancestry 
 I will also look at the relative branch lengths within each HOG as a indicator of the age of each paralog using a mixed model.  
 
 
