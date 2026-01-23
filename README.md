@@ -202,6 +202,10 @@ Salmon was run using the transcriptome .bam files created by STAR and the same t
 
 # Mapping software comparison  
 
+As the three softwares differ in their function and strategy they are difficult to compare directly. I created an R script for parsing the available information from each softwares log files and averaging across all samples and summing this in a table (**mapping_software_comparison.R**).
+
+# Differential Expression Analysis (male vs. female)
+
 ## PCA Plots 
 ### Salmon-Map  
 ![alt text](image.png)  
@@ -218,9 +222,16 @@ Salmon was run using the transcriptome .bam files created by STAR and the same t
 ### STAR  
 ![alt text](image-5.png)  
 
-## Summary table  
+## Post-DE method comparison summary table  
 
-As the three softwares differ in their function and strategy they are difficult to compare directly. I created an R script for parsing the available information from each softwares log files and averaging across all samples and summing this in a table. I also included information that is downstream from all three DE analyses (**mapping_software_comparison.R**)
+| Method               | Total transcripts | Kept transcripts | Significant DE transcripts (padj) | Significant DE transcripts (padj + logFC) | Higher in males | Higher in females | PCA 1 variance explained (%) |
+|----------------------|------------------:|-----------------:|----------------------------------:|-------------------------------------------:|----------------:|------------------:|------------------------------:|
+| Salmon_mapping       | 36,382            | 14,164           | 11,020                            | 5,061                                      | 3,189           | 1,872             | 66.8                          |
+| Salmon_alignment     | 37,989            | 13,347           | 10,038                            | 4,484                                      | 2,736           | 1,748             | 62.1                          |
+| STAR_featureCounts   | 37,989            | 14,491           | 11,517                            | 5,227                                      | 3,399           | 1,828             | 70.6                          |
+
+
+
 
 ## Correlation tests  
 Average baseMean per sex per gene between the three softwares. 
