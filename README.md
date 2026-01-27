@@ -13,13 +13,6 @@ Master_thesis_sebastian/
 ├── .gitignore # Files to exclude from version control  
 └── README.md # This file  
 
-Analyses to be run:  
-Run salmon-align on Uppmax, continue with pipeline in R and python
-
-Orthofinder analysis in python 
-
-Below follows the pipeline used. 
-
 # Datasets
 
 ## Reference Genome and Annotaions 
@@ -59,6 +52,7 @@ Three pairwise crosses of six isogenic lines.
 Six homozygous (no signs of inbreeding depression), three heterozygote.  
 Used each isogenic line as both maternal and paternal = reciprocal crosses (4 genotypes per cross).  
 RNA seq: They sequenced 3 replicates for each of the 4 genotypes and sexes, giving 24 samples per cross and 72 samples in total.  
+Each sample consists of RNA extracted from abdominal tissues from a pool of 6 virgin beetle abdomens.   
 The data was downloaded from https://www.ncbi.nlm.nih.gov/Traces/study/?acc=PRJEB70958&o=acc_s%3Aa with the script (**download_PRJEB70968.sh**).   
 
 Run FastQC and MultiQC (**run-fastqc_multiqc.sh**).
@@ -229,8 +223,6 @@ As the three softwares differ in their function and strategy they are difficult 
 | Salmon_mapping       | 36,382            | 14,164           | 11,020                            | 5,061                                      | 3,189           | 1,872             | 66.8                          |
 | Salmon_alignment     | 37,989            | 13,347           | 10,038                            | 4,484                                      | 2,736           | 1,748             | 62.1                          |
 | STAR_featureCounts   | 37,989            | 14,491           | 11,517                            | 5,227                                      | 3,399           | 1,828             | 70.6                          |
-
-
 
 
 ## Correlation tests  
