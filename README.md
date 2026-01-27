@@ -67,17 +67,19 @@ After PCA visualization one sample (ERR12383283) was changed from male to female
 
 # Mapping methods
 
-Three different mapping methods are used and will be compared. Salmons mapping based mode/quasi mapping/selective alignment, STAR with featureCounts and the combined method of Salmons alignment based mode + STARs .bam files. For the main part of the project RNA-Seq data from dataset 1 was used. Analyses were run on the transcript level rather than gene level. 
+Three different mapping methods are used and will be compared. Salmons mapping based mode/quasi mapping/selective alignment, STAR with featureCounts, and the combined method of Salmons alignment based mode + STARs .bam files. For the main part of the project RNA-Seq data from dataset 1 was used. Analyses were run on the transcript level rather than gene level. 
 
 Information about the two salmon modes are found here: https://salmon.readthedocs.io/en/latest/salmon.html#
 
 ## Salmon-mapping based mode (Quasi-mapping) 
 
-In this mode, salmon needs a transcriptome and a decoy file. 
+This mode operates directly on the transcriptome, on the fragment level (= read pairs = one RNA-molecule). The fragments are assigned to equivalence classes which represents the set of transcripts that are compatible with the given fragment sequence.
+
+Here, Salmon needs a transcriptome and a decoy file. 
 
 A transcriptome was created from the reference genome + C_maculatus_annotation_unfiltered_fixed.gtf using gffread (**create_transcript_unfiltered_consistent.sh**) 
 
-I used the whole genome decoys approach (where genome sequences themselves serve as decoys for the transcripts), and generated a gentrome (all transcripts first, then the genome/decoy sequences), and a decoy .txt file (which includes the names/headers of the genome sequences) (**generate_gentrome_decoys_consistent.sh**).
+I used the whole genome decoys approach (where genome sequences themselves serve as decoys for the transcripts), and generated a gentrome (all transcripts first, then the genome/decoy sequences), and a decoy .txt file (which includes the names/headers of the genome sequences). If a fragment maps best to a decoy, its discarded (**generate_gentrome_decoys_consistent.sh**).
 
 The salmon index was created from the gentrome and the decoy files (**create_salmon_index_unfiltered_consistent.sh**).
 
@@ -95,18 +97,21 @@ The alignments were transferred to R, where I;
 -filtered on ≥3 mean counts per sample in each sex,  
 -DESeq2 for DE analysis based on male vs female,  
 -used vst for count normalization with variance stabilization.  
-(**salmon_map_dominance_unfiltered_WG_decoys.R**)  
+(**salmon_map_dominance_consistent_script.R**)  
 
 I combined the results with the structural and functional annotations and imported them to Visual Studio Code for plotting (PCA and Volcano Plot).  
 (**salmon_map_unfiltered_plotting_transcript.ipynb**)
 
 ## STAR (with featureCounts)
 
+STAR aligns the RNA-reads to the genome.
+
 Created a STAR index with the flags:
 
 --sjdbGTFfile,  
 --sjdbOverhang 149 (the max read length -1)  
-for making it splice junction aware. 
+for making it splice junction aware.  
+Requires a GTF annotation file. 
 
 Then aligned reads and counts using the flags:
 
@@ -117,15 +122,17 @@ performs gene-level quantification,
 --twopassMode Basic 
 can discover novel junctions not in the annotation,  
 --outFilterMultimapNmax 20  
-max # of multiple alignment locations per read. Multimapped reads are randomly assigned to one location. 
+max # of multiple alignment locations per read. 
 
 (**star_alignment_dominance.sh** (includes indexing), **star_alignment_dominance_continuation.sh**, **star_alignment_dominance_continuation_2.sh**).
 
-Picard was used to mark read ruplicates by setting a flag in the bam files based on identical start positions (can be removed later), and samtools were used to index the bam files and ease downstream analyses (**run_picard_samtools.sh**). 
+Picard was used to mark read ruplicates by setting a flag in the bam files based on identical start positions (can be removed later), and samtools were used to index the bam files and ease downstream analyses (**run_picard_samtools.sh**).  
 
-Subread featureCounts were used to summarize counts per gene/transcript. Four different modes were used:  
+Subread featureCounts was used to quantify on the exon-level based on the .bam files from STAR, including the reads that have multi-mapped. Here the multi-mapped are handled fractionally, so if a read maps to 3 exons, each gets 1/3 count. It doesn't take into account any transcript abundance or sequence uniqueness like Salmon does, which does risk inflating counts.
+
+I ran four different modes of featureCounts, but so far only used the fourth to make the closest comparison to Salmon:     
 Mode 1: Standard counting
-No multimapping, summarize counts by gene, used for differential expression analysis with the flags:  
+No multimapping, summarize counts by gene, can be used for differential expression analysis with the flags:  
 -p -B -C   
 (paired-end fragments/read pairs, both must map, does not count chimeric fragments)  
 -g "gene_id"  
@@ -133,19 +140,14 @@ No multimapping, summarize counts by gene, used for differential expression anal
 -s 2   
 (reverse stranded)  
 
-2.54 billion gene counts
-Found 35489 genes 
-
 Mode 2: gene level with multimapping. 
 Still the flags -g "gene_id" and -t "exon", but also adding the -M and --fraction flags for multimapping and fractional counting (splitting reads between the multipe targets). 
-2.67 billion gene counts (~5% are multimapped) 
 
 Mode 3: transcript level counting. 
 To compare with the dominance paper. They said "summarizing exons per transcript". Using -f flag to count on the exon level and then later sum to get transcript level, and -g for grouping by transcript_id instead. 
-1.442 billion transcript counts. 
 
-Mode 4: transcript level with multimapping 
-
+Mode 4: transcript level with multimapping  
+This is the most relevant comparison to Salmon.  
 -M \
 --fraction \
 -f \
@@ -162,7 +164,7 @@ Transcript_counts_multimappers.txt
 
 These files were imported to RStudio, where I: 
 -Aggregate to transcript level by summing exon counts,  
--loaded the multimapped transcript counts,  
+-chose to only load and use the multimapped transcript counts,  
 -filtered on ≥3 mean counts per sample in each sex,  
 -DESeq2 for DE analysis based on male vs female,  
 -used vst for count normalization with variance stabilization.  
@@ -173,11 +175,12 @@ I combined the results with the structural and functional annotations and import
 
 ## Salmon-alingment based mode 
 
-First had to rerun STAR to be compatible with salmon and transcript alignment files.  
+First had to rerun STAR to be compatible with salmon and transcript alignment files. It uses the same star_index as the original run.  The reads are aligned to the genome, but gives transcript coordinates. STAR applies the same filtering as before and discards reads that mapped to more than 20 locations. 
+
 Still splice junction aware with twopassMode Basic.  
 --quantMode TranscriptomeSAM (Outputs a BAM file aligned to transcript sequences. Salmon requires reads to be mapped to transcriptome coordinates). 
 --outSAMtype BAM SortedByCoordinate 
-(Sorted by reference coordinates. I saw conflicting ideas, but this should be compatible with Salmon)
+(Sorted by reference coordinates)
 --outSAMattributes NH HI AS nM XS GX GN
 (Tags needed for Salmon.  
 Nr alignmeds for a read, alignment index for multimappers, alignment score, nr of mismatches, strand information, Gene ID, Gene name.)  
@@ -188,6 +191,8 @@ Nr alignmeds for a read, alignment index for multimappers, alignment score, nr o
 
 (**star_transcriptome_for_salmon_1.sh**, **star_transcriptome_for_salmon_2.sh**, **star_transcriptome_for_salmon_3.sh**)
 
+Salmon looks at the provided alignments from the transcript .bam files and builds equivalence classes. It uses the same transcriptome as Salmon-map. Then the fragments are probabilistically assigned to the transcripts.  
+
 Salmon was run using the transcriptome .bam files created by STAR and the same transcriptome as Salmon-map, using similar flags:  
     --targets "$TRANSCRIPTS" \
     --gcBias \
@@ -196,9 +201,7 @@ Salmon was run using the transcriptome .bam files created by STAR and the same t
 
 # Mapping software comparison  
 
-As the three softwares differ in their function and strategy they are difficult to compare directly. I created an R script for parsing the available information from each softwares log files and averaging across all samples and summing this in a table (**mapping_software_comparison.R**).
-
-# Differential Expression Analysis (male vs. female)
+## Differential Expression Analysis (male vs. female)
 
 ## PCA Plots 
 ### Salmon-Map  
@@ -224,12 +227,72 @@ As the three softwares differ in their function and strategy they are difficult 
 | Salmon_alignment     | 37,989            | 13,347           | 10,038                            | 4,484                                      | 2,736           | 1,748             | 62.1                          |
 | STAR_featureCounts   | 37,989            | 14,491           | 11,517                            | 5,227                                      | 3,399           | 1,828             | 70.6                          |
 
+## Log-file comparisons  
+
+As the three softwares differ in their function and strategy they are difficult to compare directly. I created an R script for parsing the available information from each softwares log files and averaging across all samples and summing this in tables. (**mapping_software_comparison.R**).
+
+### Salmon-Map Log files 
+
+| method      | n_samples | avg_total_fragments | avg_reads_in_eq_classes | avg_disc_mappings_align_score | avg_disc_fragment_align_score | avg_disc_fragments_decoys_map | avg_mapping_rate | nr_of_targets | nr_of_decoys | first_decoys_index |
+|------------|-----------|---------------------|--------------------------|-------------------------------|-------------------------------|-------------------------------|------------------|---------------|--------------|--------------------|
+| Salmon Map | 70        | 43044599.23         | 15698474.34              | 24226429.46                   | 9643824.77                    | 6633014.54                    | 36.23            | 37320         | 938          | 36380              |
+
+The mapping rate is very low, 36% on average, meaning 36% of fragments survived the alignment scoring, ambiguity resolution and decoy filtering. This could possibly be due to the default score threshold is too high, or the genome being too fractured, or the reads were too ambiguous to confidently assign to an equivalence class.  
+
+Mappings discarded due to alignment score = represents individual alignments that fail the scoring threshold.  
+Fragments discarded due to alignment score = fragments that failed all their mappings.  
+Fragments discarded due to decoy matching = they mapped best to a decoy.   
+
+Out of 43M fragments, 9.6M failed due to alignment score, 6.6M failed due to mapping best to a decoys, and the surviving 15.7 million fragments were assigned to equivalence classes. These contribute to quantification by being probabilistically assigned to transcripts using the Expectation-Maximization algorithm. After DE we still have quite a lot of significant transcripts (5061). 
+
+### STAR Log files 
+
+| method | n_samples | avg_input_reads | avg_uniquely_mapped_reads | avg_multi_mapped_reads | avg_uniquely_mapped_reads_percent | avg_multi_mapped_reads_percent | avg_too_multi_mapped_reads | avg_too_multi_mapped_percent |
+|-------|-----------|-----------------|----------------------------|-------------------------|-----------------------------------|--------------------------------|----------------------------|------------------------------|
+| STAR  | 70        | 43044599.23     | 26447065.84                | 4964528.76              | 61.11                             | 11.63                          | 7722021.01                 | 18.18                        |
+
+On average, 61.1% were uniquely mapped, 18% were multi-mapped to too many loci and discarded (set to --outFilterMultimapNmax 20), and 11.6% were multi-mapped and are reported across all those alignments in the BAM files.
+
+### FeatureCounts Log files 
+
+| method        | Assigned     | Unassigned_NoFeatures | Unassigned_Ambiguity |
+|---------------|--------------|------------------------|----------------------|
+| featureCounts | 22497597.69  | 42087518.83           | 17832472.58         |
+
+We have 22.5M reads that are assigned, 42.1M reads that are aligned in the BAM but discarded as they dont overlap any annotated exon, and 17.8M reads that overlap more than one feature but cannot be completely resolved.
+
+These led to 37,989 transcripts, 14491 after the filtering and 5227 significantly differentially expressed transcripts between the sexes. The highest of the three. It also has the highest variance explained by the first PC.
+Here we have the strongest signal and the most transcripts to work with, but there might be uncertainty for the multimapped reads and they might also be inflated.  
+
+### STAR transcriptBAM Log files 
+
+| method             | n_samples | avg_input_reads | avg_uniquely_mapped_reads | avg_multi_mapped_reads | avg_uniquely_mapped_reads_percent | avg_multi_mapped_reads_percent | avg_too_multi_mapped_reads | avg_too_multi_mapped_percent |
+|--------------------|-----------|-----------------|----------------------------|-------------------------|-----------------------------------|--------------------------------|----------------------------|------------------------------|
+| STAR_transcriptBAM | 70        | 43044599.23     | 23277654.27                | 4459149.10              | 53.83                             | 10.45                          | 7606532.23                 | 17.88                        |
+
+On average 53.8% were uniquely mapped, 17.9% were multi-mapped to too many locations and discarded. These are not seen by Salmon. 10.5% were multi-mapped and passed down to Salmon.
+
+### Salmon Align
+
+| method       | n_samples | avg_total_mapped_reads | avg_uniquely_mapped_reads | avg_multi_mapped_reads | avg_unique_percent | avg_multi_percent | avg_reads_in_eq_classes |
+|--------------|-----------|------------------------|----------------------------|-------------------------|--------------------|-------------------|--------------------------|
+| Salmon Align | 70        | 11685928.01            | 10533184.06                | 1152743.96              | 89.91              | 10.09             | 11558587.47              |
+
+This method has the lowest significant DE transcript counts (4484), and is the most conservative as the reads that are too ambiguous  were already filtered out during STAR alignment and cannot be recovered and assigned by Salmon.
 
 ## Correlation tests  
 Average baseMean per sex per gene between the three softwares. 
 
 # Paralog analyses  
-I used the read data from ...  
+For raw statistical power STAR + featureCounts has the most kept and significant transcripts. However, some of this apparent power can be inflated due to the fractional assignment of the paralogous transcripts.
+
+Salmon-Align has the lowest DE counts, lowest PC1 variance and is the most conservative approach as the most ambiguous reads were already filtered out during genome alignment.
+
+Salmon-mapping considers all fragments, uses probabilistic modelling for assigning ambiguous reads, doesn't discard ambiguous reads before the probibalistic modelling and still has a relatively high DE signal despite being more conservative. The low mapping rate is still a bit concerning, but seeing as featureCounts also discards a majority of reads, this might be a genome issue? 
+
+In our case, since we are interested in paralogs downstream, i think salmon map might be the best here. Its not as conservative as salmon align. It still has a high biological signal while using probibalistic modelling and decoy filterining to handle the ambigous reads instead of just fractal counting. We might trade some statistical raw power for more confidence in the origin on the reads.
+
+Later downstream the data from STAR could be used as a comparison and see if the results are comparable. 
 
 ## HOG size and sex bias 
 First I looked at the mean logFoldChange (male vs female) within each Hierarchical Orthogroup (HOG) against the size of each HOG, with the hypothesis that the more paralogs each HOG have, the higher the average logFC will be. 
