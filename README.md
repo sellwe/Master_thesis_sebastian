@@ -81,15 +81,17 @@ A transcriptome was created from the reference genome + C_maculatus_annotation_u
 
 I used the whole genome decoys approach (where genome sequences themselves serve as decoys for the transcripts), and generated a gentrome (all transcripts first, then the genome/decoy sequences), and a decoy .txt file (which includes the names/headers of the genome sequences). If a fragment maps best to a decoy, its discarded (**generate_gentrome_decoys_consistent.sh**).
 
-The salmon index was created from the gentrome and the decoy files (**create_salmon_index_unfiltered_consistent.sh**).
+Salmon builds an index of all transcripts using k-mers, this was created from the gentrome and the decoy files (**create_salmon_index_unfiltered_consistent.sh**).
 
-Then i ran salmon for mapping on dataset 1, using the flags:  
+Using the k-mer index salmon performs quasi-mapping to see which trancript each read is compatible with. It groups the reads into equivalence classes (all reads compatible with the same set of transcripts). To resolve which transcript the reads belong to it uses its EM-algorithm. 
+
+Salmon was run using the flags:  
 --qcBias  
 which corrects for GC-content during quantification,  
 --seqBias  
 which corrects for sequence specific bias where fragments starting with certain motifs might get preferential sequencing,  
 --ValidateMappings  
-which is the selective alignment mode (which is now default),  
+which is the selective alignment mode (which is now default).
 (**run_salmon_map_consistent.sh**). 
 
 The alignments were transferred to R, where I;  
@@ -227,6 +229,9 @@ Salmon was run using the transcriptome .bam files created by STAR and the same t
 | Salmon_alignment     | 37,989            | 13,347           | 10,038                            | 4,484                                      | 2,736           | 1,748             | 62.1                          |
 | STAR_featureCounts   | 37,989            | 14,491           | 11,517                            | 5,227                                      | 3,399           | 1,828             | 70.6                          |
 
+## Correlation tests  
+To see if the mapping methods agree on male and female expression levels, i will do pairwise comparisons of average baseMean per sex per gene between the three softwares. I will include this in each methods R-script. For each method i compute the mean normalized expression in males and females. 
+
 ## Log-file comparisons  
 
 As the three softwares differ in their function and strategy they are difficult to compare directly. I created an R script for parsing the available information from each softwares log files and averaging across all samples and summing this in tables. (**mapping_software_comparison.R**).
@@ -280,10 +285,7 @@ On average 53.8% were uniquely mapped, 17.9% were multi-mapped to too many locat
 
 This method has the lowest significant DE transcript counts (4484), and is the most conservative as the reads that are too ambiguous  were already filtered out during STAR alignment and cannot be recovered and assigned by Salmon.
 
-## Correlation tests  
-Average baseMean per sex per gene between the three softwares. 
-
-# Paralog analyses  
+### Result discussion
 For raw statistical power STAR + featureCounts has the most kept and significant transcripts. However, some of this apparent power can be inflated due to the fractional assignment of the paralogous transcripts.
 
 Salmon-Align has the lowest DE counts, lowest PC1 variance and is the most conservative approach as the most ambiguous reads were already filtered out during genome alignment.
@@ -293,6 +295,9 @@ Salmon-mapping considers all fragments, uses probabilistic modelling for assigni
 In our case, since we are interested in paralogs downstream, i think salmon map might be the best here. Its not as conservative as salmon align. It still has a high biological signal while using probibalistic modelling and decoy filterining to handle the ambigous reads instead of just fractal counting. We might trade some statistical raw power for more confidence in the origin on the reads.
 
 Later downstream the data from STAR could be used as a comparison and see if the results are comparable. 
+
+
+# Paralog analyses  
 
 ## HOG size and sex bias 
 First I looked at the mean logFoldChange (male vs female) within each Hierarchical Orthogroup (HOG) against the size of each HOG, with the hypothesis that the more paralogs each HOG have, the higher the average logFC will be. 
