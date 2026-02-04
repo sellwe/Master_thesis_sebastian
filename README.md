@@ -73,7 +73,11 @@ Information about the two salmon modes are found here: https://salmon.readthedoc
 
 ## Salmon-mapping based mode (Quasi-mapping) 
 
-This mode operates directly on the transcriptome, on the fragment level (= read pairs = one RNA-molecule). The fragments are assigned to equivalence classes which represents the set of transcripts that are compatible with the given fragment sequence.
+Salmon maps directly to the transcriptome, on the fragment level (= read pairs = one RNA-molecule). The fragments are assigned to equivalence classes which represents the set of transcripts that are compatible with the given fragment sequence. It employ statistical models that tries to estimate the probability of a fragments origin. 
+
+Quasi-mapping = no full base-by-base alignment, no alignment score.
+
+Salmon builds an index of overlapping transcript k-mers. It runs a sliding window across the read (k-mer) to identify candidate transcript matches. If enough k-mers from the read hit the same transcript consistently it’s a possible match, evaluated using a lightweight fast scoring algorithm. For each read is given a list of possible transcripts. All the reads that have the same list of transcripts are put in the same equivalence class. The probabilistic algorithms are run on these equivalence classes which decreases run time substantially. 
 
 Here, Salmon needs a transcriptome and a decoy file. 
 
@@ -83,7 +87,7 @@ I used the whole genome decoys approach (where genome sequences themselves serve
 
 Salmon builds an index of all transcripts using k-mers, this was created from the gentrome and the decoy files (**create_salmon_index_unfiltered_consistent.sh**).
 
-Using the k-mer index salmon performs quasi-mapping to see which trancript each read is compatible with. It groups the reads into equivalence classes (all reads compatible with the same set of transcripts). To resolve which transcript the reads belong to it uses its EM-algorithm. 
+Using the k-mer index salmon performs quasi-mapping to see which trancript each read is compatible with. It groups the reads into equivalence classes (all reads compatible with the same set of transcripts). To resolve which transcript the reads belong to it uses its probabilistic algorithm. 
 
 Salmon was run using the flags:  
 --qcBias  
@@ -230,7 +234,18 @@ Salmon was run using the transcriptome .bam files created by STAR and the same t
 | STAR_featureCounts   | 37,989            | 14,491           | 11,517                            | 5,227                                      | 3,399           | 1,828             | 70.6                          |
 
 ## Correlation tests  
-To see if the mapping methods agree on male and female expression levels, i will do pairwise comparisons of average baseMean per sex per gene between the three softwares. I will include this in each methods R-script. For each method i compute the mean normalized expression in males and females. 
+To see if the mapping methods agree on transcript expression levels, i did pairwise comparisons of baseMean per transcript correlation plots between the three softwares in python. 
+
+### STAR vs. Salmon map
+![alt text](image-6.png)
+
+### STAR vs. Salmon align
+![alt text](image-7.png)
+
+### Salmon map vs Salmon align
+![alt text](image-8.png)
+
+Pearson, Spearman and R2 values are really high, indicating that the three methods assessed similar transcript expressions overall. Some differences are seen between STAR and the Salmon methods, but overall this is a good indicator 
 
 ## Log-file comparisons  
 
@@ -264,7 +279,7 @@ On average, 61.1% were uniquely mapped, 18% were multi-mapped to too many loci a
 |---------------|--------------|------------------------|----------------------|
 | featureCounts | 22497597.69  | 42087518.83           | 17832472.58         |
 
-We have 22.5M reads that are assigned, 42.1M reads that are aligned in the BAM but discarded as they dont overlap any annotated exon, and 17.8M reads that overlap more than one feature but cannot be completely resolved.
+We have 22.5M reads that are assigned, 42.1M reads that are aligned in the BAM but discarded as they dont overlap any annotated exon, and 17.8M reads that overlap more than one feature (multimap), and are resolved fractioanlly.
 
 These led to 37,989 transcripts, 14491 after the filtering and 5227 significantly differentially expressed transcripts between the sexes. The highest of the three. It also has the highest variance explained by the first PC.
 Here we have the strongest signal and the most transcripts to work with, but there might be uncertainty for the multimapped reads and they might also be inflated.  
@@ -295,7 +310,6 @@ Salmon-mapping considers all fragments, uses probabilistic modelling for assigni
 In our case, since we are interested in paralogs downstream, i think salmon map might be the best here. Its not as conservative as salmon align. It still has a high biological signal while using probibalistic modelling and decoy filterining to handle the ambigous reads instead of just fractal counting. We might trade some statistical raw power for more confidence in the origin on the reads.
 
 Later downstream the data from STAR could be used as a comparison and see if the results are comparable. 
-
 
 # Paralog analyses  
 
