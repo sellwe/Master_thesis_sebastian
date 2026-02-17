@@ -100,13 +100,13 @@ which is the selective alignment mode (which is now default).
 
 The alignments were transferred to R, where I;  
 -ran txiimport on the transcript level,  
--filtered on ≥3 mean counts per sample in each sex,  
+-filtered on ≥5 counts in at least 5 samples (Earlier for all methods i used ≥3 mean counts per sample in each sex, but as this removes genes that are only expressed in one sex i changed that. This is why the ipynb files are named _new_filtering)   
 -DESeq2 for DE analysis based on male vs female,  
 -used vst for count normalization with variance stabilization.  
 (**salmon_map_dominance_consistent_script.R**)  
 
 I combined the results with the structural and functional annotations and imported them to Visual Studio Code for plotting (PCA and Volcano Plot).  
-(**salmon_map_unfiltered_plotting_transcript.ipynb**)
+(**salmon_map_unfiltered_plotting_transcript_new_filtering.ipynb**)
 
 ## STAR (with featureCounts)
 
@@ -171,13 +171,13 @@ Transcript_counts_multimappers.txt
 These files were imported to RStudio, where I: 
 -Aggregate to transcript level by summing exon counts,  
 -chose to only load and use the multimapped transcript counts,  
--filtered on ≥3 mean counts per sample in each sex,  
+-filtered on ≥5 counts in at least 5 samples (Earlier for all methods i used ≥3 mean counts per sample in each sex, but as this removes genes that are only expressed in one sex i changed that. This is why the ipynb files are named _new_filtering),   
 -DESeq2 for DE analysis based on male vs female,  
 -used vst for count normalization with variance stabilization.  
 (**star_DE_analysis.R**)  
 
 I combined the results with the structural and functional annotations and imported them to Visual Studio Code for plotting (PCA and Volcano Plot).  
-(**STAR_plotting.ipynb**)
+(**STAR_plotting_new_filtering.ipynb**)
 
 ## Salmon-alingment based mode 
 
@@ -205,45 +205,55 @@ Salmon was run using the transcriptome .bam files created by STAR and the same t
     --seqBias \  
 (**run_salmon_align_star_consistent.sh**)
 
+The alignments were transferred to R, where I;  
+-ran txiimport on the transcript level,  
+-filtered on ≥5 counts in at least 5 samples (Earlier for all methods i used ≥3 mean counts per sample in each sex, but as this removes genes that are only expressed in one sex i changed that. This is why the ipynb files are named _new_filtering)   
+-DESeq2 for DE analysis based on male vs female,  
+-used vst for count normalization with variance stabilization.  
+(**salmon_align_dominance_consistent_script.R**)  
+
+I combined the results with the structural and functional annotations and imported them to Visual Studio Code for plotting (PCA and Volcano Plot).  
+(**salmon_align_plotting_new_filtering.ipynb**)
+
 # Mapping software comparison  
 
 ## Differential Expression Analysis (male vs. female)
 
 ## PCA Plots 
 ### Salmon-Map  
-![alt text](image.png)  
+![alt text](image-9.png)  
 ### Salmon-Align  
-![alt text](image-2.png)  
+![alt text](image-10.png)  
 ### STAR  
-![alt text](image-4.png)  
+![alt text](image-11.png)  
 
 ## Volcano Plots  
 ### Salmon-Map  
-![alt text](image-1.png)  
+![alt text](image-12.png)  
 ### Salmon-Align  
-![alt text](image-3.png) 
+![alt text](image-13.png)  
 ### STAR  
-![alt text](image-5.png)  
+![alt text](image-14.png)  
 
 ## Post-DE method comparison summary table  
 
-| Method               | Total transcripts | Kept transcripts | Significant DE transcripts (padj) | Significant DE transcripts (padj + logFC) | Higher in males | Higher in females | PCA 1 variance explained (%) |
-|----------------------|------------------:|-----------------:|----------------------------------:|-------------------------------------------:|----------------:|------------------:|------------------------------:|
-| Salmon_mapping       | 36,382            | 14,164           | 11,020                            | 5,061                                      | 3,189           | 1,872             | 66.8                          |
-| Salmon_alignment     | 37,989            | 13,347           | 10,038                            | 4,484                                      | 2,736           | 1,748             | 62.1                          |
-| STAR_featureCounts   | 37,989            | 14,491           | 11,517                            | 5,227                                      | 3,399           | 1,828             | 70.6                          |
+| Method              | Total Transcripts | Transcripts Retained | Significant DE (padj < 0.05) | Significant DE (padj < 0.05 & |log2FC| > 1) | Higher in Males | Higher in Females | PCA1 Variance Explained (%) |
+|---------------------|------------------|------------------|---------------|------------------------|-----------------|-------------------|-----------------------------|
+| Salmon_mapping      | 36,382           | 17,574           | 13,172        | 7,134                  | 4,931           | 2,203             | 65.5                        |
+| STAR_featureCounts  | 37,989           | 17,566           | 13,392        | 6,977                  | 4,804           | 2,173             | 70.7                        |
+| Salmon_alignment    | 37,989           | 16,563           | 11,937        | 6,309                  | 4,184           | 2,125             | 64.7                        |
 
 ## Correlation tests  
 To see if the mapping methods agree on transcript expression levels, i did pairwise comparisons of baseMean per transcript correlation plots between the three softwares in python. 
 
 ### STAR vs. Salmon map
-![alt text](image-6.png)
+![alt text](image-15.png)  
 
 ### STAR vs. Salmon align
-![alt text](image-7.png)
+![alt text](image-16.png)  
 
 ### Salmon map vs Salmon align
-![alt text](image-8.png)
+![alt text](image-17.png)  
 
 Pearson, Spearman and R2 values are really high, indicating that the three methods assessed similar transcript expressions overall. Some differences are seen between STAR and the Salmon methods, but overall this is a good indicator 
 
