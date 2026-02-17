@@ -237,11 +237,12 @@ I combined the results with the structural and functional annotations and import
 
 ## Post-DE method comparison summary table  
 
-| Method              | Total Transcripts | Transcripts Retained | Significant DE (padj < 0.05) | Significant DE (padj < 0.05 & |log2FC| > 1) | Higher in Males | Higher in Females | PCA1 Variance Explained (%) |
-|---------------------|------------------|------------------|---------------|------------------------|-----------------|-------------------|-----------------------------|
-| Salmon_mapping      | 36,382           | 17,574           | 13,172        | 7,134                  | 4,931           | 2,203             | 65.5                        |
-| STAR_featureCounts  | 37,989           | 17,566           | 13,392        | 6,977                  | 4,804           | 2,173             | 70.7                        |
-| Salmon_alignment    | 37,989           | 16,563           | 11,937        | 6,309                  | 4,184           | 2,125             | 64.7                        |
+| Method              | Total Transcripts | Transcripts Retained | Significant DE (padj < 0.05) | Significant DE (padj < 0.05 & abs(log2FC) > 1) | Higher in Males | Higher in Females | PCA1 Variance Explained (%) |
+|---------------------|------------------|----------------------|------------------------------|------------------------------------------------|-----------------|-------------------|-----------------------------|
+| Salmon_mapping      | 36,382           | 17,574               | 13,172                       | 7,134                                          | 4,931           | 2,203             | 65.5                        |
+| STAR_featureCounts  | 37,989           | 17,566               | 13,392                       | 6,977                                          | 4,804           | 2,173             | 70.7                        |
+| Salmon_alignment    | 37,989           | 16,563               | 11,937                       | 6,309                                          | 4,184           | 2,125             | 64.7                        |
+
 
 ## Correlation tests  
 To see if the mapping methods agree on transcript expression levels, i did pairwise comparisons of baseMean per transcript correlation plots between the three softwares in python. 
