@@ -61,9 +61,17 @@ Ran fastqc and multiqc again to confirm improvements (**run_fastqc_multiqc_post_
 
 ### Metadata
 
-Label corrected metadata for dataset 1 is found in **dominance_meta_corrected_outlier_corrected.xlsx** and **dominance_meta_corrected_outlier_corrected.csv**.  
+Label corrected metadata for dataset 1 is found in **dominance_meta_corrected_outlier_corrected.xlsx** and **dominance_meta_corrected_outlier_corrected.csv** (where the outliers are removed).   
+To determine the sexes of the samples, i looked at the original fasta names submitted to SRA (ex. TF-2581-3_S3_L001_R1_001.fastq.gz) and linked these to the TF ID in the original excel file, which has the correct sexes in the Sex column.  
 
-After PCA visualization one sample (ERR12383283) was changed from male to female due to clustering and suspected misidentification. Two samples (ERR12383297 male and ERR12383303 male) were removed due to ambiguous sexes. Three remaining samples are suspected of ambigous sex as they stray from the respective clusters, but are kept (ERR12383254 female, ERR12383278 male, ERR12383310 male).  
+To determine the correct genotypes of the samples I looked at the Cross column in the excel and translated it as follows:  
+Reciprocal pairwise cross 1: 13:20 x 42:13, which I will call A x B. For samples 1-24, resulting in AA, AB, BA and BB.  
+Reciprocal pairwise cross 2: 21:5 x 1:11, which I will call C x D. For samples 25-48, resulting in CC, CD, DC, and DD.  
+Reciprocal pairwise cross 3: 47:1 x 4:18, which I will call E x F. For samples 49-72, resulting in EE, EF, FE and FF.  
+
+I cant be entirely sure, but these genotype terms and pairwise cross distinction is the best i can think of to replicate what was used in the study. Even if the naming conventions would be different, the groupings of samples should stay the same for downstream analysis. As genotypes in this study is only relevant as background noice to be taken account for, i think this will suffice. 
+
+After PCA visualization one sample (ERR12383283) was changed from male to female due to clustering and suspected misidentification. Two samples (ERR12383297 male and ERR12383303 male) were removed due to ambiguous sexes. Three remaining samples are suspected of ambigous sex as they stray from the respective clusters, but are kept (ERR12383254 female, ERR12383278 male, ERR12383310 male). In total 70 samples, of whom 37 are female and 33 are male. 
 
 # Mapping methods
 
