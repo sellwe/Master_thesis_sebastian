@@ -64,10 +64,18 @@ Ran fastqc and multiqc again to confirm improvements (**run_fastqc_multiqc_post_
 Label corrected metadata for dataset 1 is found in **dominance_meta_corrected_outlier_corrected.xlsx** and **dominance_meta_corrected_outlier_corrected.csv** (where the outliers are removed).   
 To determine the sexes of the samples, i looked at the original fasta names submitted to SRA (ex. TF-2581-3_S3_L001_R1_001.fastq.gz) and linked these to the TF ID in the original excel file, which has the correct sexes in the Sex column.  
 
-To determine the correct genotypes of the samples I looked at the Cross column in the excel and translated it as follows:  
-Reciprocal pairwise cross 1: 13:20 x 42:13, which I will call A x B. For samples 1-24, resulting in AA, AB, BA and BB.  
-Reciprocal pairwise cross 2: 21:5 x 1:11, which I will call C x D. For samples 25-48, resulting in CC, CD, DC, and DD.  
-Reciprocal pairwise cross 3: 47:1 x 4:18, which I will call E x F. For samples 49-72, resulting in EE, EF, FE and FF.  
+To determine the correct genotypes of the samples I looked at the Cross column in the excel, and the pdf and translated it as follows:  
+13:20 = A   
+42:13 = B   
+21:5 = C   
+1:11 = D  
+47:1 = E  
+4:18 = F  
+
+Which leads to:  
+Reciprocal pairwise cross 1: 13:20 x 42:13, or A x B. For samples 1-24 (page 1 in pdf), resulting in AA, AB, BA and BB.  
+Reciprocal pairwise cross 2: 21:5 x 1:11, or C x D. For samples 25-48 (page 2 in pdf), resulting in CC, CD, DC, and DD.  
+Reciprocal pairwise cross 3: 47:1 x 4:18, or E x F. For samples 49-72 (page 3 in pdf), resulting in EE, EF, FE and FF.  
 
 I cant be entirely sure, but these genotype terms and pairwise cross distinction is the best i can think of to replicate what was used in the study. Even if the naming conventions would be different, the groupings of samples should stay the same for downstream analysis. As genotypes in this study is only relevant as background noice to be taken account for, i think this will suffice. 
 
