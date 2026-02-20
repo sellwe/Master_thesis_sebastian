@@ -61,10 +61,14 @@ Ran fastqc and multiqc again to confirm improvements (**run_fastqc_multiqc_post_
 
 ### Metadata
 
-Label corrected metadata for dataset 1 is found in **dominance_meta_corrected_outlier_corrected.xlsx** and **dominance_meta_corrected_outlier_corrected.csv** (where the outliers are removed).   
-To determine the sexes of the samples, i looked at the original fasta names submitted to SRA (ex. TF-2581-3_S3_L001_R1_001.fastq.gz) and linked these to the TF ID in the original excel file, which has the correct sexes in the Sex column.  
+The metadata was found from the same SRA website with accesion-nr PREJB70958.  
+The original metadata from the study is found in **Philipp_dominance_metafile.xlsx** and **Philipp_dominance_notes_meta.pdf**.   
 
-To determine the correct genotypes of the samples I looked at the Cross column in the excel, and the pdf and translated it as follows:  
+Label corrected metadata used here for dataset 1 is found in **dominance_meta_corrected.xlxs** (all 72 entries), and in **dominance_meta_corrected_outlier_corrected.xlsx** and **dominance_meta_corrected_outlier_corrected.csv** (where the outliers are removed).   
+
+To determine the sexes of the samples, i looked at the original fasta names submitted to SRA for each sample (ex. TF-2581-3_S3_L001_R1_001.fastq.gz) and linked these to the TF ID in the original excel file, which has the correct sexes in the Sex column.  
+
+To determine the correct genotypes of the samples I looked at the Cross column in the excel file, and the pdf and translated it as follows:  
 13:20 = A   
 42:13 = B   
 21:5 = C   
@@ -77,9 +81,14 @@ Reciprocal pairwise cross 1: 13:20 x 42:13, or A x B. For samples 1-24 (page 1 i
 Reciprocal pairwise cross 2: 21:5 x 1:11, or C x D. For samples 25-48 (page 2 in pdf), resulting in CC, CD, DC, and DD.  
 Reciprocal pairwise cross 3: 47:1 x 4:18, or E x F. For samples 49-72 (page 3 in pdf), resulting in EE, EF, FE and FF.  
 
+I created an additional column Genotype where i collapsed the reciprocal crosses into Heterozygote (i.e AB + BA = AB), as the reciprocal didnt impact the results of the original study. The genotypes will be accounted for in the differential expression analysis and in the mixed models. 
+
 I cant be entirely sure, but these genotype terms and pairwise cross distinction is the best i can think of to replicate what was used in the study. Even if the naming conventions would be different, the groupings of samples should stay the same for downstream analysis. As genotypes in this study is only relevant as background noice to be taken account for, i think this will suffice. 
 
-After PCA visualization one sample (ERR12383283) was changed from male to female due to clustering and suspected misidentification. Two samples (ERR12383297 male and ERR12383303 male) were removed due to ambiguous sexes. Three remaining samples are suspected of ambigous sex as they stray from the respective clusters, but are kept (ERR12383254 female, ERR12383278 male, ERR12383310 male). In total 70 samples, of whom 37 are female and 33 are male. 
+After PCA visualization one sample (ERR12383283 (DD)) was changed from male to female due to clustering and suspected misidentification. Two samples were removed due to ambiguous sexes:   
+ERR12383297 (male, FE),  
+ERR12383303 (male, EF),  
+Three remaining samples are suspected of ambigous sex as they stray from the respective clusters in the PCA, but are kept (ERR12383254 (female, BA), ERR12383278 (male, AA), ERR12383310 (male, FF)). In total 70 samples, of whom 37 are female, and 33 are male. 
 
 # Mapping methods
 
@@ -117,7 +126,7 @@ which is the selective alignment mode (which is now default).
 The alignments were transferred to R, where I;  
 -ran txiimport on the transcript level,  
 -filtered on ≥5 counts in at least 5 samples (Earlier for all methods i used ≥3 mean counts per sample in each sex, but as this removes genes that are only expressed in one sex i changed that. This is why the ipynb files are named _new_filtering)   
--DESeq2 for DE analysis based on male vs female,  
+-DESeq2 for DE analysis based on male vs female, controlled for the underlying genotypes (~ Genotype + Sex),   
 -used vst for count normalization with variance stabilization.  
 (**salmon_map_dominance_consistent_script.R**)  
 
@@ -188,7 +197,7 @@ These files were imported to RStudio, where I:
 -Aggregate to transcript level by summing exon counts,  
 -chose to only load and use the multimapped transcript counts,  
 -filtered on ≥5 counts in at least 5 samples (Earlier for all methods i used ≥3 mean counts per sample in each sex, but as this removes genes that are only expressed in one sex i changed that. This is why the ipynb files are named _new_filtering),   
--DESeq2 for DE analysis based on male vs female,  
+-DESeq2 for DE analysis based on male vs female, controlled for the underlying genotypes (~ Genotype + Sex),  
 -used vst for count normalization with variance stabilization.  
 (**star_DE_analysis.R**)  
 
@@ -224,7 +233,7 @@ Salmon was run using the transcriptome .bam files created by STAR and the same t
 The alignments were transferred to R, where I;  
 -ran txiimport on the transcript level,  
 -filtered on ≥5 counts in at least 5 samples (Earlier for all methods i used ≥3 mean counts per sample in each sex, but as this removes genes that are only expressed in one sex i changed that. This is why the ipynb files are named _new_filtering)   
--DESeq2 for DE analysis based on male vs female,  
+-DESeq2 for DE analysis based on male vs female, controlled for the underlying genotypes (~ Genotype + Sex),  
 -used vst for count normalization with variance stabilization.  
 (**salmon_align_dominance_consistent_script.R**)  
 
@@ -237,19 +246,19 @@ I combined the results with the structural and functional annotations and import
 
 ## PCA Plots 
 ### Salmon-Map  
-![alt text](image-9.png)  
+![alt text](image-18.png)  
 ### Salmon-Align  
-![alt text](image-10.png)  
+![alt text](image-19.png)  
 ### STAR  
-![alt text](image-11.png)  
+![alt text](image-20.png)  
 
 ## Volcano Plots  
 ### Salmon-Map  
-![alt text](image-12.png)  
+![alt text](image-21.png)  
 ### Salmon-Align  
-![alt text](image-13.png)  
+![alt text](image-22.png)  
 ### STAR  
-![alt text](image-14.png)  
+![alt text](image-23.png)  
 
 ## Post-DE method comparison summary table  
 
@@ -264,13 +273,13 @@ I combined the results with the structural and functional annotations and import
 To see if the mapping methods agree on transcript expression levels, i did pairwise comparisons of baseMean per transcript correlation plots between the three softwares in python. 
 
 ### STAR vs. Salmon map
-![alt text](image-15.png)  
+![alt text](image-24.png)  
 
 ### STAR vs. Salmon align
-![alt text](image-16.png)  
+![alt text](image-25.png)  
 
 ### Salmon map vs Salmon align
-![alt text](image-17.png)  
+![alt text](image-26.png)  
 
 Pearson, Spearman and R2 values are really high, indicating that the three methods assessed similar transcript expressions overall. Some differences are seen between STAR and the Salmon methods, but overall this is a good indicator 
 
