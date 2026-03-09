@@ -336,7 +336,7 @@ On average 53.8% were uniquely mapped, 17.9% were multi-mapped to too many locat
 
 This method has the lowest significant DE transcript counts (4484), and is the most conservative as the reads that are too ambiguous  were already filtered out during STAR alignment and cannot be recovered and assigned by Salmon.
 
-### Result discussion
+### Mapping software result discussion
 For raw statistical power STAR + featureCounts has the most kept and significant transcripts. However, some of this apparent power can be inflated due to the fractional assignment of the paralogous transcripts.
 
 Salmon-Align has the lowest DE counts, lowest PC1 variance and is the most conservative approach as the most ambiguous reads were already filtered out during genome alignment.
@@ -348,10 +348,60 @@ In our case, since we are interested in paralogs downstream, i think salmon map
 Later downstream the data from STAR could be used as a comparison and see if the results are comparable. 
 
 # Paralog analyses  
-As we are only looking at genes/transcripts in C.mac for these analyses, using Hierarchical Orthologous Groups (HOGs) will be synonomous with gene family. 
+I used preexisting data from Orthofinder that include 14 beetle species + Drosophyla melanogaster as an outgroup. This assigns each gene to an Orthogroup (OG) and a Hierarchical Orthogroup (HOG). OG groups all genes across all species that descend from a single gene in the root of the tree.  
+HOGs provide more context by breaking down OG at each node of the species tree, creating subfamilies within the same OG. A single OG might split into several HOGs depending on when speciation events occurred.  
 
-## HOG size and sex bias 
-First I looked at the mean logFoldChange (male vs female) within each Hierarchical Orthogroup (HOG) against the size of each HOG, with the hypothesis that the more paralogs each HOG have, the higher the average logFC will be. 
+As we are only looking at genes/transcripts in C.mac for these analyses, using Hierarchical Orthologous Groups (HOGs) will be synonomous with gene family, as each HOG represents all transcripts in C_mac that share a common ancestor at a given node in the tree.  
+
+## HOG size and sex bias (**HOG_size_sex_bias.ipynb**)
+First I wanted to investigate if the larger the gene family, the more sex baised paralogs it will have, as having more copies would lead me to suspect that there are more opportunities for sex-specific neofunctionalization to occur. 
+
+### lFC within gene families vs. gene family size. 
+First I looked at the transcript logFoldChange (male vs female) within each Hierarchical Orthogroup (HOG) against the size of each HOG.  
+![alt text](image-11.png)  
+
+This indicate however that the strength of sex-bias decreases the larger the gene family size is. Does indicate that male bias is more common than female bias.  
+However, a majority of the transcripts belong to smaller gene family sizes:  
+![alt text](image-12.png)  
+
+### Bias direction among biased transcripts  
+To investigare further; within each gene family, which proportion is male biased at each gene family size? Due to the difference in sample sizes I added wilson confidence intervals (preferred over standard CI as proportions reaches 0 at some points).  
+![alt text](image-9.png)   
+Out of the transcripts that are sex-biased, more are male-biased. 
+
+What is the proportion of male biased, female biased and unbiased transcripts at each gene family size?  
+![alt text](image-10.png)
+
+A general trend can be observed with most transcripts being unbiased, followed by male-biased and female-biased. 
+
+### Variance vs. gene family size  
+Variance for all transcripts that belong to a gene family of a certain size.  
+![alt text](image-14.png)  
+Expression differene decreases as the family size increases. But for HOG sizes larger than 15 we have very small sample sizes so variance is noisy and unreliable as small sample size makes variance unstable.
+
+### Variance within each gene family 
+If we instead look at each gene family individually:  
+![alt text](image-13.png)  
+Size 1 filtered out. This plot again shows a trend that the direction of expression in the larger gene families are more "in agreement" in direction than the smaller sizes. The outlier in red is N0.HOG0000055. 
+
+### Within gene family directional bias  
+Next I categorized the gene families based on the expression direction of the transcripts they contain. These being all unbiased, all male-biased, all female-biased and the combinations of the three:  
+![alt text](image-15.png)  
+
+We can visualize this further with the categories and the gene family sizes they include:  
+![alt text](image-16.png)  
+The largest families are found in the two sex biased + unbiased categories. 
+
+### Gene family size category proportions  
+
+![alt text](image-17.png)
+
+### Size comparison pre and post filtering (5 copies in 5 samples)
+
+![alt text](image-30.png)  
+
+log10 transformed:  
+![alt text](image-29.png)
 
 ## Paralog ancestry 
 I will also look at the relative branch lengths within each HOG as a indicator of the age of each paralog using mixed models.  
@@ -375,7 +425,7 @@ I assigned each transcript its most recent duplication as we want the latest poi
 
 ![alt text](image-28.png)
 
-I then merged this annotation with the mapping results from Salmon-map (**salmon_map_dominance_consistent_script.R**). Image below is the age ranks/duplications of the transcripts that are expressed (salmon managed to map these to the gentrome), before any type of filtering:  
+I then merged this annotation with the mapping results from Salmon-map (**salmon_map_dominance_consistent_script.R**) and added some plots. Image below is the age ranks/duplications of the transcripts that are expressed (salmon managed to map these to the gentrome), before any type of filtering:  
 
 ![alt text](image-2.png)
 
@@ -387,55 +437,22 @@ Out of the ones that have a age rank (4319, 59.4% of the 7270 total).
 The common thread in all of these plots is that the majority of duplication events originate in C.mac, consistent with the high number of predicted genes in the species, and the repetetive nature of the genome.  
 
 I then looked at the gene family transcript age diversity: 
-  # A tibble: 6 × 2
-  n_age     n
-  <int> <int>
-1     1  5416
-2     2   722
-3     3   162
-4     4    44
-5     5    13
-6     6     3
-
-Most gene families only have transcripts of the same age, but there are still many candidates of geme families with differently aged paralogs.  
-
-If we look at the top 20 gene families with the most different ages in them:  
-# A tibble: 20 × 4
-   HOG           n_transcripts n_ages has_mixed_ages
-   <chr>                 <int>  <int> <lgl>         
- 1 N0.HOG0000010           115      6 TRUE          
- 2 N0.HOG0000255            92      1 FALSE         
- 3 N0.HOG0000312            86      1 FALSE         
- 4 N0.HOG0000481            62      1 FALSE         
- 5 N0.HOG0000094            61      5 TRUE          
- 6 N0.HOG0000007            59      4 TRUE          
- 7 N0.HOG0000284            57      3 TRUE          
- 8 N0.HOG0000008            54      5 TRUE          
- 9 N0.HOG0000055            53      6 TRUE          
-10 N0.HOG0000597            53      1 FALSE         
-11 N0.HOG0000058            52      4 TRUE          
-12 N0.HOG0000009            51      4 TRUE          
-13 N0.HOG0000030            50      3 TRUE          
-14 N0.HOG0000060            47      4 TRUE          
-15 N0.HOG0000078            46      5 TRUE          
-16 N0.HOG0000025            46      4 TRUE          
-17 N0.HOG0000501            46      3 TRUE          
-18 N0.HOG0000205            46      2 TRUE          
-19 N0.HOG0000263            42      4 TRUE          
-20 N0.HOG0000526            42      3 TRUE  
 
 Age rank diversity in the full annotation file:  
 ![alt text](image-6.png)  
-
-The most diverse gene families in the full annotation:  
-![alt text](image-7.png)  
 
 Significantlly DE transcripts gene family age diversity. 
 
 ![alt text](image-4.png)  
 
+Most gene families only have transcripts of the same age, but there are still many candidates of geme families with differently aged paralogs.  
+
+Top 20 most age rank diverse gene families. The age range might indicate an continously expanding gene family, with duplication events occuring throughout time rather in short rapid bursts (max age rank - min age rank +1). 
+
+The most diverse gene families in the full annotation:  
+![alt text](image-7.png)  
+
 The most diverse gene families with significantlly DE transcripts:
 
 ![alt text](image-8.png)
 
-The age range might indicate an continously expanding gene family, with duplication events occuring throughout time rather in short rapid bursts. 
