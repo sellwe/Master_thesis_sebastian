@@ -40,7 +40,7 @@ After the softwares were finished a final gff3 file was created for merging with
 Functional annotation:  
 I created a symbolic link to braker_proteins.aa in order to run eggNog to get functional annotation, which was combined with the structural annotation to create the "full annotation" in R (**run_eggnog.sh**).    
 
-In R, this structural annotation file was merged with the results from eggnog as well as the results from OrthoFinder (N0.tsv file) to create a more comprehensive structural + functional annotation (**create_full_annotation.R**).  
+In R, this structural annotation file was merged with the results from eggnog as well as the results from OrthoFinder (N0.tsv file) to create a more comprehensive structural + functional annotation (**create_full_annotation.R**) I later added the age rank of each HOG as well into this annotation, see Paralog ancestry below.  
 
 ## RNA Dataset 1
 
@@ -264,9 +264,9 @@ I combined the results with the structural and functional annotations and import
 
 | Method              | Total Transcripts | Transcripts Retained | Significant DE (padj < 0.05) | Significant DE (padj < 0.05 & abs(log2FC) > 1) | Higher in Males | Higher in Females | PCA1 Variance Explained (%) |
 |---------------------|------------------|----------------------|------------------------------|------------------------------------------------|-----------------|-------------------|-----------------------------|
-| Salmon_mapping      | 36,382           | 17,574               | 13,172                       | 7,134                                          | 4,931           | 2,203             | 65.5                        |
-| STAR_featureCounts  | 37,989           | 17,566               | 13,392                       | 6,977                                          | 4,804           | 2,173             | 70.7                        |
-| Salmon_alignment    | 37,989           | 16,563               | 11,937                       | 6,309                                          | 4,184           | 2,125             | 64.7                        |
+| Salmon_mapping      | 36,382           | 17,574               | 13,923                       | 7,270                                          | 5,070           | 2,200             | 65.4                        |
+| STAR_featureCounts  | 37,989           | 17,566               | 14,101                       | 6,964                                          | 4,843           | 2,121             | 69.1                        |
+| Salmon_alignment    | 37,989           | 16,563               | 12,645                       | 6,382                                          | 4,277           | 2,105             | 66.0                        |
 
 
 ## Correlation tests  
@@ -348,12 +348,94 @@ In our case, since we are interested in paralogs downstream, i think salmon map
 Later downstream the data from STAR could be used as a comparison and see if the results are comparable. 
 
 # Paralog analyses  
+As we are only looking at genes/transcripts in C.mac for these analyses, using Hierarchical Orthologous Groups (HOGs) will be synonomous with gene family. 
 
 ## HOG size and sex bias 
 First I looked at the mean logFoldChange (male vs female) within each Hierarchical Orthogroup (HOG) against the size of each HOG, with the hypothesis that the more paralogs each HOG have, the higher the average logFC will be. 
 
 ## Paralog ancestry 
-I will also look at the relative branch lengths within each HOG as a indicator of the age of each paralog using a mixed model.  
+I will also look at the relative branch lengths within each HOG as a indicator of the age of each paralog using mixed models.  
+I downloaded SpeciesTree_rooted.txt, SpeciesTree_rooted_node_labels.txt, Duplications.tsv and SpeciesTree_Gene_Duplications_0.5_Support.txt from the OrthoFinder output.  
 
+By uploading this file into Phylo.io I could visually inspect the phylogeny, see screenshot below:  
 
+![alt text](image-27.png)
 
+In order to add the age rank i updated the script (**create_full_annotation.R**). I loaded SpeciesTree_rooted_node_labels.txt in order to create a node age tree with the depths of the nodes to the roots and the branch lengths of the nodes that lead to C_maculatus in the phylogeny (N0, N1, N2, N5, N8, N10, N12, N13 and the tip node C_maculatus_proteinfaste_TE_filtered) and i ranked the nodes from oldest (N0 = 1) to youngest (C_maculatus_proteinfaste_TE_filtered = 9) in decending order, based on the node's depth from the root.  
+
+Then i load Duplications.tsv to get information about when duplication events occured, and which genes resulted from each duplicaiton, and i filtered for only C_mac transcripts and duplications that occured on the branches leading to C_Mac in the phylogeny. I then merged this with the table containing the age ranks. I created a transcript_id column to later join with the rest of the annotations. 
+
+For all duplication events:  
+
+![alt text](image-1.png)
+
+But this counts every single duplication event, so one transcript can appear many times (nested in the family tree history). 
+
+I assigned each transcript its most recent duplication as we want the latest point where the copy became independant. 
+
+![alt text](image-28.png)
+
+I then merged this annotation with the mapping results from Salmon-map (**salmon_map_dominance_consistent_script.R**). Image below is the age ranks/duplications of the transcripts that are expressed (salmon managed to map these to the gentrome), before any type of filtering:  
+
+![alt text](image-2.png)
+
+The same plot but after the expression filtering (5 copies in 5 samples) and post-DE significance filtering (padj < 0.05, |LFC| > 1):  
+
+![alt text](image-3.png)  
+Out of the ones that have a age rank (4319, 59.4% of the 7270 total).  
+
+The common thread in all of these plots is that the majority of duplication events originate in C.mac, consistent with the high number of predicted genes in the species, and the repetetive nature of the genome.  
+
+I then looked at the gene family transcript age diversity: 
+  # A tibble: 6 × 2
+  n_age     n
+  <int> <int>
+1     1  5416
+2     2   722
+3     3   162
+4     4    44
+5     5    13
+6     6     3
+
+Most gene families only have transcripts of the same age, but there are still many candidates of geme families with differently aged paralogs.  
+
+If we look at the top 20 gene families with the most different ages in them:  
+# A tibble: 20 × 4
+   HOG           n_transcripts n_ages has_mixed_ages
+   <chr>                 <int>  <int> <lgl>         
+ 1 N0.HOG0000010           115      6 TRUE          
+ 2 N0.HOG0000255            92      1 FALSE         
+ 3 N0.HOG0000312            86      1 FALSE         
+ 4 N0.HOG0000481            62      1 FALSE         
+ 5 N0.HOG0000094            61      5 TRUE          
+ 6 N0.HOG0000007            59      4 TRUE          
+ 7 N0.HOG0000284            57      3 TRUE          
+ 8 N0.HOG0000008            54      5 TRUE          
+ 9 N0.HOG0000055            53      6 TRUE          
+10 N0.HOG0000597            53      1 FALSE         
+11 N0.HOG0000058            52      4 TRUE          
+12 N0.HOG0000009            51      4 TRUE          
+13 N0.HOG0000030            50      3 TRUE          
+14 N0.HOG0000060            47      4 TRUE          
+15 N0.HOG0000078            46      5 TRUE          
+16 N0.HOG0000025            46      4 TRUE          
+17 N0.HOG0000501            46      3 TRUE          
+18 N0.HOG0000205            46      2 TRUE          
+19 N0.HOG0000263            42      4 TRUE          
+20 N0.HOG0000526            42      3 TRUE  
+
+Age rank diversity in the full annotation file:  
+![alt text](image-6.png)  
+
+The most diverse gene families in the full annotation:  
+![alt text](image-7.png)  
+
+Significantlly DE transcripts gene family age diversity. 
+
+![alt text](image-4.png)  
+
+The most diverse gene families with significantlly DE transcripts:
+
+![alt text](image-8.png)
+
+The age range might indicate an continously expanding gene family, with duplication events occuring throughout time rather in short rapid bursts. 
