@@ -353,6 +353,8 @@ HOGs provide more context by breaking down OG at each node of the species tree, 
 
 As we are only looking at genes/transcripts in C.mac for these analyses, using Hierarchical Orthologous Groups (HOGs) will be synonomous with gene family, as each HOG represents all transcripts in C_mac that share a common ancestor at a given node in the tree.  
 
+In the OrthoFinder analysis, the proteome was isoform filtered to retain only the canonical isoform per gene. Consequently, in my following analyses based on this data on things like HOG and age rank annotations, i will only have one transcript per gene represented. And no isoform-level random effets are necessary in the mixed models. 
+
 ## HOG size and sex bias (**HOG_size_sex_bias.ipynb**)
 First I wanted to investigate if the larger the gene family, the more sex baised paralogs it will have, as having more copies would lead me to suspect that there are more opportunities for sex-specific neofunctionalization to occur. 
 
@@ -402,6 +404,11 @@ The largest families are found in the two sex biased + unbiased categories.
 
 log10 transformed:  
 ![alt text](image-29.png)
+
+### Transcript expression differences
+
+Comparing transcripts pre and post filtering (5 copies in 5 samples) within each size category:  
+![alt text](image-31.png)  
 
 ## Paralog ancestry 
 I will also look at the relative branch lengths within each HOG as a indicator of the age of each paralog using mixed models.  
@@ -456,3 +463,130 @@ The most diverse gene families with significantlly DE transcripts:
 
 ![alt text](image-8.png)
 
+# Mixed model analyses 
+
+I will use lme4 on the post-DESEq2 data as a two-stage approach.  
+My other option was dream and limma voom on the raw counts, but this would redo the DE analysis from scratch and ...
+
+Mixed models have fixed and random effects. Fixed effects are variable levels we wish to estimate and interpret. Some used here are:  
+age_rank - continous scale 1-9.  
+Sex - categorical M/F.  
+log2FC - response variable from the DESEq2 results.  
+
+Random effects are variables we want to control for but not interpret. Some here are:  
+(1 | HOG) - A random intercept which account for the clustering of transcripts within the same gene family.  Here each gene family has its own baseline log2FC, bu tthe relationship between age_rank and logFC is assumed to be the same.  
+(1 + age_rank | HOG) - random slope which allows the effect of age_rank to vary between gene families. Each gene family has its own baseline and its own age_rank slope. 
+
+The outputs from lmer are:  
+Estimate - effect size  
+Std. Error - uncertainty around the estimate  
+t value - estimate / std.error, larger abolute value = stronger signal  
+Pr (>|t|) - p-value, how different from 0, significance. 
+
+## Model 1 - does age predict the direction of sex bias?  
+logFC ~ age_rank + (1 | HOG)  
+To test wether older/younger duplicates tend to be more male or female biased. Random intecept assumes the effect is constant across gene families.  
+log2FC is the response variable. Postivive = male, negative = female.  
+1 | HOG is the random intercept. This accounts for the fact that transcripts in the same gene family are not independent as they share evolutionary history. This leaves only age_rank random effect to be estimated.  
+I use REML (Restricted Maximum Likelihood) = TRUE to estimate variance in the mixed models. It gives unbiased estimates of the random effect variance compared to regular maximum likelihood. 
+I did three versions of this model:  
+
+### Model 1a:  logFC ~ age_rank_scaled + (1 | HOG):  
+Age rank scaled: Uses continous linear age rank 1 to 9 and is scaled to mean=0 and SD=1. One unit is 1 SD increase towards younger duplicates. This answers; how much does log2FC change for each 1 increase in SD in age_rank. This assumes equal spacing between ranks, which is not technically true. The SD of age in the dataset is 2.3, meaning that a 1 SD increase is moving 2.3 age rank units towards younger ages. A positive estimate = younger duplicates are more male biased (log2FC M vs. F)
+
+**Fixed effects:**   
+| Term | Estimate | Std. Error | t value | p-value | Sig. |
+|------|----------|------------|---------|---------|------|
+| Intercept (mean age rank) | 0.784 | 0.033 | 23.56 | <2e-16 | *** |
+| age_rank_scaled | +0.146 | 0.026 | 5.60 | 2.27e-08 | *** |
+
+Younger duplicates significantly more male-biased (p=2.27e-08).    
+Each 1 SD increase in age rank (towards youger copies) increases log2FC by 0.146 units. 
+
+**Random effects:**   
+| Group | Variance | Std. Dev. |
+|-------|----------|-----------|
+| HOG (Intercept) | 3.97 | 1.99 |
+| Residual | 2.20 | 1.48 |
+
+HOG variance > residual variance. Gene family membership explains more variation than within-family differences 
+
+**Fixed effects for the filtered dataset (HOG ≥ 5 transcripts)**
+
+| Term | Estimate | Std. Error | t value | p-value | Sig. |
+|------|----------|------------|---------|---------|------|
+| Intercept | 1.016 | 0.115 | 8.88 | <2e-16 | *** |
+| age_rank_scaled | +0.133 | 0.063 | 2.10 | 0.036 | * |
+
+The positive age_rank_scaled estimates mean younger duplicates are more male-biased. Here, for every 1 SD increase in age_rank moving towards younger age, logFC increases by ~0.146 units. Very significant in the full dataset, less, but still significant in the size-filtered dataset. The intercept of 0.78 means the average transcript at the mean age rank is already slightly male-biased. 
+
+### Model 1b:  
+Age rank as a factor: Treats each rank as a separate category. Shows how each rank differs from the oldest rank/baseline. Captures non-linearity but as we estimate 8 coefficients here (one per rank), rather than one for the entire dataset (slope), we loose 7 degrees of freedom.  
+
+**Fixed Effects (Full dataset, n=9785)**
+
+| Age rank | Node | Estimate vs rank 1 | Absolute logFC | Std. Error | t value | p-value | Sig. |
+|----------|------|-------------------|----------------|------------|---------|---------|------|
+| 1 (baseline) | N0 | 0 (ref) | 0.697 | 0.134 | 5.22 | 1.87e-07 | *** |
+| 2 | N1 | -0.279 | 0.418 | 0.149 | -1.88 | 0.061 | . |
+| 3 | N2 | -0.219 | 0.478 | 0.162 | -1.35 | 0.177 | |
+| 4 | N5 | +0.261 | 0.958 | 0.221 | 1.18 | 0.238 | |
+| 5 | N8 | +0.302 | 0.999 | 0.153 | 1.98 | 0.048 | * |
+| 6 | N10 | +0.478 | 1.175 | 0.196 | 2.43 | 0.015 | * |
+| 7 | N12 | -0.064 | 0.633 | 0.158 | -0.40 | 0.686 | |
+| 8 | N13 | -0.441 | 0.256 | 0.235 | -1.87 | 0.061 | . |
+| 9 | C_mac | +0.208 | 0.905 | 0.141 | 1.47 | 0.140 | |
+
+The absolute predicted log2FC is Intercept + Estimate. Rank 1 baseline logFC is 0.697. All age ranks are male biased. Ranks 2 and 3 are slightly more female-biased than rank 1 but not significant. Ranks 5 and 6 are significantly more male-biased than rank 1. There is not a clean linear trend, the intermediate ages shows the strongest male-bias ages.  
+
+![alt text](image-32.png)
+
+The filtered dataset shows no significant individual ranks. 
+
+**Random Effects**
+
+| Group | Variance | Std. Dev. |
+|-------|----------|-----------|
+| HOG (Intercept) | 3.95 | 1.99 |
+| Residual | 2.19 | 1.48 |
+
+### Model 1c:  
+Node depth scaled: uses the actual branch lengths from the species tree instead of ranks. Should show the real evolutionary distance better. Scaled to mean=0 and SD=1. 
+
+**Fixed effects**  
+
+| Dataset | Term | Estimate | Std. Error | t value | p-value | Sig. |
+|---------|------|----------|------------|---------|---------|------|
+| Full (n=9785) | Intercept | 0.784 | 0.033 | 23.54 | <2e-16 | *** |
+| Full | node_depth_scaled | +0.143 | 0.026 | 5.50 | 3.9e-08 | *** |
+| Filtered (n=1883) | Intercept | 0.980 | 0.116 | 8.46 | 1.34e-15 | *** |
+| Filtered | node_depth_scaled | +0.221 | 0.077 | 2.88 | 0.004 | ** |
+
+
+Very similar to model 1a. Deeper nodes are not male biased. Adding the real branch lengths doest add meaningful information. 
+
+
+### Model 1 AICcomparison  
+| Model | Parameterisation | df | AIC (full) | AIC (filtered) |
+|-------|-----------------|-----|------------|----------------|
+| 1a | Continuous rank | 4 | 42514 | 7692 |
+| **1b** | **Factor (9 levels)** | **11** | **42491** | **7682** |
+| 1c | Node depth | 4 | 42516 | 7688 |
+
+
+The IAC difference between model 1b against 1a and 1c is around 24 on the full dataset and larger than the usual threshold of 4. The non-linear descrete factor model is a lot better. 
+
+Model 1b performs the best due to its non-linearity in capturing the intermediate age male bias. As model 1a and 1c give almost identical estimates and p-values suggest that the rank ordering captures the evolutionary distances well enough, so adding the true branch lengths provide no meaningful information.   
+
+Overall, younger duplicate gene copies are more male biased p<0.001. The random effects of gene family absorbs variance larger than the residual variance in the full datasets, confirming that the gene family membership is an important source of variation that we need to control for. 
+
+## Model 2 - does age predict magnitude of sex bias, and does it differ by sex?  
+
+abs(logFC) ~ Sex * age_rank + (1 + age_rank | HOG)  
+
+abs(logFC) = magniture in either direction  
+Sex * age_rank = interaction to test if the age-bias relationship differs between male and female biased genes.   
+1 + age_rank | HOG = random slope. Lets each gene family have its own age trajectory.  
+This will depend more on the sizes of the gene families. 
+
+For the random slope model i use a filtered model dataset where gene families below the size of 5 is filtered out. This is because a line has to be able to be fitted within each gene family between transcripts of different ages. The filtered datset is 1883 transcripts and 248 gene families. 
