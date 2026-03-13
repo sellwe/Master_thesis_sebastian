@@ -635,16 +635,17 @@ expression.
 However, after accounting for estimation precision via inverse-variance weighting, there is no significant relationship between evolutionary age and direction of sex bias in the dataset of 9,785 transcripts (Model 1a weighted: p=0.349; 
 Model 1c weighted: p=0.637), and model 1b performing the worst when weighted.  The discrepancy between weighted and unweighted results shows the value of accounting for logFC estimation precision in two-stage mixed models on RNA-seq data.
 
-## Model 2 - does age predict magnitude of sex bias, and does it differ by sex?  
-**Model formula:** `abs(logFC) ~ Sex * age_rank + (1 + age_rank | HOG)`
-**Response variable:** abs(logFC) = magniture in either direction (male or female)   
-**Random effect:** `(1 + age_rank | HOG)` - 
-**Weighting:** 
+## Model 2a - does age predict magnitude of sex bias, and does it differ by sex?    
+**Model formula:** `abs(logFC) ~ age_rank_scaled + (1 | HOG)`  
+**Response variable:** abs(logFC) = magniture in either direction (male or female)     
+**Random effect:** `(1 | HOG)` - normal intercept first  
+**Weighting:**  I will once again try both weighted and unweighted  
 
+## Model 2b - 
+**Model formula:** `abs(logFC) ~ age_rank_scaled + (1 + age_rank | HOG)`  
+**Response variable:** abs(logFC) = magniture in either direction (male or female)  
+**Random effect:** `(1 + age_rank | HOG)` - random slope within each gene family.   
+**Filter:** For the random slope model i use a filtered model dataset where gene families below the size of 5 is filtered out. This is because a line has to be able to be fitted within each gene family between several transcripts. The filtered datset is 1883 transcripts and 248 gene families. 
 
-Sex * age_rank = interaction to test if the age-bias relationship differs between male and female biased genes.   
-1 + age_rank | HOG = random slope. Lets each gene family have its own age trajectory.  
-This will depend more on the sizes of the gene families. 
-
-For the random slope model i use a filtered model dataset where gene families below the size of 5 is filtered out. This is because a line has to be able to be fitted within each gene family between several transcripts. The filtered datset is 1883 transcripts and 248 gene families. 
-
+## Model 3 -   
+**Model formula:** `abs(logFC) ~ sex_bias * age_rank_scaled + (1 | HOG)`  
