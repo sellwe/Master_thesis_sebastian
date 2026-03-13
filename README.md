@@ -396,9 +396,13 @@ The largest families are found in the two sex biased + unbiased categories.
 
 ### Gene family size category proportions  
 
-![alt text](image-17.png)
 
-### Size comparison pre and post filtering (5 copies in 5 samples)
+![alt text](image-17.png)  
+
+### Size comparison pre and post filtering (5 copies in 5 samples) 
+
+Data from prefiltered/unexpressed transcripts. These are post-tximport in R, so they are transcrtipts that were still mapped by Salmon. The raw orthofinder data includes even more transcripts, but these have no mapping evidence.  
+Here the gene family sizes are defined from the big unexpressed dataset. 
 
 ![alt text](image-30.png)  
 
@@ -408,7 +412,9 @@ log10 transformed:
 ### Transcript expression differences
 
 Comparing transcripts pre and post filtering (5 copies in 5 samples) within each size category:  
-![alt text](image-31.png)  
+![alt text](image-35.png)  
+
+Here we can see that some transcripts in the larger gene families are expressed, whereas others are not. In our expressed dataset the size of the gene families that the transcripts belong to much smaller 
 
 ## Paralog ancestry 
 I will also look at the relative branch lengths within each HOG as a indicator of the age of each paralog using mixed models.  
@@ -469,7 +475,7 @@ I will use lme4 on the post-DESEq2 data as a two-stage approach.
 My other option was dream and limma voom on the raw counts, but this would redo the DE analysis. 
 
 Mixed models have fixed and random effects. Fixed effects are variable levels we wish to estimate and interpret. Some used here are:  
-age_rank - continous scale 1-9.  
+age_rank - continous scale 1-9 (older to younger).  
 Sex - categorical M/F.  
 log2FC - response variable from the DESEq2 results.  
 
@@ -483,7 +489,7 @@ Std. Error - uncertainty around the estimate
 t value - estimate / std.error, larger abolute value = stronger signal  
 Pr (>|t|) - p-value, how different from 0, significance. 
 
-Here, DESEq2 first identifies which transcripts are sex-biased while controlling for the underlying genotypes, and lme4 then asks whether evolutionary age predict the pattern and magnitude of that sex bias across transcripts, with the gene families as a random effect to account for the non-independence of transcripts within the same gene family. A limitation here is that lme4 treats all log2FC estimates equally certain regardless of expression level. To account for this I use log2FC estimation precision with inverse-variance weighting 1/lfcSE². 
+Here, DESEq2 first identifies which transcripts are sex-biased while controlling for the underlying genotypes, and lme4 then asks whether evolutionary age predict the pattern and magnitude of that sex bias across transcripts, with the gene families as a random effect to account for the non-independence of transcripts within the same gene family. A limitation here is that lme4 treats all log2FC estimates equally certain regardless of expression level. To account for this I use log2FC estimation precision with inverse-variance weighting 1/lfcSE², which makes it so that transcripts with precise logFC estimates (low lfcSE) will contribute more to the model.
 
 ## Model 1 - does age predict the direction of sex bias?  
 **Model formula:** `log2FoldChange ~ age_rank + (1 | HOG)`  
@@ -507,7 +513,7 @@ I use REML (Restricted Maximum Likelihood) = TRUE to estimate variance in the mi
 I did three versions of this model:  
 
 ### Model 1a:  `logFC ~ age_rank_scaled + (1 | HOG)`  
-Age rank scaled: Uses continous linear age rank 1 to 9 and is scaled to mean=0 and SD=1. One unit is 1 SD increase towards younger duplicates. This answers; how much does log2FC change for each 1 increase in SD in age_rank. This assumes equal spacing between ranks, which is not technically true. The SD of age in the dataset is 2.9, meaning that a 1 SD increase is moving 2.9 age rank units towards younger ages. A positive estimate = younger duplicates are more male biased (log2FC M vs. F). The SD of node_depth_from_root is 0.187, used for interpreting model 1c on an equivalent scale. 
+Age rank scaled: Uses continous linear age rank 1 to 9 (9 being youngest/C.mac) and is scaled to mean=0 and SD=1. One unit is 1 SD increase towards younger duplicates. This answers; how much does log2FC change for each 1 increase in SD in age_rank. This assumes equal spacing between ranks, which is not technically true. The SD of age in the dataset is 2.9, meaning that a 1 SD increase is moving 2.9 age rank units towards younger ages. A positive estimate = younger duplicates are more male biased (log2FC M vs. F). The SD of node_depth_from_root is 0.187, used for interpreting model 1c on an equivalent scale. 
 
 ### Fixed Effects
 
@@ -516,14 +522,14 @@ Age rank scaled: Uses continous linear age rank 1 to 9 and is scaled to mean=0 a
 | Unweighted | +0.784 | <2e-16 *** | +0.146 | 0.026 | 5.60 | 2.27e-08 | *** |
 | Weighted | +0.207 | <2e-16 *** | +0.014 | 0.015 | 0.94 | 0.349 | |
 
+The unweighted model shows a highly significant positive trend (p=2.27e-08), meaning younger duplicates appear more male-biased. Each 1 SD increase in age rank (towards youger copies) increases log2FC by 0.146 units.  But the signal disappears entirely in the weighted model (p=0.349), indicating it was driven by transcripts with imprecise log2FC estimates (large lfcSE).
+
 ### Random Effects
 
 | Weighting | HOG Variance | Residual Variance |
 |-----------|-------------|-------------------|
 | Unweighted | 3.973 | 2.202 |
 | Weighted | 0.784 | 61.916 |
-
-The unweighted model shows a highly significant positive trend (p=2.27e-08), meaning younger duplicates appear more male-biased. Each 1 SD increase in age rank (towards youger copies) increases log2FC by 0.146 units.  But the signal disappears entirely in the weighted model (p=0.349), indicating it was driven by transcripts with imprecise log2FC estimates (large lfcSE).
 
 In the unweighted model, HOG variance (3.97) > Residual variance (2.20), confirming gene family membership is an important source of variation and validating the random effect. In weighted models, the residual variance is inflated because weights rescale the error term. I believe this is expected and should not be a problem.
 
@@ -559,6 +565,13 @@ Captures non-linearity but as we estimate 8 coefficients here (one per rank), ra
 | 8 | N13 | -0.185 | +0.140 | 0.122 | -1.52 | 0.130 | |
 | 9 | C_mac | -0.086 | +0.240 | 0.070 | -1.23 | 0.220 | |
 
+Both models agree that at each rank the absolute logFC is more male-biased.  
+But when it comes to significance the unweighted and weighted models give opposite results.  
+Unweighted: ranks 5 (N8) and 6 (N10) are significantly more male-biased than rank 1, suggesting younger or intermediate age duplicates are more male-biased.  
+Weighted: ranks 2 (N1), 3 (N2), 4 (N5), and 7 (N12) are significantly less male-biased than rank 1, suggesting the oldest duplicates (rank 1/N0) are the most male-biased. This opposition indicates the unweighted result was due to imprecise estimates of log2FC.
+
+![alt text](image-33.png)
+
 ### Random Effects 
 
 | Weighting | HOG Variance | Residual Variance |
@@ -566,17 +579,13 @@ Captures non-linearity but as we estimate 8 coefficients here (one per rank), ra
 | Unweighted | 3.954 | 2.192 |
 | Weighted | 0.790 | 61.531 |
 
-The unweighted and weighted models give opposite results.  
-Unweighted: ranks 5 (N8) and 6 (N10) are significantly more male-biased than rank 1, suggesting younger or intermediate age duplicates are more male-biased.  
-Weighted: ranks 2 (N1), 3 (N2), 4 (N5), and 7 (N12) are significantly less male-biased than rank 1, suggesting the oldest duplicates (rank 1/N0) are the most male-biased. This opposition indicates the unweighted result was due to imprecise estimates of log2FC.
-
-![alt text](image-33.png)
-
 In the unweighted model, HOG variance (3.97) > Residual variance (2.20), confirming gene family membership is an important source of variation and validating the random effect.  
 In the weighted model, the residual variance is inflated because weights rescale the error term. This is expected and should not be a problem.
 
 ### Model 1c: `logFC ~ node_depth_scaled + (1 | HOG)`
-Node depth scaled: uses the actual cumulative branch lengths from the species tree instead of ranks. Should show the real evolutionary distance better. Scaled to mean=0 and SD=1. The SD of node_depth_from_root is 0.187, meaning 1 SD corresponds to ~0.187 units of cumulative branch length. Deeper nodes = further from root = younger duplicates. A positive estimate = younger duplicates are more male-biased.
+Node depth scaled: uses the actual cumulative branch lengths from the species tree instead of ranks. Should show the real evolutionary distance better. Scaled to mean=0 and SD=1. The SD of node_depth_from_root is 0.187, meaning 1 SD corresponds to ~0.187 units of cumulative branch length. 
+
+Larger values of node depth are further from the root = younger duplicates. A positive estimate = younger duplicates are more male-biased. 
 
 ### Fixed Effects
 
@@ -585,6 +594,8 @@ Node depth scaled: uses the actual cumulative branch lengths from the species tr
 | Unweighted | +0.784 | <2e-16 *** | +0.143 | 0.026 | 5.50 | 3.9e-08 | *** |
 | Weighted | +0.204 | <2e-16 *** | +0.007 | 0.014 | 0.47 | 0.637 | |
 
+Similar to Model 1a, the pattern is significant in the unweighted model (p=3.9e-08) but once again collapses when weighted (p=0.637).
+
 ### Random Effects — Model 1c
 
 | Weighting | HOG Variance | Residual Variance |
@@ -592,11 +603,11 @@ Node depth scaled: uses the actual cumulative branch lengths from the species tr
 | Unweighted | 3.975 | 2.202 |
 | Weighted | 0.783 | 61.968 |
 
-Model 1c is the most consistent across weighting schemes in the filtered dataset, significant in both unweighted (p=0.004) and weighted (p=0.002) filtered models, with real branch lengths providing a stronger signal than provided rank ordering. However, the pattern once again collapses when weighted (p=0.637), consistent with 1a.
-
 ### AIC Comparison — Which age parameterisation fits best?
 
-AIC is only comparable within the same dataset and weighting scheme. ΔAIC > 4 is considered meaningful.
+Akakike Information Criterion (AIC) uses the fomrula `AIC = 2k - 2ln(L)`. 2ln(L) scores models that perform better and 2k penalises models for each parameter added. Lower AIC is better, and ΔAIC > 4 is considered meaningful.
+
+AIC is only comparable within the same weighting scheme, and only measures how good each model is relative to the others. 
 
 ### Unweighted
 
@@ -606,6 +617,8 @@ AIC is only comparable within the same dataset and weighting scheme. ΔAIC > 4 i
 | **1b** | **Factor (9 levels)** | **11** | **42491** |
 | 1c | Node depth | 4 | 42516 |
 
+Unweighted: model 1b (factor) wins (ΔAIC ~24). The non-linear pattern across discrete age ranks is real and not captured by a simple slope.  
+
 ### Weighted
 
 | Model | Parameterisation | df | AIC | 
@@ -614,23 +627,24 @@ AIC is only comparable within the same dataset and weighting scheme. ΔAIC > 4 i
 | 1b | Factor (9 levels) | 11 | 39151 |
 | 1c | Node depth | 4 | 39146 |
 
-Unweighted: model 1b (factor) wins (ΔAIC ~24). The non-linear pattern across discrete age ranks is real and not captured by a simple slope.  
+Weighted: Models 1a and 1c are basically tied (ΔAIC = 1), with 1b performing worst (ΔAIC ~6 vs 1a). The shift from 1b winning unweighted to 1b performing the worst weighted indicates that the non-linearity in 1b was partly an artefact of imprecise estimates. When this is accounted for the linear models perform better than the complex factor one. 
 
-Weighted: Models 1a and 1c are essentially tied (ΔAIC = 1), with 1b performing worst (ΔAIC ~6 vs 1a). The shift from 1b winning unweighted to 1b performing the worst weighted indicates that the non-linearity in 1b was partly an artefact of imprecise estimates. When this is accounted for the linear models perform better than the complex factor one. 
-
-**Conclusion:** After accounting for estimation precision via inverse-variance weighting, there is no significant relationship between evolutionary age and direction of sex bias in the dataset of 9,785 transcripts (Model 1a weighted: p=0.349; 
-Model 1c weighted: p=0.637).  The discrepancy between weighted and unweighted results highlights the importance of accounting for logFC estimation precision in two-stage mixed models on RNA-seq data.
-
-Expressed transcripts belonging to gene families show a consistent positive baseline logFC (male-biased expression) across all evolutionary ages. After accounting for logFC estimation precision via inverse-variance weighting, the oldest duplicate copies (rank 1, node N0) show the strongest male bias, with progressively younger duplicates trending toward weaker sex-differential 
+**Conclusion:** Expressed transcripts belonging to gene families show a consistent positive baseline logFC (male-biased expression) across all evolutionary ages. After accounting for logFC estimation precision via inverse-variance weighting, the oldest duplicate copies (rank 1, node N0) show the strongest male bias, with progressively younger duplicates trending toward weaker sex-differential 
 expression.
 
+However, after accounting for estimation precision via inverse-variance weighting, there is no significant relationship between evolutionary age and direction of sex bias in the dataset of 9,785 transcripts (Model 1a weighted: p=0.349; 
+Model 1c weighted: p=0.637), and model 1b performing the worst when weighted.  The discrepancy between weighted and unweighted results shows the value of accounting for logFC estimation precision in two-stage mixed models on RNA-seq data.
+
 ## Model 2 - does age predict magnitude of sex bias, and does it differ by sex?  
+**Model formula:** `abs(logFC) ~ Sex * age_rank + (1 + age_rank | HOG)`
+**Response variable:** abs(logFC) = magniture in either direction (male or female)   
+**Random effect:** `(1 + age_rank | HOG)` - 
+**Weighting:** 
 
-abs(logFC) ~ Sex * age_rank + (1 + age_rank | HOG)  
 
-abs(logFC) = magniture in either direction  
 Sex * age_rank = interaction to test if the age-bias relationship differs between male and female biased genes.   
 1 + age_rank | HOG = random slope. Lets each gene family have its own age trajectory.  
 This will depend more on the sizes of the gene families. 
 
-For the random slope model i use a filtered model dataset where gene families below the size of 5 is filtered out. This is because a line has to be able to be fitted within each gene family between transcripts of different ages. The filtered datset is 1883 transcripts and 248 gene families. 
+For the random slope model i use a filtered model dataset where gene families below the size of 5 is filtered out. This is because a line has to be able to be fitted within each gene family between several transcripts. The filtered datset is 1883 transcripts and 248 gene families. 
+
