@@ -396,7 +396,6 @@ The largest families are found in the two sex biased + unbiased categories.
 
 ### Gene family size category proportions  
 
-
 ![alt text](image-17.png)  
 
 ### Size comparison pre and post filtering (5 copies in 5 samples) 
@@ -424,50 +423,91 @@ By uploading this file into Phylo.io I could visually inspect the phylogeny, see
 
 ![alt text](image-27.png)
 
-In order to add the age rank i updated the script (**create_full_annotation.R**). I loaded SpeciesTree_rooted_node_labels.txt in order to create a node age tree with the depths of the nodes to the roots and the branch lengths of the nodes that lead to C_maculatus in the phylogeny (N0, N1, N2, N5, N8, N10, N12, N13 and the tip node C_maculatus_proteinfaste_TE_filtered) and i ranked the nodes from oldest (N0 = 1) to youngest (C_maculatus_proteinfaste_TE_filtered = 9) in decending order, based on the node's depth from the root.  
+In order to add the age rank i updated the script (**create_full_annotation.R**).   
+I loaded SpeciesTree_rooted_node_labels.txt in order to create a node age tree with the depths of the nodes to the roots and the branch lengths of the nodes that lead to C_maculatus in the phylogeny (N0, N1, N2, N5, N8, N10, N12, N13 and the tip node C_maculatus_proteinfaste_TE_filtered) and i ranked the nodes from oldest (N0 = 1) to youngest (C_maculatus_proteinfaste_TE_filtered = 9) in decending order, based on the node's depth from the root.  
 
-Then i load Duplications.tsv to get information about when duplication events occured, and which genes resulted from each duplicaiton, and i filtered for only C_mac transcripts and duplications that occured on the branches leading to C_Mac in the phylogeny. I then merged this with the table containing the age ranks. I created a transcript_id column to later join with the rest of the annotations. 
-
-For all duplication events:  
-
-![alt text](image-1.png)
+Then i load Duplications.tsv to get information about when duplication events occured, and which genes resulted from each duplicaiton, and i filtered for only C_mac transcripts and duplications that occured on the branches leading to C_Mac in the phylogeny. 
+I merged this with the age_rank table and exported this as dup_long which contains all the duplication events in the C_mac lineage.  
 
 But this counts every single duplication event, so one transcript can appear many times (nested in the family tree history). 
 
-I assigned each transcript its most recent duplication as we want the latest point where the copy became independant. 
+I therefore assigned each transcript its most recent duplication as we want the latest point where the copy became independant, into dup_most_recent. I created a transcript_id column and joined this with the rest of the full_annotation. 
 
-![alt text](image-28.png)
+I imported dup_long.csv and full_annotation_with_age.csv into VSCode for plotting: 
 
-I then merged this annotation with the mapping results from Salmon-map (**salmon_map_dominance_consistent_script.R**) and added some plots. Image below is the age ranks/duplications of the transcripts that are expressed (salmon managed to map these to the gentrome), before any type of filtering:  
+Age diversity of all duplication events:  
 
-![alt text](image-2.png)
+![alt text](image-36.png)
 
-The same plot but after the expression filtering (5 copies in 5 samples) and post-DE significance filtering (padj < 0.05, |LFC| > 1):  
+I did a combined plot with 4 dataset levels:  
 
-![alt text](image-3.png)  
-Out of the ones that have a age rank (4319, 59.4% of the 7270 total).  
+1. Full annotation: All of the C-mac transcripts most recent copy.  
+
+2. Prefilter transcripts: I then merged the annotation with the mapping results from Salmon-map (**salmon_map_dominance_consistent_script.R**).  
+This was done after tximport but before the expression filter, exporting a new file "prefilter_transcripts_annotated.csv". Here we get the age_rank information about all of the transcripts mapped by Salmon.  
+
+3. DE results: Post-DE-analysis. Includes all expressed transcripts (5 counts in 5 samples).  
+
+4. Only the significnatly DE transcripts (M v F)
+
+| Step            | Info                                                        | Transcript count | Transcript count with age info |
+|-----------------|-------------------------------------------------------------|------------------|-------------------------------|
+| dup_long        | Total duplication events (multiple per transcript)          | 92,785           | 92,785 (100%)                 |
+| full_annotation | Most recent copy. All annotated transcripts                 | 37,988           | 21,484 (56.6%)                |
+| prefilter_df    | Mapped transcripts by Salmon                                | 36,382           | 20,467 (56.3%)                |
+| de_results      | Expressed transcripts (≥5 counts in ≥5 samples)             | 17,574           | 9,796 (55.7%)                 |
+| significant_de  | Significantly DE transcripts (padj < 0.05, \|LFC\| > 1)     | 7,270            | 4,319 (59.4%)                 |
+
+
+![alt text](image-37.png)  
 
 The common thread in all of these plots is that the majority of duplication events originate in C.mac, consistent with the high number of predicted genes in the species, and the repetetive nature of the genome.  
 
-I then looked at the gene family transcript age diversity: 
+Worth noting is that not all transcripts in the categories have age count information. These either dont belong to a gene family, which could be unannotated or new genes (orphans?). Or they belong to a gene family but dont have an age rank, which means there was no duplication event in the C_mac lineage. 
 
-Age rank diversity in the full annotation file:  
-![alt text](image-6.png)  
+### Box plots:  
+Here i tried to replicate Milenas plot of the significantly DE expressed / sex-biased transcripts in each age rank, split between male and female biased.   
+Split by log2FC sign. log2FC > 1 = male-biased, log2FC <1 = female-biased. 
 
-Significantlly DE transcripts gene family age diversity. 
+4319 transcripts with age rank were plotted. 2951 significantlly DE transcripts are missing age rank. Out of these 2158 belong to a gene family, and 793 does not
 
-![alt text](image-4.png)  
+![alt text](image-38.png)  
 
-Most gene families only have transcripts of the same age, but there are still many candidates of geme families with differently aged paralogs.  
+Higer male bias across all ranks. 
 
-Top 20 most age rank diverse gene families. The age range might indicate an continously expanding gene family, with duplication events occuring throughout time rather in short rapid bursts (max age rank - min age rank +1). 
+Age ranks 4(N5), 5(N8), 6(N10) interesting here? Big variance, high mean and high median?  
+N5 is where R_ferrugineus and D_ponderosae splits off  
+N8 is where A_obtectus splits off  
+N10 is where B_siliquastri splits off  
 
-The most diverse gene families in the full annotation:  
-![alt text](image-7.png)  
+### Proportion sex-bias in age ranks  
+Here i tried to replicate Milenas plot of the proportions of unbiased, male-biased or female-biased transcripts within each age rank.  
 
-The most diverse gene families with significantlly DE transcripts:
+![alt text](image-39.png)  
 
-![alt text](image-8.png)
+In all ages, most are unbiased, followed by male-biased and last female-biased. There is an increase in proportionally male-biased transcripts in ages 4(N5), 5(N8) and 6(N10) once again. 
+
+
+### within gene family transcripts age rank diversity:  to do -------  
+
+
+| Dataset         | Total transcripts | With age_rank        | With HOG             | With both (plotted)     |
+|-----------------|------------------|-----------------------|-----------------------|---------------------------|
+| full_annotation | 37,988           | 21,484 (56.6%)        | 31,507 (82.9%)        | 21,467 (56.5%)            |
+| prefilter_df    | 36,382           | 20,467 (56.3%)        | 30,041 (82.6%)        | 20,450 (56.2%)            |
+| de_results      | 17,574           | 9,796 (55.7%)         | 15,648 (89.0%)        | 9,785 (55.7%)             |
+| sig             | 7,270            | 4,319 (59.4%)         | 6,472 (89.0%)         | 4,314 (59.3%)             |
+
+![alt text](image-40.png)
+
+Most gene families only have transcripts of the same age, but there are still candidates of gene families with 2 or 3 different ages in the significantlly DE dataset.  
+
+### Top 10 most age diverse 
+Top 10 most age rank diverse gene families. This is all gene families with more than 3 DE transcripts in them. The age range might indicate an continously expanding gene family (darker), with duplication events occuring throughout time rather in short rapid bursts (lighter) (max age rank - min age rank +1). 
+
+![alt text](image-42.png) 
+
+I might come back to this later and investigate those families. 
 
 # Mixed model analyses 
 
@@ -649,3 +689,5 @@ Model 1c weighted: p=0.637), and model 1b performing the worst when weighted.  T
 
 ## Model 3 -   
 **Model formula:** `abs(logFC) ~ sex_bias * age_rank_scaled + (1 | HOG)`  
+sex bias as three categories? Unbiased, male and female? 
+
