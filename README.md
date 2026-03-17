@@ -355,16 +355,46 @@ As we are only looking at genes/transcripts in C.mac for these analyses, using H
 
 In the OrthoFinder analysis, the proteome was isoform filtered to retain only the canonical isoform per gene. Consequently, in my following analyses based on this data on things like HOG and age rank annotations, i will only have one transcript per gene represented. And no isoform-level random effets are necessary in the mixed models. 
 
-## HOG size and sex bias (**HOG_size_sex_bias.ipynb**)
-First I wanted to investigate if the larger the gene family, the more sex baised paralogs it will have, as having more copies would lead me to suspect that there are more opportunities for sex-specific neofunctionalization to occur. 
+## Gene family size and sex bias (**HOG_size_sex_bias.ipynb**)
+First I wanted to investigate if the larger the gene family, the more sex baised paralogs it will have, as having more copies would lead me to suspect that there are more opportunities for sex-specific neofunctionalization to occur.  
+First i removed all the transcript that doest belong to a HOG, resulting in 15.648 transcripts.  
+I then defined three different sets of gene family sizes:  
+1. Genome wide  
+The size of the gene families are defined by all of the transcripts in the annotation.  
+2. Mapped / not expressed   
+These are all transcripts that managed to be mapped to the transcriptome by Salmon. These stem from the dataset prefilter_df which comes after tximport in the script **salmon_map_dominance_consistent_script.R**, but before the expression filtering (≥5 counts in ≥5 samples) and the differential expression analysis.  
+3. Expressed  
+These are the sizes defined by the transcripts in the result dataset, post filtering and DE-analysis.  
+
+I did this since the gene family sizes a transcript belongs to will not be realistic after all mapping and filtering steps. For example, if we only looked at the Expressed set, the largest gene family size appears to be 25. But that is based only on the "visible" transcripts. But If we look at the entire genome from full_annotation, the largest gene family has 115 members (if all of those were expressed).  
+Now each expressed transcript has a column for each size definition. 
+
+Regardless of size definition however, a majority of the transcripts belong to very small gene families:  
+![alt text](image-44.png)  
+
+### Density plot of size definition comparison 
+
+![alt text](image-55.png)  
+
+log10 transformed:  
+![alt text](image-56.png)  
+
+### Size category expression differences 
+
+If we look at the full genome definitions, what is the proportion of mapped and expressed transcripts?  
+![alt text](image-57.png) 
+
+Here we can see that a majority of transcripts are not expressed, but a majority was mapped by salmon (but too lowly expressed). 
 
 ### lFC within gene families vs. gene family size. 
-First I looked at the transcript logFoldChange (male vs female) within each Hierarchical Orthogroup (HOG) against the size of each HOG.  
+To investigate sex bias and gene family size i started by looking at the transcript logFoldChange (male vs female) within each gene family, against the size of each gene family.  
+First with the expressed size definition:   
 ![alt text](image-11.png)  
 
-This indicate however that the strength of sex-bias decreases the larger the gene family size is. Does indicate that male bias is more common than female bias.  
-However, a majority of the transcripts belong to smaller gene family sizes:  
-![alt text](image-12.png)  
+And with the full genome size definition, with :  
+![alt text](image-45.png)
+
+This indicate however that the strength of sex-bias decreases the larger the gene family size is. Does indicate that male bias is more common than female bias, especially for larger sizes where female-bias is rarer.  
 
 ### Bias direction among biased transcripts  
 To investigare further; within each gene family, which proportion is male biased at each gene family size? Due to the difference in sample sizes I added wilson confidence intervals (preferred over standard CI as proportions reaches 0 at some points).  
@@ -374,46 +404,41 @@ Out of the transcripts that are sex-biased, more are male-biased.
 What is the proportion of male biased, female biased and unbiased transcripts at each gene family size?  
 ![alt text](image-10.png)
 
-A general trend can be observed with most transcripts being unbiased, followed by male-biased and female-biased. 
+A general trend can be observed with most transcripts being unbiased, followed by male-biased and female-biased.  
+The same two plots but with the full genome size definitions (a bit cluttered):  
+![alt text](image-46.png)  
+![alt text](image-47.png)
 
 ### Variance vs. gene family size  
-Variance for all transcripts that belong to a gene family of a certain size.  
-![alt text](image-14.png)  
+Variance for all transcripts that belong to a gene family of a certain size. Here only looking at the expressed size definitions.   
+![alt text](image-48.png)  
 Expression differene decreases as the family size increases. But for HOG sizes larger than 15 we have very small sample sizes so variance is noisy and unreliable as small sample size makes variance unstable.
 
 ### Variance within each gene family 
 If we instead look at each gene family individually:  
-![alt text](image-13.png)  
+![alt text](image-49.png)  
 Size 1 filtered out. This plot again shows a trend that the direction of expression in the larger gene families are more "in agreement" in direction than the smaller sizes. The outlier in red is N0.HOG0000055. 
 
 ### Within gene family directional bias  
 Next I categorized the gene families based on the expression direction of the transcripts they contain. These being all unbiased, all male-biased, all female-biased and the combinations of the three:  
-![alt text](image-15.png)  
+![alt text](image-50.png)  
 
 We can visualize this further with the categories and the gene family sizes they include:  
-![alt text](image-16.png)  
-The largest families are found in the two sex biased + unbiased categories. 
+Expressed:    
+![alt text](image-52.png) 
 
-### Gene family size category proportions  
+Full genome:  
+![alt text](image-51.png)
 
-![alt text](image-17.png)  
+The largest families are found in the two sex biased + unbiased categories.  
 
-### Size comparison pre and post filtering (5 copies in 5 samples) 
+### Gene family size sex-bias category proportions  
 
-Data from prefiltered/unexpressed transcripts. These are post-tximport in R, so they are transcrtipts that were still mapped by Salmon. The raw orthofinder data includes even more transcripts, but these have no mapping evidence.  
-Here the gene family sizes are defined from the big unexpressed dataset. 
+Expressed:  
+![alt text](image-53.png)  
 
-![alt text](image-30.png)  
-
-log10 transformed:  
-![alt text](image-29.png)
-
-### Transcript expression differences
-
-Comparing transcripts pre and post filtering (5 copies in 5 samples) within each size category:  
-![alt text](image-35.png)  
-
-Here we can see that some transcripts in the larger gene families are expressed, whereas others are not. In our expressed dataset the size of the gene families that the transcripts belong to much smaller 
+Full genome:  
+![alt text](image-54.png)  
 
 ## Paralog ancestry 
 I will also look at the relative branch lengths within each HOG as a indicator of the age of each paralog using mixed models.  
@@ -488,7 +513,7 @@ Here i tried to replicate Milenas plot of the proportions of unbiased, male-bias
 In all ages, most are unbiased, followed by male-biased and last female-biased. There is an increase in proportionally male-biased transcripts in ages 4(N5), 5(N8) and 6(N10) once again. 
 
 
-### within gene family transcripts age rank diversity:  to do -------  
+### within gene family transcripts age rank diversity:  
 
 
 | Dataset         | Total transcripts | With age_rank        | With HOG             | With both (plotted)     |
