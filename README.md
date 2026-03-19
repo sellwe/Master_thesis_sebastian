@@ -355,7 +355,7 @@ As we are only looking at genes/transcripts in C.mac for these analyses, using H
 
 In the OrthoFinder analysis, the proteome was isoform filtered to retain only the canonical isoform per gene. Consequently, in my following analyses based on this data on things like HOG and age rank annotations, i will only have one transcript per gene represented. And no isoform-level random effets are necessary in the mixed models. 
 
-## Gene family size and sex bias (**HOG_size_sex_bias.ipynb**)
+# Gene family size and sex bias (**HOG_size_sex_bias.ipynb**)
 First I wanted to investigate if the larger the gene family, the more sex baised paralogs it will have, as having more copies would lead me to suspect that there are more opportunities for sex-specific neofunctionalization to occur.  
 First i removed all the transcript that doest belong to a HOG, resulting in 15.648 transcripts.  
 I then defined three different sets of gene family sizes:  
@@ -366,8 +366,8 @@ These are all transcripts that managed to be mapped to the transcriptome by Salm
 3. Expressed  
 These are the sizes defined by the transcripts in the result dataset, post filtering and DE-analysis.  
 
-I did this since the gene family sizes a transcript belongs to will not be realistic after all mapping and filtering steps. For example, if we only looked at the Expressed set, the largest gene family size appears to be 25. But that is based only on the "visible" transcripts. But If we look at the entire genome from full_annotation, the largest gene family has 115 members (if all of those were expressed). This indicates that a majority of members in the large gene families are not expressed the largest gene families  
-Now each expressed transcript has a column for each size definition. 
+I did this since only looking at the size definitions of expressed transcript would not reflect reality. For example, if we only looked at the Expressed set, the largest gene family size appears to be 25. But that is based only on the "visible" transcripts. But If we look at the entire genome from full_annotation, the largest gene family has 115 members (if all of those were expressed). This indicates that a majority of members in the large gene families are not expressed or lowly expressed in abdominal tissues.  
+In the dataset each expressed transcript has a column for each size definition. 
 
 Regardless of size definition however, a majority of the expressed transcripts belong to very small gene families, and the median size is consistently 1. For most plots later we filter out size 1.  
 
@@ -376,8 +376,6 @@ Regardless of size definition however, a majority of the expressed transcripts b
 | Genome | 37,988 | 31,507 | 6,481 | 14,563 | 115 | 1 |
 | Mapped | 36,382 | 30,041 | 6,341 | 14,563 | 114 | 1 |
 | Expressed | 17,574 | 15,648 | 1,926 | 10,850 | 25 | 1 |
-
-The proportion of transcript that doesnt have a HOG is larger at the genome and mapped levels than the expressed level. 
 
 ### Density plot of size definition comparison 
 
@@ -389,9 +387,9 @@ log10 transformed:
 ### Size category expression differences 
 
 If we look at the full genome definitions, what is the proportion of mapped and expressed transcripts?  
-![alt text](image-57.png) 
+![alt text](image-59.png)  
 
-Here we can see that a majority of transcripts are not expressed, but a majority was mapped by salmon (but too lowly expressed). 
+Here we can see that consistently aross sizes, <50% of transcripts are not expressed, but a majority was mapped by salmon (but too lowly expressed). 
 
 ### lFC within gene families vs. gene family size. 
 To investigate sex bias and gene family size i started by looking at the transcript logFoldChange (male vs female) within each gene family, against the size of each gene family.  
@@ -445,9 +443,9 @@ Expressed:
 ![alt text](image-53.png)  
 
 Full genome:  
-![alt text](image-54.png)  
+![alt text](image-60.png)  
 
-## Paralog ancestry 
+# Paralog ancestry - Age rank analyses
 I will also look at the relative branch lengths within each HOG as a indicator of the age of each paralog using mixed models.  
 I downloaded SpeciesTree_rooted.txt, SpeciesTree_rooted_node_labels.txt, Duplications.tsv and SpeciesTree_Gene_Duplications_0.5_Support.txt from the OrthoFinder output.  
 
@@ -469,7 +467,9 @@ I imported dup_long.csv and full_annotation_with_age.csv into VSCode for plottin
 
 Age diversity of all duplication events:  
 
-![alt text](image-36.png)
+![alt text](image-36.png)  
+
+A majority of all duplication events occurred in C_mac.
 
 I did a combined plot with 4 dataset levels:  
 
@@ -482,7 +482,7 @@ This was done after tximport but before the expression filter, exporting a new f
 
 4. Only the significnatly DE transcripts (M v F)
 
-| Step            | Info                                                        | Transcript count | Transcript count with age info |
+| Dataset         | Info                                                        | Transcript count | Transcript count with age info |
 |-----------------|-------------------------------------------------------------|------------------|-------------------------------|
 | dup_long        | Total duplication events (multiple per transcript)          | 92,785           | 92,785 (100%)                 |
 | full_annotation | Most recent copy. All annotated transcripts                 | 37,988           | 21,484 (56.6%)                |
@@ -490,18 +490,18 @@ This was done after tximport but before the expression filter, exporting a new f
 | de_results      | Expressed transcripts (≥5 counts in ≥5 samples)             | 17,574           | 9,796 (55.7%)                 |
 | significant_de  | Significantly DE transcripts (padj < 0.05, \|LFC\| > 1)     | 7,270            | 4,319 (59.4%)                 |
 
+dup_long includes all of the duplication events in C_mac only, hence 100%. Full_annotation is defined from the .gff. In each level only around 50-60% of transcripts from the GFF have had a duplication event in the C_mac lineage. The remaining ~40% of transcripts could still belong to a HOG, but have no duplication events in the C_mac lineage. Or they could not belong to a HOG at all, and are novel C_Mac specific genes with no homologs, TE-derived or very fragmented in the assembly. 
 
 ![alt text](image-37.png)  
 
-The common thread in all of these plots is that the majority of duplication events originate in C.mac, consistent with the high number of predicted genes in the species, and the repetetive nature of the genome.  
+The common thread in all of these levels is that the majority of transcripts most recent copy originate in C.mac, consistent with the high number of predicted genes in the species, and the repetetive nature of the genome. There is a noteable drop in the amount of age 9 transcripts from mapped to expressed. Do these belong to the outstadningly large amount of annotated "genes" in the C_mac genome?  
 
-Worth noting is that not all transcripts in the categories have age count information. These either dont belong to a gene family, which could be unannotated or new genes (orphans?). Or they belong to a gene family but dont have an age rank, which means there was no duplication event in the C_mac lineage. 
+## Age rank and sex bias
 
 ### Box plots:  
-Here i tried to replicate Milenas plot of the significantly DE expressed / sex-biased transcripts in each age rank, split between male and female biased.   
-Split by log2FC sign. log2FC > 1 = male-biased, log2FC <1 = female-biased. 
+Here i tried to replicate Milenas plot of the significantly DE expressed / sex-biased transcripts in each age rank, split between male and female biased (padj < 0.05, |log2FC| > 1, where log2FC > 1 = male-biased, log2FC <1 = female-biased).
 
-4319 transcripts with age rank were plotted. 2951 significantlly DE transcripts are missing age rank. Out of these 2158 belong to a gene family, and 793 does not
+4319 transcripts with age rank were plotted. (2951 significantlly DE transcripts are missing age rank. Out of these 2158 belong to a gene family, and 793 does not).
 
 ![alt text](image-38.png)  
 
@@ -514,15 +514,14 @@ N10 is where B_siliquastri splits off
 
 ### Proportion sex-bias in age ranks  
 Here i tried to replicate Milenas plot of the proportions of unbiased, male-biased or female-biased transcripts within each age rank.  
+9796 expressed transcripts were plotted, significance was defined by padj < 0.05, |log2FC| > 1, where log2FC > 1 = male-biased, log2FC <1 = female-biased. 
 
 ![alt text](image-39.png)  
 
-In all ages, most are unbiased, followed by male-biased and last female-biased. There is an increase in proportionally male-biased transcripts in ages 4(N5), 5(N8) and 6(N10) once again. 
+In all ages, most are unbiased, followed by male-biased and last female-biased. There is an increase in proportionally male-biased transcripts in ages 4(N5), 5(N8) and 6(N10) once again, hinting at intermediate age increase in male-bias. 
 
-
-### within gene family transcripts age rank diversity:  
-
-
+## Age rank and gene family size  
+ 
 | Dataset         | Total transcripts | With age_rank        | With HOG             | With both (plotted)     |
 |-----------------|------------------|-----------------------|-----------------------|---------------------------|
 | full_annotation | 37,988           | 21,484 (56.6%)        | 31,507 (82.9%)        | 21,467 (56.5%)            |
@@ -530,16 +529,45 @@ In all ages, most are unbiased, followed by male-biased and last female-biased. 
 | de_results      | 17,574           | 9,796 (55.7%)         | 15,648 (89.0%)        | 9,785 (55.7%)             |
 | sig             | 7,270            | 4,319 (59.4%)         | 6,472 (89.0%)         | 4,314 (59.3%)             |
 
+A higher proportion of transcripts belong to a HOG than have age rank information, making age rank the limiting factor. 
+
+### Within gene family transcript age rank diversity:   
+Looking at the number of different ages within each gene family:
+
 ![alt text](image-40.png)
 
 Most gene families only have transcripts of the same age, but there are still candidates of gene families with 2 or 3 different ages in the significantlly DE dataset.  
 
 ### Top 10 most age diverse 
-Top 10 most age rank diverse gene families. This is all gene families with more than 3 DE transcripts in them. The age range might indicate an continously expanding gene family (darker), with duplication events occuring throughout time rather in short rapid bursts (lighter) (max age rank - min age rank +1). 
+Top 10 most age rank diverse gene families. This is all gene families with more than 3 DE transcripts in them. The age range might indicate an continously expanding gene family (darker), with duplication events occuring throughout time rather in shorter bursts (lighter) (max age rank - min age rank +1). 
 
 ![alt text](image-42.png) 
 
-I might come back to this later and investigate those families. 
+I might come back to this later and investigate those families.  
+
+### Age rank distribution by gene family size  
+Plotted the 9785 transcripts with both HOG and age rank info. 
+![alt text](image-66.png)   
+
+### Age rank vs. Gene family size with sex-bias info.  
+
+Same sex bias definition. With the gene family sizes as the y-axis.    
+Genome sizes:  
+![alt text](image-61.png)
+Expressed sizes:   
+![alt text](image-62.png) 
+
+Again indicates that most gene family expansions are happening within C_mac. 
+
+I also tried to do it with box plots separated into unbiased, male-biased and female-biased:    
+Genome sizes:  
+![alt text](image-63.png)
+Expressed sizes:  
+![alt text](image-64.png)   
+These are all of the expressed trasncripts, not just the significant ones. 
+
+And as proporitonal bars, where i grouped together the genome-defined sizes into singeltons, small, medium and large families to limit this to 4 plots.  
+![alt text](image-67.png) 
 
 # Mixed model analyses 
 
