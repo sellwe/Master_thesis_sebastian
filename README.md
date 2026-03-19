@@ -569,6 +569,11 @@ These are all of the expressed trasncripts, not just the significant ones.
 And as proporitonal bars, where i grouped together the genome-defined sizes into singeltons, small, medium and large families to limit this to 4 plots.  
 ![alt text](image-67.png) 
 
+# Chromosomal location analyses 
+
+
+
+
 # Mixed model analyses 
 
 I will use lme4 on the post-DESEq2 data as a two-stage approach.  
@@ -607,7 +612,7 @@ Here, DESEq2 first identifies which transcripts are sex-biased while controlling
 | **Model data** (age rank + HOG + logFC) | **9,785** |
 | HOGs represented | 5,048 |
 | Unique gene_ids | 9,785 |
-| Filtered dataset (HOG ≥ 5 transcripts) | 1,883 transcripts / 248 HOGs |
+
 
 I use REML (Restricted Maximum Likelihood) = TRUE to estimate variance in the mixed models. It gives unbiased estimates of the random effect variance compared to regular maximum likelihood.   
 I did three versions of this model:  
@@ -734,6 +739,16 @@ expression.
 
 However, after accounting for estimation precision via inverse-variance weighting, there is no significant relationship between evolutionary age and direction of sex bias in the dataset of 9,785 transcripts (Model 1a weighted: p=0.349; 
 Model 1c weighted: p=0.637), and model 1b performing the worst when weighted.  The discrepancy between weighted and unweighted results shows the value of accounting for logFC estimation precision in two-stage mixed models on RNA-seq data.
+
+## Model 2 
+
+| | Count |
+|---|---|
+| **Model data** (age rank + HOG + logFC) | 9,785 transcripts / 5048 HOGs |
+| Filtered dataset (HOG ≥ 2 transcripts) | 7361 transcripts / 2624 HOGs |
+| Filtered dataset (HOG ≥ 5 transcripts) | 1,883 transcripts / 248 HOGs |
+
+To be able to use a random slope model within each gene family, it needs more than one member. 
 
 ## Model 2a - does age predict magnitude of sex bias, and does it differ by sex?    
 **Model formula:** `abs(logFC) ~ age_rank_scaled + (1 | HOG)`  
