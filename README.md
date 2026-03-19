@@ -366,11 +366,18 @@ These are all transcripts that managed to be mapped to the transcriptome by Salm
 3. Expressed  
 These are the sizes defined by the transcripts in the result dataset, post filtering and DE-analysis.  
 
-I did this since the gene family sizes a transcript belongs to will not be realistic after all mapping and filtering steps. For example, if we only looked at the Expressed set, the largest gene family size appears to be 25. But that is based only on the "visible" transcripts. But If we look at the entire genome from full_annotation, the largest gene family has 115 members (if all of those were expressed).  
+I did this since the gene family sizes a transcript belongs to will not be realistic after all mapping and filtering steps. For example, if we only looked at the Expressed set, the largest gene family size appears to be 25. But that is based only on the "visible" transcripts. But If we look at the entire genome from full_annotation, the largest gene family has 115 members (if all of those were expressed). This indicates that a majority of members in the large gene families are not expressed the largest gene families  
 Now each expressed transcript has a column for each size definition. 
 
-Regardless of size definition however, a majority of the transcripts belong to very small gene families:  
-![alt text](image-44.png)  
+Regardless of size definition however, a majority of the expressed transcripts belong to very small gene families, and the median size is consistently 1. For most plots later we filter out size 1.  
+
+| Level | Total transcripts | Transcripts with Gene family | Transcripts without Gene family | # Gene families | Max family size | Median family size |
+|---|---|---|---|---|---|---|
+| Genome | 37,988 | 31,507 | 6,481 | 14,563 | 115 | 1 |
+| Mapped | 36,382 | 30,041 | 6,341 | 14,563 | 114 | 1 |
+| Expressed | 17,574 | 15,648 | 1,926 | 10,850 | 25 | 1 |
+
+The proportion of transcript that doesnt have a HOG is larger at the genome and mapped levels than the expressed level. 
 
 ### Density plot of size definition comparison 
 
@@ -392,9 +399,9 @@ First with the expressed size definition:
 ![alt text](image-11.png)  
 
 And with the full genome size definition, with :  
-![alt text](image-45.png)
+![alt text](image-58.png)  
 
-This indicate however that the strength of sex-bias decreases the larger the gene family size is. Does indicate that male bias is more common than female bias, especially for larger sizes where female-bias is rarer.  
+This indicate however that the strength of sex-bias decreases the larger the gene family size is. Does indicate that male bias is more common than female bias, especially for larger sizes where female-bias is rarer. By looking at the full genome plot its made even more clear that sex-bias decreases with the size of the gene family.   
 
 ### Bias direction among biased transcripts  
 To investigare further; within each gene family, which proportion is male biased at each gene family size? Due to the difference in sample sizes I added wilson confidence intervals (preferred over standard CI as proportions reaches 0 at some points).  
