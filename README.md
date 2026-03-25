@@ -90,6 +90,8 @@ ERR12383297 (male, FE),
 ERR12383303 (male, EF),  
 Three remaining samples are suspected of ambigous sex as they stray from the respective clusters in the PCA, but are kept (ERR12383254 (female, BA), ERR12383278 (male, AA), ERR12383310 (male, FF)). In total 70 samples, of whom 37 are female, and 33 are male. 
 
+![alt text](<Screenshot 2025-12-12 140934.png>) 
+
 # Mapping methods
 
 Three different mapping methods are used and will be compared. Salmons mapping based mode/quasi mapping/selective alignment, STAR with featureCounts, and the combined method of Salmons alignment based mode + STARs .bam files. For the main part of the project RNA-Seq data from dataset 1 was used. Analyses were run on the transcript level rather than gene level. 
@@ -427,6 +429,9 @@ Size 1 filtered out. This plot again shows a trend that the direction of express
 ### Within gene family directional bias  
 Next I categorized the gene families based on the expression direction of the transcripts they contain. These being all unbiased, all male-biased, all female-biased and the combinations of the three:  
 ![alt text](image-50.png)  
+
+If we divide the multiple category bars into the overall proportion transcript bias within the categories, we see that its around 50% bias and unbiased in the double categories, and in the all three category its 40.2% unbiased, 36.3% male-biased and23.5% female-biased.    
+![alt text](image-68.png)  
 
 We can visualize this further with the categories and the gene family sizes they include:  
 Expressed:    
