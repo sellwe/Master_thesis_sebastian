@@ -456,10 +456,12 @@ I downloaded SpeciesTree_rooted.txt, SpeciesTree_rooted_node_labels.txt, Duplica
 
 By uploading this file into Phylo.io I could visually inspect the phylogeny, see screenshot below:  
 
-![alt text](image-27.png)
+![alt text](image-69.png)    
 
 In order to add the age rank i updated the script (**create_full_annotation.R**).   
 I loaded SpeciesTree_rooted_node_labels.txt in order to create a node age tree with the depths of the nodes to the roots and the branch lengths of the nodes that lead to C_maculatus in the phylogeny (N0, N1, N2, N5, N8, N10, N12, N13 and the tip node C_maculatus_proteinfaste_TE_filtered) and i ranked the nodes from oldest (N0 = 1) to youngest (C_maculatus_proteinfaste_TE_filtered = 9) in decending order, based on the node's depth from the root.  
+
+![alt text](image-71.png) 
 
 Then i load Duplications.tsv to get information about when duplication events occured, and which genes resulted from each duplicaiton, and i filtered for only C_mac transcripts and duplications that occured on the branches leading to C_Mac in the phylogeny. 
 I merged this with the age_rank table and exported this as dup_long which contains all the duplication events in the C_mac lineage.  
@@ -500,6 +502,12 @@ dup_long includes all of the duplication events in C_mac only, hence 100%. Full_
 ![alt text](image-37.png)  
 
 The common thread in all of these levels is that the majority of transcripts most recent copy originate in C.mac, consistent with the high number of predicted genes in the species, and the repetetive nature of the genome. There is a noteable drop in the amount of age 9 transcripts from mapped to expressed. Do these belong to the outstadningly large amount of annotated "genes" in the C_mac genome?  
+
+I wanted to see if we see the same pattern in related species. So i tried to replicate the grey bar for the full genome duplication ages for the species C_chienensis (sister species), A_obtectus (Bruchnae) and T_castaneum (Tenebrionidae).
+
+I softlinked their isoform_filtered annotation files and cleaned them up with the script **clean_gff_related_species.sh**. 
+
+![alt text](image-72.png)
 
 ## Age rank and sex bias
 
