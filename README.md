@@ -588,32 +588,23 @@ And as proporitonal bars, where i grouped together the genome-defined sizes into
 
 
 # Mixed model analyses 
+I use lme4 on the post-DESeq2 data as a two-stage approach. The DESeq2 step identifies which transcripts are sex-biased while controlling for underlying genotypes. The lme4 step then asks whether evolutionary age predicts the pattern and magnitude of that sex bias across transcripts, with gene families as a random effect to account for the non-independence of transcripts within the same family.
+Two types of models are used throughout:
 
-I will use lme4 on the post-DESEq2 data as a two-stage approach.  
-My other option was dream and limma voom on the raw counts, but this would redo the DE analysis. 
+lmer for continuous responses (log2FoldChange, |log2FoldChange|)  
+glmer for binary responses (is this gene sex-biased: yes/no)  
 
-Mixed models have fixed and random effects. Fixed effects are variable levels we wish to estimate and interpret. Some used here are:  
-age_rank - continous scale 1-9 (older to younger).  
-Sex - categorical M/F.  
-log2FC - response variable from the DESEq2 results.  
+Mixed models have fixed and random effects. Fixed effects are the variable we wish to estimate and interpret. Such as age rank or the sex-bias class. 
 
-Random effects are variables we want to control for but not interpret. Some here are:  
-(1 | HOG) - A random intercept which account for the clustering of transcripts within the same gene family.  Here each gene family has its own baseline log2FC, bu tthe relationship between age_rank and logFC is assumed to be the same.  
-(1 + age_rank | HOG) - random slope which allows the effect of age_rank to vary between gene families. Each gene family has its own baseline and its own age_rank slope. 
+Random effects are variables we want to control for but not interpret directly. Here the random effect is always (1 | HOG) which is a random intercept that gives each gene family its own baseline expression bias. This will account for the fact that paralogs within the same family are not independent observations. 
 
-The outputs from lmer are:  
-Estimate - effect size  
-Std. Error - uncertainty around the estimate  
-t value - estimate / std.error, larger abolute value = stronger signal  
-Pr (>|t|) - p-value, how different from 0, significance. 
+I use REML (Restricted Maximum Likelihood) to fit the variance components in lmer models. This gives unbiased estimates of the random effect variance compared to regular maximum likelihood. For likelihood ratio tests (LRT) comparing two models, both models must be fitted with regular maximum likelihood so they are on the same scale.
 
-Here, DESEq2 first identifies which transcripts are sex-biased while controlling for the underlying genotypes, and lme4 then asks whether evolutionary age predict the pattern and magnitude of that sex bias across transcripts, with the gene families as a random effect to account for the non-independence of transcripts within the same gene family. A limitation here is that lme4 treats all log2FC estimates equally certain regardless of expression level. To account for this I use log2FC estimation precision with inverse-variance weighting 1/lfcSE², which makes it so that transcripts with precise logFC estimates (low lfcSE) will contribute more to the model.
+Two tools are used to interpret results beyond the coefficient tables:
 
-## Model 1 - does age predict the direction of sex bias?  
-**Model formula:** `log2FoldChange ~ age_rank + (1 | HOG)`  
-**Response variable:** log2FoldChange (M vs F). Positive = male-biased, Negative = female-biased.  
-**Random effect:** `(1 | HOG)` — accounts for non-independence of transcripts within the same gene family.  
-**Weighting:** Models run both unweighted (all transcripts equal) and weighted by `1/lfcSE²` (inverse variance from DESeq2) to assess whether results are driven by imprecise logFC estimates from lowly expressed transcripts.  
+drop1 performs a likelihood ratio test by dropping one term at a time from the full model and testing whether removing it significantly worsens the fit. This is a Type III test, meaning it tests each term after accounting for all others. This lets me see if an interaction or main effect is justified in the model. 
+
+emmeans (estimated marginal means) computes the predicted value of the response for each combination of factor levels, averaged over all other predictors in the model. This is what the model thinks the mean response would be for a typical gene in each group. Contrasts then compare pairs of these predicted means directly.
 
 ## Dataset Summary
 
@@ -626,156 +617,380 @@ Here, DESEq2 first identifies which transcripts are sex-biased while controlling
 | HOGs represented | 5,048 |
 | Unique gene_ids | 9,785 |
 
+OrthoFinder was run on an isoform-filtered proteome (one protein per gene) so eac htranscript maps to only one gene and one HOG. There is no isofrm nesting to wory about, so (1 | HOG) should be sufficient for the random  effects. 
 
-I use REML (Restricted Maximum Likelihood) = TRUE to estimate variance in the mixed models. It gives unbiased estimates of the random effect variance compared to regular maximum likelihood.   
-I did three versions of this model:  
+### Dataset Issues
+Two structural properties of the data shape the analysis throughout:  
+24.8% of genes are singletons (gene families of size 1). These genes have no family members to compare against, so they have no relative age within a family. They are excluded from any within-family analysis.  
 
-### Model 1a:  `logFC ~ age_rank_scaled + (1 | HOG)`  
-Age rank scaled: Uses continous linear age rank 1 to 9 (9 being youngest/C.mac) and is scaled to mean=0 and SD=1. One unit is 1 SD increase towards younger duplicates. This answers; how much does log2FC change for each 1 increase in SD in age_rank. This assumes equal spacing between ranks, which is not technically true. The SD of age in the dataset is 2.9, meaning that a 1 SD increase is moving 2.9 age rank units towards younger ages. A positive estimate = younger duplicates are more male biased (log2FC M vs. F). The SD of node_depth_from_root is 0.187, used for interpreting model 1c on an equivalent scale. 
+89% of gene families have all paralogs at the same age rank. This means most gene family expansions happened in a single burst duplication event at one node. Relative age is only biologically meaningful in the 554 families where paralogs arose at different nodes. This is why i did the two-dataset design used in Parts 2 and 3.
 
-### Fixed Effects
+I divided the analyses in three parts. The raw model outputs can be found in the corresponding mixed_model_partX_results.txt files.
 
-| Weighting | Intercept (mean age) | Intercept p | age_rank_scaled estimate | Std. Error | t value | p-value | Sig. |
-|-----------|---------------------|-------------|--------------------------|------------|---------|---------|------|
-| Unweighted | +0.784 | <2e-16 *** | +0.146 | 0.026 | 5.60 | 2.27e-08 | *** |
-| Weighted | +0.207 | <2e-16 *** | +0.014 | 0.015 | 0.94 | 0.349 | |
 
-The unweighted model shows a highly significant positive trend (p=2.27e-08), meaning younger duplicates appear more male-biased. Each 1 SD increase in age rank (towards youger copies) increases log2FC by 0.146 units.  But the signal disappears entirely in the weighted model (p=0.349), indicating it was driven by transcripts with imprecise log2FC estimates (large lfcSE).
+# Part 1: Absolute Age Models 
+Does the absolute evolutionary age of a gene predict how sex-biased it is? Age is deined using 9 discrete ranks (1 = oldest, shared with Diptera; 9 = youngest, C. mac specific).
 
-### Random Effects
 
-| Weighting | HOG Variance | Residual Variance |
-|-----------|-------------|-------------------|
-| Unweighted | 3.973 | 2.202 |
-| Weighted | 0.784 | 61.916 |
+## Model 1 - Direction of sex bias  
+**Formula:** `log2FoldChange ~ age_rank + (1 | HOG)`  
+**Response:** log2FoldChange (M vs F). Positive = male-biased, Negative = female-biased.  
 
-In the unweighted model, HOG variance (3.97) > Residual variance (2.20), confirming gene family membership is an important source of variation and validating the random effect. In weighted models, the residual variance is inflated because weights rescale the error term. I believe this is expected and should not be a problem.
+lmer treats all log2FC estimates as equally certain regarless of expression level. To adress this, each model is run twice. Once unweighted (all transcripts equal) and once weighted by `1/lfcSE²`, (inverse variance from DESeq2), so that transcripts with precise logFC estimates contribute more.
 
-### Model 1b: `logFC ~ age_rank_factor + (1 | HOG)`  
-Age rank as a factor: Treats each rank as a separate category. Shows how each rank differs from the oldest rank/baseline (oldest, node N0). The absolute predicted log2FC is Intercept + Estimate.  
-Captures non-linearity but as we estimate 8 coefficients here (one per rank), rather than one for the entire dataset (slope), we lose 7 degrees of freedom.  
+Three age parameterisations are compared:
 
-### Fixed Effects (Unweighted)
+* M1a: Continuous scaled age rank. One unit = 1 SD increase toward younger (SD of age rank = 2.9 units). Assumes equal spacing between ranks.  
 
-| Age rank | Node | Intercept / Estimate vs rank 1 | Absolute logFC | Std. Error | t value | p-value | Sig. |
-|----------|------|-------------------------------|----------------|------------|---------|---------|------|
-| 1 (ref) | N0 | +0.697 (intercept) | +0.697 | 0.134 | 5.22 | 1.87e-07 | *** |
-| 2 | N1 | -0.279 | +0.418 | 0.149 | -1.88 | 0.061 | . |
-| 3 | N2 | -0.219 | +0.478 | 0.162 | -1.35 | 0.177 | |
-| 4 | N5 | +0.261 | +0.958 | 0.221 | 1.18 | 0.238 | |
-| 5 | N8 | +0.302 | +0.999 | 0.153 | 1.98 | 0.048 | * |
-| 6 | N10 | +0.478 | +1.175 | 0.196 | 2.43 | 0.015 | * |
-| 7 | N12 | -0.064 | +0.633 | 0.158 | -0.40 | 0.686 | |
-| 8 | N13 | -0.441 | +0.256 | 0.235 | -1.87 | 0.061 | . |
-| 9 | C_mac | +0.208 | +0.905 | 0.141 | 1.47 | 0.140 | |
+* M1b: Age as 9 discrete factor levels. Rank 1 (N0) is the reference. Each coefficient shows how much a given rank differs from the oldest. Captures non-linearity but costs 7 extra degrees of freedom.  
 
-### Fixed Effects (Weighted)
+* M1c: Real cumulative branch lengths from the tree root, scaled. More biologically honest than arbitrary rank spacing.  
 
-| Age rank | Node | Intercept / Estimate vs rank 1 | Absolute logFC | Std. Error | t value | p-value | Sig. |
-|----------|------|-------------------------------|----------------|------------|---------|---------|------|
-| 1 (ref) | N0 | +0.325 (intercept) | +0.325 | 0.064 | 5.08 | 4.11e-07 | *** |
-| 2 | N1 | -0.178 | +0.147 | 0.072 | -2.48 | 0.013 | * |
-| 3 | N2 | -0.175 | +0.150 | 0.078 | -2.25 | 0.025 | * |
-| 4 | N5 | -0.238 | +0.088 | 0.111 | -2.15 | 0.032 | * |
-| 5 | N8 | -0.021 | +0.304 | 0.075 | -0.28 | 0.778 | |
-| 6 | N10 | -0.028 | +0.297 | 0.103 | -0.27 | 0.785 | |
-| 7 | N12 | -0.279 | +0.047 | 0.080 | -3.51 | 4.59e-04 | *** |
-| 8 | N13 | -0.185 | +0.140 | 0.122 | -1.52 | 0.130 | |
-| 9 | C_mac | -0.086 | +0.240 | 0.070 | -1.23 | 0.220 | |
+AIC is used to compare the three parameterisations within the same weighting scheme (the samaller AIC the better the model). ΔAIC > 4 is considered meaningful.
 
-Both models agree that at each rank the absolute logFC is more male-biased.  
-But when it comes to significance the unweighted and weighted models give opposite results.  
-Unweighted: ranks 5 (N8) and 6 (N10) are significantly more male-biased than rank 1, suggesting younger or intermediate age duplicates are more male-biased.  
-Weighted: ranks 2 (N1), 3 (N2), 4 (N5), and 7 (N12) are significantly less male-biased than rank 1, suggesting the oldest duplicates (rank 1/N0) are the most male-biased. This opposition indicates the unweighted result was due to imprecise estimates of log2FC.
+### AIC Comparison - Unweighted:
 
-![alt text](image-33.png)
+| Model | Parameterisation  | df | AIC   |
+| ----- | ----------------- | -- | ----- |
+| M1a   | Continuous rank   | 4  | 42514 |
+| M1b   | Factor (9 levels) | 11 | 42491 |
+| M1c   | Node depth        | 4  | 42516 |
 
-### Random Effects 
+M1b wins by ΔAIC = 23. The non-linear node-specific pattern is real.
 
-| Weighting | HOG Variance | Residual Variance |
-|-----------|-------------|-------------------|
-| Unweighted | 3.954 | 2.192 |
-| Weighted | 0.790 | 61.531 |
+### M1b Results (Unweighted, best model)
+Each coefficient shows the estimated log2FC at that rank relative to rank 1 (N0).
 
-In the unweighted model, HOG variance (3.97) > Residual variance (2.20), confirming gene family membership is an important source of variation and validating the random effect.  
-In the weighted model, the residual variance is inflated because weights rescale the error term. This is expected and should not be a problem.
+| Age rank | Node  | Estimate vs rank 1 | p-value  | Sig. |
+| -------- | ----- | ------------------ | -------- | ---- |
+| 1 (ref)  | N0    | +0.697 (intercept) | 1.87e-07 | ***  |
+| 2        | N1    | -0.279             | 0.061    | .    |
+| 3        | N2    | -0.219             | 0.177    |      |
+| 4        | N5    | +0.261             | 0.238    |      |
+| 5        | N8    | +0.302             | 0.048    | *    |
+| 6        | N10   | +0.478             | 0.015    | *    |
+| 7        | N12   | -0.064             | 0.686    |      |
+| 8        | N13   | -0.441             | 0.061    | .    |
+| 9        | C_mac | +0.208             | 0.140    |      |
 
-### Model 1c: `logFC ~ node_depth_scaled + (1 | HOG)`
-Node depth scaled: uses the actual cumulative branch lengths from the species tree instead of ranks. Should show the real evolutionary distance better. Scaled to mean=0 and SD=1. The SD of node_depth_from_root is 0.187, meaning 1 SD corresponds to ~0.187 units of cumulative branch length. 
+Ranks 5 (N8) and 6 (N10) are significantly more male-biased than rank 1. These are bruchid-specific nodes (similar to what we have seen in earlier plots).
 
-Larger values of node depth are further from the root = younger duplicates. A positive estimate = younger duplicates are more male-biased. 
+### AIC Comparison - Weighted:
+| Model | Parameterisation  | df | AIC   |
+| ----- | ----------------- | -- | ----- |
+| M1a   | Continuous rank   | 4  | 39145 |
+| M1b   | Factor (9 levels) | 11 | 39151 |
+| M1c   | Node depth        | 4  | 39146 |
 
-### Fixed Effects
+When expression precision is accounted for, the non-linearity disappears and the simpler continuous model wins.  
 
-| Weighting | Intercept | Intercept p | node_depth_scaled estimate | Std. Error | t value | p-value | Sig. |
-|-----------|-----------|-------------|---------------------------|------------|---------|---------|------|
-| Unweighted | +0.784 | <2e-16 *** | +0.143 | 0.026 | 5.50 | 3.9e-08 | *** |
-| Weighted | +0.204 | <2e-16 *** | +0.007 | 0.014 | 0.47 | 0.637 | |
+The weighted M1b tells the opposite story: ranks 2, 3, 4 and 7 are significantly less male-biased than rank 1, meaning the oldest genes are most male-biased when expression precision is accounted for. The discrepancy shows that the unweighted male-bias signal at young ranks is partly driven by lowly expressed genes with noisy fold-change estimates.
 
-Similar to Model 1a, the pattern is significant in the unweighted model (p=3.9e-08) but once again collapses when weighted (p=0.637).
+![alt text](image-73.png)
 
-### Random Effects — Model 1c
+## Model M1_prob: Probability of Sex Bias by Node
+**Formula**: `glmer(sex_biased_bin ~ age_rank_factor + (1 | HOG), family = binomial)`
+**Response:** Binary (1 = sex-biased by DESeq2 thresholds |logFC| > 1 and padj < 0.05, 0 = unbiased).
 
-| Weighting | HOG Variance | Residual Variance |
-|-----------|-------------|-------------------|
-| Unweighted | 3.975 | 2.202 |
-| Weighted | 0.783 | 61.968 |
+As a complement to M1b, asking wheter genes are biased at all, rather than how biased they are at each node. drop1 tests wheter the factor as a whole significantly improves the fit. EMMs give the predicted probability of sex bias at each node (using type = "response"). 
 
-### AIC Comparison — Which age parameterisation fits best?
+![alt text](image-74.png)
+The plot indicates that genes at the bruchid-specific nodes, are not only more male-biased in direction (from M1b) but also significantly more likely to be classified as sex-biased generally. Ranks 7-9 show some decline back toward baseline, suggesting the elevated sex bias is specific to these intermediate bruchid nodes rather than a continous increase with younger age.
 
-Akakike Information Criterion (AIC) uses the fomrula `AIC = 2k - 2ln(L)`. 2ln(L) scores models that perform better and 2k penalises models for each parameter added. Lower AIC is better, and ΔAIC > 4 is considered meaningful.
 
-AIC is only comparable within the same weighting scheme, and only measures how good each model is relative to the others. 
+## Model 2: Magnitude of Sex Bias
+**Formula:** `lmer(abs(log2FoldChange) ~ age + (1 | HOG))`    
+**Response:** Absolute log2FoldChange - measure of how sex-biased a gene is regardless of which sex is higher.
 
-### Unweighted
+### M2a: Continuous Age, Random Intercept
+**Formula:** `lmer(abs_logFC ~ age_rank_scaled + (1 | HOG)`
+Run on the full dataset, and on HOG >= 2 (multi-member families only) for comparison.
 
-| Model | Parameterisation | df | AIC |
-|-------|-----------------|-----|------------|
-| 1a | Continuous rank | 4 | 42514 |
-| **1b** | **Factor (9 levels)** | **11** | **42491** |
-| 1c | Node depth | 4 | 42516 |
+| Dataset           | Slope (age_rank_scaled) | p-value  |
+| ----------------- | ----------------------- | -------- |
+| Full (n=9,785)    | +0.162                  | 2.45e-13 |
+| HOG ≥ 2 (n=7,361) | +0.094                  | 0.001    |
 
-Unweighted: model 1b (factor) wins (ΔAIC ~24). The non-linear pattern across discrete age ranks is real and not captured by a simple slope.  
+Younger genes show significantly hihger sex bias magnitude in both datasets. The effect is smaller once singletons are excluded, suggesting singletons in young families inflate the signal somewhat.
 
-### Weighted
+### M2a_factor: Factor Age, Random Intercept
+**Formula:** `lmer(abs(log2FoldChange) ~ age_rank_factor + (1 | HOG))`
 
-| Model | Parameterisation | df | AIC | 
-|-------|-----------------|-----|------------|
-| **1a** | **Continuous rank** | **4** | **39145** |
-| 1b | Factor (9 levels) | 11 | 39151 |
-| 1c | Node depth | 4 | 39146 |
+The factor version shows the predicted magnitude at each specific node rather than an average slope. This is the magnitude equivalent of M1b to see which nodes stand out. EMMs give the predicted |log2FC| at each rank. drop1 tests whether the factor as a whole significantly predicts magnitude.
 
-Weighted: Models 1a and 1c are basically tied (ΔAIC = 1), with 1b performing worst (ΔAIC ~6 vs 1a). The shift from 1b winning unweighted to 1b performing the worst weighted indicates that the non-linearity in 1b was partly an artefact of imprecise estimates. When this is accounted for the linear models perform better than the complex factor one. 
+![alt text](image-75.png)
 
-**Conclusion:** Expressed transcripts belonging to gene families show a consistent positive baseline logFC (male-biased expression) across all evolutionary ages. After accounting for logFC estimation precision via inverse-variance weighting, the oldest duplicate copies (rank 1, node N0) show the strongest male bias, with progressively younger duplicates trending toward weaker sex-differential 
-expression.
+The predicted magnitude of sex bias follow a similar pattern. Dramatic increase at rank 4. Interestingly, this decreases after rank 4, indicating that intermediate-age families at the bruchid node drive the sex-biased signal.
 
-However, after accounting for estimation precision via inverse-variance weighting, there is no significant relationship between evolutionary age and direction of sex bias in the dataset of 9,785 transcripts (Model 1a weighted: p=0.349; 
-Model 1c weighted: p=0.637), and model 1b performing the worst when weighted.  The discrepancy between weighted and unweighted results shows the value of accounting for logFC estimation precision in two-stage mixed models on RNA-seq data.
+### M2b: Random Slope Model
+**Formula:** `lmer(abs_logFC ~ age_rank_scaled + (1 + age_rank_scaled | HOG))`
 
-## Model 2 
+This allows each gene family to have its own age-magnitude relationship, instead of assuming the slope is the same for all families. A random slope requires at least 3 observations per gene family to estimate reliably (only 2 points will give zero residual degrees of freedom within the HOG), so this is run on a HOG >= 3 dataset (3,725 transcripts, 806 HOGs).
 
-| | Count |
-|---|---|
-| **Model data** (age rank + HOG + logFC) | 9,785 transcripts / 5048 HOGs |
-| Filtered dataset (HOG ≥ 2 transcripts) | 7361 transcripts / 2624 HOGs |
-| Filtered dataset (HOG ≥ 5 transcripts) | 1,883 transcripts / 248 HOGs |
+I used the bobyqa optimizer because random slope models are harder to fit and the default optimizer can have trouble near convergence boundaries.
 
-To be able to use a random slope model within each gene family, it needs more than one member. 
+To test whether the random slope is justified, M2a and M2b are compared using a likelihood ratio test on the same HOG >= 3 dataset. Both models must be fitted with maximum likelihood (REML = FALSE) for a valid LRT comparison.
 
-## Model 2a - does age predict magnitude of sex bias, and does it differ by sex?    
-**Model formula:** `abs(logFC) ~ age_rank_scaled + (1 | HOG)`  
-**Response variable:** abs(logFC) = magniture in either direction (male or female)     
-**Random effect:** `(1 | HOG)` - normal intercept first  
-**Weighting:**  I will once again try both weighted and unweighted  
+**LRT result:** p < 2.2e-16, so the random slope model fits significantly better.
 
-## Model 2b - 
-**Model formula:** `abs(logFC) ~ age_rank_scaled + (1 + age_rank | HOG)`  
-**Response variable:** abs(logFC) = magniture in either direction (male or female)  
-**Random effect:** `(1 + age_rank | HOG)` - random slope within each gene family.   
-**Filter:** For the random slope model i use a filtered model dataset where gene families below the size of 5 is filtered out. This is because a line has to be able to be fitted within each gene family between several transcripts. The filtered datset is 1883 transcripts and 248 gene families. 
+However, the average slope across all families is not significant (p = 0.14). Within-family age trajectories vary alot across families, and those trajectories cancel out at the population level.  
+The intercept-slope correlation is +0.30, meaning gene families with higher sex bias also show a steeper age gradient within themselves. The age-sex bias connection is concentrated in families that already have sex-biased expression.
 
-## Model 3 -   
-**Model formula:** `abs(logFC) ~ sex_bias * age_rank_scaled + (1 | HOG)`  
-sex bias as three categories? Unbiased, male and female? 
+| Model    | n transcripts | n HOGs | Fixed slope (age) | p    | Slope variance | Intercept–slope r |
+| -------- | ------------- | ------ | ----------------- | ---- | -------------- | ----------------- |
+| M2a_filt | 3,372         | 5,806  | 0.077             | 0.14 | -              | -                 |
+| M2b_filt | 3,372         | 5,806  | 0.077             | 0.14 | 0.537          | +0.30             |
 
+Model 3: Does the Age-Magnitude Relationship Differ by Sex Bias Class?
+Formula: lmer(abs(log2FoldChange) ~ sex_bias * age_rank_scaled + (1 | HOG))
+
+### Model 3: Does the Age-Magnitude Relationship Differ by Sex Bias Class?
+**Formula:** `lmer(abs_logFC ~ sex_bias * age_rank_scaled + (1 | HOG)`
+**Response:** |log2FoldChange|  
+**Predictors:** sex_bias (three levels: unbiased / male-biased / female-biased) crossed with continuous age rank. Unbiased is the reference group. "Unbiased" means the gene did not pass |logFC| > 1 and padj < 0.05
+
+A significant interaction means the age-magnitude slope differs between sex bias classes. drop1 tests the interaction term. EMMs predict the magnitude for each class at low (-1 SD), average (0) and high (+1 SD) age, allowing direct comparison of the slopes.
+
+| Dataset           | Interaction F | p-value |
+| ----------------- | ------------- | ------- |
+| Full (n=9,785)    | 4.04          | 0.018   |
+| HOG ≥ 2 (n=7,361) | 8.47          | 0.0002  |
+
+The interaction term is significant in both datasets, stronger in the multi-member family. 
+
+**Range from EMM table:** 
+| Sex bias class | At -1 SD (older) | At average age | At +1 SD (younger) | Change | Interpretation |
+|----------------|-----------------|----------------|--------------------|--------|----------------|
+| Unbiased       | 0.58            | 0.73           | 0.88               | +0.30  | Steep positive slope |
+| Male-biased    | 2.81            | 2.86           | 2.91               | +0.10  | Nearly flat |
+| Female-biased  | 2.11            | 2.18           | 2.26               | +0.15  | Nearly flat |
+
+Predicted values are |log2FoldChange|. Age is on a standardised scale where -1 SD correspond to roughly ranks 3-4 and +1 SD roughly ranks 6-7.  
+This indicate that the age-magnitude gradient from M2a is driven by unbiased genes. Once a gene is sex-biased, its magnitude stays roughly constant regardless of evolutionary age. Younger unbiased genes show higher fold-change variation, but it doesnt cross the significance threshold. 
+
+### Model 3b Factor Age Version (Supplementary)
+**Formula:** `lmer(abs(log2FoldChange) ~ sex_bias * age_rank_factor + (1 | HOG))`
+
+Using age_rank_factor shows which nodes drives interaction, and drop1 gives an interation p=2.8e-16, much stronger than the continous version. 
+
+EMMs gives the predicted magnitude for each sex bias class at each node. Two nodes stand out, a spike in male magnitude at N5 a reversal at N13. All other nodes show male-biased genes exceeding female-biased genes in magnitude. 
+
+| Node         | Male abs(log2FC) | Female abs(log2FC) | Notable                                         |
+| ------------ | ------------- | --------------- | ----------------------------------------------- |
+| Rank 4 (N5)  | 4.12          | 2.24            | Male magnitude nearly double any other node     |
+| Rank 8 (N13) | 2.32          | 3.56            | Only node where female exceeds male (p = 0.014) |
+
+![alt text](image-76.png)
+
+## Covariate controlled models 
+
+To test wether the age effects are confounded by gene length, mean expression level or gene family size. Young genes tend to be shorter and lower expressed, and larger families have more observed paralogs per bin. If the age signals simply reflect these properties, they are not informative.
+
+Covariates added:
+
+* log_gene_length_scaled:  
+log-transformed transcript length from GFF coordinates (end - start), scaled to mean=0 SD=1.
+* log_baseMean_scaled:  
+log-transformed DESeq2 mean normalized count across all samples, scaled.
+* hog_size_genome_scaled:  
+gene family size at the genome level, scaled.
+
+### M2a_cov
+**Formula:** `lmer(abs_logFC ~ age_rank_scaled + log_gene_length + log_baseMean + hog_size + (1 | HOG))`
+
+Table from drop1: 
+| Term                   | F value | p-value |
+| ---------------------- | ------- | ------- |
+| age_rank_scaled        | 47.5    | 5.8e-12 |
+| log_gene_length_scaled | 35.1    | 3.3e-09 |
+| log_baseMean_scaled    | 49.1    | 2.5e-12 |
+| hog_size_genome_scaled | 2.5     | 0.115   |
+
+The age effect strenghtens after controlling for these factors. Gene length and expression are predictors of magnitude, but they do not explain the age factor. 
+
+### M3_cov
+**Formula:** `lmer(abs_logFC ~ sex_bias * age_rank_scaled + log_baseMean + (1 | HOG))`
+
+Table from drop1:
+| Term                     | F value | p-value   |
+| ------------------------ | ------- | --------- |
+| log_baseMean_scaled      | 108.6   | < 2.2e-16 |
+| sex_bias:age_rank_scaled | 6.15    | 0.002     |
+
+The sex bias x age interaction holds after controlling for expression level. 
+
+# Part 2: Relative age models 
+Does a paralogs relative position within its gene familys duplication history predict sex bias and does this depend on the family itself? 
+
+**New definitions:**  
+**Family age:** The age rank of the oldest paralog in the HOG. This defines when the gene family first appeared in the phylogeny. Binned into three categories using tertiles of the distribution across all gene families:
+
+| Category     | Age rank range                                  |
+| ------------ | ----------------------------------------------- |
+| Old          | Ranks 1–3 (shared with Coleoptera or older)     |
+| Intermediate | Ranks 4–7 (bruchid-specific nodes)              |
+| Young        | Ranks 8–9 (Callosobruchus or *C. mac* specific) |
+
+**Relative age:** The percentile rank of each paralog's age_rank within its gene family. The oldest copy gets 0, the youngest gets 1. Copies that share the same age_rank receive the same percentile rank. If all copies in a family share the same age_rank (a burst duplication at one node), all of them receive 0, because none is older or younger than any other.
+
+Binned into two levels: old (percentile rank <= 0.5) and young (> 0.5). Three bins were structurally impossible: a young family cannot have a "youngest paralog" relative to an older within-family copy, because paralogs in a young family most of the time originate at the same recent node. The young-family x young-paralog interaction cell was always empty.
+
+**Two analysis datasets**  
+**Analysis A:** Full dataset excluding singletons (n = 7,361, 2,624 gene families). Singletons have no relative age within a family.  
+**Analysis B:** Restricted to the 554 gene families where paralogs arose at different nodes (sequential duplication). Only in these families is relative age biologically meaningful. 89% of gene families have all paralogs at the same age rank and are excluded here.
+
+### Model MS1: Probability of Sex Bias
+**Formula:** `glmer(sex_biased_bin ~ rel_age_cat * family_age_2lev + (1 | HOG), family = binomial)`
+
+Family age is collapsed to two levels (old vs non-old) for the glmer, because the young-family x young-paralog cell is more or less empty and causes the model to fail with 3 levels.
+
+drop1 tests the interaction term. EMMs give predicted probabilities per group. Contrasts compare young vs old paralogs within each family age class.
+
+MS1_A showed convergence warnings due to large HOG random effect variance relative to the small fixed effects. I used allFit to confirm these are numerical artifacts and not a real problem: all five optimizers gave essentially the same fixed effect estimates (maximum range across optimizers: 0.028) and log-likelihood (range: 0.23).
+
+| Model                     | Interaction p-value          |
+| ------------------------- | ---------------------------- |
+| MS1_A (full)              | 0.44                         |
+| MS1_B (age-variable gene families) | 0.44                |
+
+The overall interaction is not significant. However, the marginal contrast in non-old families is significant:
+
+| Family age       | Contrast (old vs young paralog) | Odds ratio | p-value |
+| ---------------- | ------------------------------- | ---------- | ------- |
+| Old families     | old vs young                    | 0.82       | 0.35    |
+| Non-old families | old vs young                    | 0.57       | 0.043   |
+
+In non-old families, young paralogs have significantly higher odds of being sex-biased than old paralogs (OR=0.57 means old paralogs have 43% lower odds). This does not hold for the old families, but as mentioned the overall interaction is non-significant. 
+
+### Model MS2: Magnitude of Sex Bias
+**Formula:** `lmer(abs_logFC ~ rel_age_cat * family_age_cat + (1 | HOG))`
+
+Family age uses 3 levels here. The lmer is more tolerant of sparse cells than the glmer, and the young-family x young-paralog cell, while very sparse, is still estimable for a continuous response.
+
+| Model                     | Interaction F | p-value |
+| ------------------------- | ------------- | ------- |
+| MS2_A (full)              | 5.11          | 0.006   |
+| MS2_B (age-variable HOGs) | 3.75          | 0.024   |
+
+
+The interaction is significant in both datasets. 
+
+Table from EMM(MS2_A):
+| Relative age | Family age | Predicted abs(log2FC) |
+|-------------|------------|----------------------|
+| Old paralog | Old family | 1.38 |
+| Young paralog | Old family | 1.55 (+0.17, p=0.15) |
+| Old paralog | Intermediate family | 2.04 |
+| Young paralog | Intermediate family | 1.76 (-0.29, p=0.05) |
+| Old paralog | Young family | 1.65 |
+| Young paralog | Young family | excluded (near-empty cell) |
+
+The highest sex bias magnitude is in old paralogs from intermediate-age families. Within those families, young paralogs are actually less biased than old ones - the opposite of our prediction.  In old families the direction fits the prediction (young slightly higher) but the difference is not significant.
+
+This connects to the M1b and M3b findings: intermediate-age families correspond to the bruchid-specific nodes (ranks 4-7) where sex bias is elevated overall. Within those families, it is the established older copies driving the bias, not the most recently derived ones.
+
+![alt text](image-77.png)
+
+### Model MS2_A: Covariate Control
+**Formula:** `lmer(abs_logFC ~ rel_age_cat * family_age_cat + hog_size_genome_scaled + log_baseMean_scaled + (1 | HOG)`
+
+Controlling for family size and expression.  
+
+| Term                       | F value | p-value |
+| -------------------------- | ------- | ------- |
+| hog_size_genome_scaled     | 2.58    | 0.109   |
+| log_baseMean_scaled        | 34.7    | 4.1e-09 |
+| rel_age_cat:family_age_cat | 5.17    | 0.006   |
+
+The interaction survives covariate control. Expression level matters independently (higher expressed genes are more sex-biased), but it does not explain why old paralogs in intermediate-age families show elevated sex bias magnitude.
+
+# Part 3: Duplication Offset Models
+Instead of relative age i use a more direct approach. 
+
+Duplication offset = paralog age_rank − min(age_rank in HOG)
+
+* Offset = 0: founder copy — arose when the gene family was first established
+* Offset > 0: derived copy — arose through a later duplication event at a more recent node
+
+This uses the phylogenetic distance from the families node of origin, rather than relative position among siblings. All founder copies get offset 0 regardless of how many there are.
+
+Three offset bins (founder / early / late) were structurally impossible: high offsets can only occur in old families, since a family that originated at node 8 cannot produce a copy five nodes later. The interaction table would have the same empty cell problem as Part 2. Binary (founder vs derived) is the only approach that worked. 
+
+Both models MO1 and MO2 use Analysis B (554 HOGs with sequential duplication), since the offset concept is only meaningful where paralogs arose at different nodes.
+
+Relative offset rescales the offset to 0-1 within each family's own evolutionary window: rel_offset = dup_offset / (9 - family_origin). This corrects for the fact that old families have had more time to accumulate high-offset copies. Used in the sensitivity model MO2, restricted to old and intermediate families because young families can only have rel_offset values of 0 or 1 (no continuous gradient to fit).
+
+### Model MO1: Binary Offset
+**Formula (magnitude):** `lmer(abs_logFC ~ offset_bin1 + family_age_2lev + (1 | HOG)`  
+**Formula (magnitude):** `glmer(sex_biased_bin ~ offset_bin1 + family_age_2lev + (1 | HOG)`
+
+No interaction term - the interaction between offset and family age is not estimable (empty cells, same structural reason as the three-bin problem).
+
+**EMMs - magnitude:**
+| Copy type | Family age | Predicted abs(log2FC) |
+|-----------|------------|----------------------|
+| Founder | Old | 1.50 |
+| Derived | Old | 1.60 (+0.11) |
+| Founder | Non-old | 1.98 |
+| Derived | Non-old | 2.08 (+0.11) |
+
+**EMMs - probability**
+| Copy type | Family age | Predicted P(sex-biased) |
+| --------- | ---------- | ----------------------- |
+| Founder   | Old        | 0.462                   |
+| Derived   | Old        | 0.509                   |
+| Founder   | Non-old    | 0.510                   |
+| Derived   | Non-old    | 0.557                   |
+
+**drop1 results:**
+| Term            | Model    | F / LRT    | p-value |
+| --------------- | -------- | ---------- | ------- |
+| offset_bin1     | MO1_mag  | F = 2.34   | 0.126   |
+| family_age_2lev | MO1_mag  | F = 9.71   | 0.002   |
+| offset_bin1     | MO1_prob | LRT = 2.93 | 0.087   |
+| family_age_2lev | MO1_prob | LRT = 1.39 | 0.239   |
+
+Family age is the dominant predictor of magnitude. Derived copies are 0.11 |log2FC| higher than founders on average, in the predicted direction, but this does not reach significance. For probability, offset is borderline (p = 0.087): founders have 17% lower odds of being sex-biased than derived copies (OR = 0.83).
+
+![alt text](image-78.png)
+
+### Model MO2: Continuous Relative Offset (Sensitivity)
+**Formula (magnitude):** `lmer(abs_logFC ~ rel_offset + family_age_2lev + (1 | HOG)`  
+**Formula (magnitude):** `glmer(sex_biased_bin ~ rel_offset + family_age_2lev + (1 | HOG)`
+
+Restricted to old and intermediate families (n = 2,406, 543 HOGs). Young families are excluded because their rel_offset is either 0 or 1 with nothing in between, making a continuous slope uninterpretable.
+
+| Term            | Model    | F / LRT    | p-value |
+| --------------- | -------- | ---------- | ------- |
+| rel_offset      | MO2_mag  | F = 2.15   | 0.143   |
+| family_age_2lev | MO2_mag  | F = 8.40   | 0.004   |
+| rel_offset      | MO2_prob | LRT = 3.31 | 0.069   |
+| family_age_2lev | MO2_prob | LRT = 0.80 | 0.371   |
+
+The continuous and binary approaches agree: moving from founder (rel_offset = 0) to the latest possible derived copy (rel_offset = 1) adds ~ 0.11 to |log2FC| (p = 0.14). The fact that the effect size and direction are identical in MO1 and MO2 rules out the binning choice as the reason for non-significance.
+
+### MO1_mag_cov: Covariate Control
+**Formula (magnitude):** `lmer(abs_logFC ~ offset_bin1 + family_age_2lev + hog_size_genome_scaled + (1 | HOG)`  
+| Term                   | F value | p-value |
+| ---------------------- | ------- | ------- |
+| offset_bin1            | 2.33    | 0.127   |
+| family_age_2lev        | 9.69    | 0.002   |
+| hog_size_genome_scaled | 0.0004  | 0.983   |
+
+Family size has essentially zero effect (F < 0.001). The offset result is not a confounder artifact - the effect is simply small.
+
+### Summary of results
+| Question                                                  | Model              | Key result                                                                                                                                       |
+| --------------------------------------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Does age predict direction of sex bias?                   | M1b unweighted     | N8 (rank 5) and N10 (rank 6) significantly more male-biased. Signal disappears when weighted.                                                    |
+| Does age predict magnitude of sex bias?                   | M2a_full           | Younger genes more sex-biased in magnitude (p = 2.5e-13). Effect smaller in multi-member families.                                               |
+| Does the magnitude–age relationship vary across families? | M2b                | Random slope justified (p < 2.2e-16). Average slope flat across families. High-bias families show steeper within-family age gradients.           |
+| Does the age–magnitude slope differ by sex bias class?    | M3                 | Yes (p = 0.002–0.018). Unbiased genes drive the age gradient. Sex-biased genes are flat across ages.                                             |
+| Which nodes show extreme sex bias magnitude?              | M3b                | Rank 4 (N5): extreme male magnitude (4.12). Rank 8 (N13): only node where female exceeds male.                                                   |
+| Does relative paralog age predict P(sex-biased)?          | MS1                | No significant interaction. Young paralogs in non-old families have borderline higher odds (OR = 0.57, p = 0.043).                               |
+| Does relative paralog age × family age predict magnitude? | MS2                | Yes (p = 0.006 and 0.024 in the two datasets). Old paralogs in intermediate-age families show highest magnitude.                      |
+| Does founder vs derived status predict sex bias?          | MO1                | Directional trend (derived +0.11).                                                                                                               |
+| Do covariates explain the age effects?                    | M2a_cov, MS2_A_cov | No. Age effects survive and strengthen after controlling for gene length, expression, and family size.                                           |
+
+**Overall conclusion**  
+Absolute family age is the strongest and most consistent predictor of sex bias. Gene families that originated at bruchid-specific nodes (particularly N5 and N10 for direction, and the intermediate age category for magnitude) show the highest sex bias. The within-family age effects (relative age, duplication offset) show directional trends consistent with the prediction that derived copies evolve more sex bias, but these effects are smaller and less consistent than the family age effect. Once a gene is sex-biased, its magnitude does not continue to increase with younger evolutionary age. It is unbiased genes that show the strongest age-magnitude gradient, possibly suggesting that evolutionary timing determines whether a gene crosses the threshold into sex-biased expression, but not how extreme that bias becomes once it does.
