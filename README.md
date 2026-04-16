@@ -584,7 +584,10 @@ And as proporitonal bars, where i grouped together the genome-defined sizes into
 
 # Chromosomal location analyses 
 
+Sex Chromosomal contigs: 
 
+{ X : ['utg000057l_1','utg000114l_1','utg000139l_1','utg000191l_1','utg000326l_1','utg000359l_1','utg000532l_1','utg000602l_1'],
+  Y : ['utg000322l_1','utg 000312c_1','utg 000610l_1','utg 001235l_1']}
 
 
 # Mixed model analyses 
@@ -905,7 +908,7 @@ Controlling for family size and expression.
 The interaction survives covariate control. Expression level matters independently (higher expressed genes are more sex-biased), but it does not explain why old paralogs in intermediate-age families show elevated sex bias magnitude.
 
 # Part 3: Duplication Offset Models
-Instead of relative age i use a more direct approach. 
+Instead of relative age i use a more direct approach. Since with relative age, the copy labeled as "youngest" within a family doesnt capture how long since the gamilies origin it originated. With offsets I wanted to capture different the founder copies are to the derived copies, and use this evolutionary distance instead. 
 
 Duplication offset = paralog age_rank − min(age_rank in HOG)
 
@@ -914,7 +917,8 @@ Duplication offset = paralog age_rank − min(age_rank in HOG)
 
 This uses the phylogenetic distance from the families node of origin, rather than relative position among siblings. All founder copies get offset 0 regardless of how many there are.
 
-Three offset bins (founder / early / late) were structurally impossible: high offsets can only occur in old families, since a family that originated at node 8 cannot produce a copy five nodes later. The interaction table would have the same empty cell problem as Part 2. Binary (founder vs derived) is the only approach that worked. 
+This has some other limitations though.
+Three offset bins (founder / early / late) were structurally impossible. High offsets can only occur in old families, since a family that originated at node 8 cannot produce a copy five nodes later. The interaction table would have the same empty cell problem as Part 2. Binary (founder vs derived) is the only approach that worked. 
 
 Both models MO1 and MO2 use Analysis B (554 HOGs with sequential duplication), since the offset concept is only meaningful where paralogs arose at different nodes.
 
