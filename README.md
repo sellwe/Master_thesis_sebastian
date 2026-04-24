@@ -590,6 +590,16 @@ Sex Chromosomal contigs:
   Y : ['utg000322l_1','utg 000312c_1','utg 000610l_1','utg 001235l_1']}
 
 
+From the paper i filtered contigs longer than 100kbp to identify "true" autosomes. The locations X, Y, A (autosome) and U (unassigned/belongs to the short contigs). 
+
+#transcripts on each before expression filtering:  
+    A     U     X     Y 
+28651  7176  1827   334
+
+After expression filtering:  
+    A     U     X     Y 
+16630   148   719    76
+
 # Mixed model analyses 
 I use lme4 on the post-DESeq2 data as a two-stage approach. The DESeq2 step identifies which transcripts are sex-biased while controlling for underlying genotypes. The lme4 step then asks whether evolutionary age predicts the pattern and magnitude of that sex bias across transcripts, with gene families as a random effect to account for the non-independence of transcripts within the same family.
 Two types of models are used throughout:
