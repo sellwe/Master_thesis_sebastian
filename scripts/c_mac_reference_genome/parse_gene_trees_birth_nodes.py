@@ -15,7 +15,7 @@ Birth node of a gene can be assigned in three ways:
     Using OrthoFinder's pre-reconciled, rooted gene trees.
     Walk from the leaf toward the root in the gene tree. The first
     duplication node encountered is the birth node. That node is mapped
-   to a species tree node via Duplications.tsv, giving evolutionary age.
+    to a species tree node via Duplications.tsv, giving evolutionary age.
 
 2 mrca_inferred:
    The gene was never duplicated in any lineage within this orthogroup,
@@ -33,7 +33,7 @@ Birth node of a gene can be assigned in three ways:
    or an annotation artifact). Kept as NA for downstream handling.
 
 In R: species_tree_birth_node will be merged with node_age_table to get age_rank.
-Use birth_type to distinguish how each age was determined.
+birth_type shows how each age was determined.
 
 Output columns:
   transcript_id          : e.g. g6090.t1 (matches annotation)
@@ -54,7 +54,7 @@ import io
 from collections import defaultdict
 from Bio import Phylo
 
-# ── Paths ──────────────────────────────────────────────────────────────────────
+# -- Paths ----------------------------------------------------------------------
 RESULTS_DIR  = "/proj/naiss2023-6-65/Sebastian/data/orthofinder/Results_May27"
 TREE_DIR     = os.path.join(RESULTS_DIR, "Resolved_Gene_Trees")
 DUP_FILE     = os.path.join(RESULTS_DIR, "Gene_Duplication_Events", "Duplications.tsv")
@@ -66,14 +66,13 @@ OUT_FILE     = ("/proj/naiss2023-6-65/Sebastian/Master_thesis_sebastian"
 SEP = "_filtered_proteinfasta_TE_filtered_"
 
 
-# ── Helpers ────────────────────────────────────────────────────────────────────
+# -- Helpers ----------------------------------------------------------------------
 def get_species(gene_id):
     """
     Extracts the full species prefix from an OrthoFinder gene ID.
     C_maculatus_filtered_proteinfasta_TE_filtered_C_maculatus_g6090.t1_1
     -> C_maculatus_filtered_proteinfasta_TE_filtered
-    The species prefix is everything up to (but not including) the final 
-    underscore before the gene name, same as the tip label in species_tree
+    The species prefix is the same as the tip label in species_tree
     """
     idx = gene_id.find(SEP)
     if idx < 0:
@@ -111,7 +110,7 @@ def get_gene_id(transcript_id):
     return transcript_id.split('.')[0]
 
 
-# ── Load species tree ──────────────────────────────────────────────────────────
+# -- Load species tree -------------------------------------------------------------
 # The species tree is needed for the MRCA nodes for unduplicated genes
 # For duplicated genens we get what we need from Duplications.tsv
 print("Loading species tree ...", flush=True)
@@ -129,7 +128,8 @@ def get_mrca_label(species_set):
     the oldest point in evolutionary history where it is documented to
     have existed (based on the most distantly related species that share it).
 
-    Returns None if fewer than 2 valid species.
+    Returns None if fewer than 2 valid species are found. Single-species OG is handled 
+    leter as species_specific
     """
     # keep only species in the species tree 
     valid = [s for s in species_set if s in sp_tree_tips]
@@ -155,7 +155,7 @@ def get_mrca_label(species_set):
     return None
 
 
-# ── Load Duplications.tsv ──────────────────────────────────────────────────────
+# -- Load Duplications.tsv ---------------------------------------------------------
 # Duplications.tsv contains all duplicaiton events. Each row is one duplication event:
 # it records the orthogroup, the internal node in the gene tree where the 
 # duplication occurred (Gene Tree Node), and the node in the species tree where 
@@ -181,7 +181,7 @@ print(f"  Loaded duplication events for {len(og_dup_lookup):,} orthogroups.",
       flush=True)
 
 
-# ── Process gene trees ─────────────────────────────────────────────────────────
+# -- Process gene trees ------------------------------------------------------------
 # For each orthogroup we:
 # 1 parse the resolved gene tree (Newick file, one per OG)
 # 2 For each gene (leaf) in the tree, find its birth node
@@ -206,7 +206,7 @@ for i, fname in enumerate(tree_files, 1):
     if i % 2000 == 0:
         print(f"  {i:,}/{n_files:,} trees processed ...", flush=True)
 
-    #Parse this orthogroup
+    # Parse this orthogroup
     # Orthogroup ID minus _tree.txt
     og    = fname[:-9]                              
     fpath = os.path.join(TREE_DIR, fname)
@@ -248,7 +248,7 @@ for i, fname in enumerate(tree_files, 1):
     # og_mrca = "N4". If only C_maculatus is in the OG, og_mrca = None.
     og_mrca = get_mrca_label(sp_count.keys())
 
-    # assign birht nodes for each gene
+    # assign birth nodes for each gene
     for leaf in terminals:
         gene_id_raw   = leaf.name
         species       = get_species(gene_id_raw)
@@ -256,17 +256,14 @@ for i, fname in enumerate(tree_files, 1):
         gene_id       = get_gene_id(transcript_id)
 
         # Walk from immediate parent toward root.
+        # Every node in get_path() is a direct ancestor of this leaf. 
+        # Stop at the first duplication, which created this particualr copy.
         # First duplication node hit = birth node.
-        # All nodes in get_path() are direct ancestors of the leaf,
-        # so any duplication found here genuinely occurred in this genes history.
         path      = tree.get_path(leaf)
         birth_gtn = None # gene tree node label (ex n7)
         birth_stn = None #species tree node label (ex N5)
         birth_type = None
 
-        # Walk from immediate parent towards root. Every node in this path is a direct
-        # ancestor of the leaf. Stop at the first duplication, which created this particualr copy
-        # as a distinct lineage. 
         for clade in reversed(path[:-1]):
             if clade.name and clade.name in dup_nodes:
                 # found birth duplication
@@ -316,7 +313,7 @@ print(f"  birth_type=mrca_inferred:  {n_mrca_inferred:,}")
 print(f"  birth_type=species_specific: {n_species_specific:,}")
 
 
-# ── Write output ───────────────────────────────────────────────────────────────
+# -- Write output ------------------------------------------------------------------
 print(f"Writing output to:\n  {OUT_FILE}", flush=True)
 
 fieldnames = [

@@ -17,30 +17,42 @@ Here I am investigating how paralog age might predict sex-biased gene expression
 
 Some research questions to be answered: 
  
-Is sex-biased expression consistent among paralogs within a gene family?
+* Is sex-biased expression consistent among paralogs within a gene family?
 
-Does paralog age predict whether a copy evolves sex-biased expression?
+* Does paralog age predict whether a copy evolves sex-biased expression?
 
-Are older copies within a family more or less biased than younger ones? 
+* Are older copies within a family more or less biased than younger ones? 
 
-Does this depend on when the gene family itself originated? 
+* Does this depend on when the gene family itself originated? 
 
 # Datasets
 
-## Reference Genome and Annotaions 
+## Reference Genome
 
 The reference genome comes from the paper "Y-Linked Copy Number Polymorphism of Target of Rapamycin Is Associated with Sexual Size Dimorphism in Seed Beetles" by Kaufmann et. al 2023. Male virgin C_maculatus abdominal tissue samples from the Lomé population. I am using the small male Y haplotype assembly from the paper, as it is more continuous, and the small Y haplotype is the most abundant haplotype in the population. 
 
-Genome size: 1.2 Gbp
-Genes: 35865
-Repeats: 72%
-Y assembled: 10 Mbp
+**Summary:**
+| Metric        | Value   |
+|--------------|--------|
+| Genome size  | 1.2 Gbp |
+| Genes        | 35,865  |
+| Repeats      | 72%     |
+| Y assembled  | 10 Mbp  |
 
-### Annotation  
-(Several scripts are titeled "_unfiltered" as they are based the non-isoform filtered annotation files, as i want to conserv that information).   
+## Annotations  
+Scripts titled _unfiltered are based on the non-isoform filtered annotation, to preserve all isoform information for downstream use. 
 
-Structural annotation:  
-The given non-isoform filtered annotation file braker.gtf (softlinked as C_maculatus_annotation_nonfiltered.gtf) was converted to a gff3 file using:   
+**Source files:**  
+| Softlinked File Name | Source path |
+|------|-------------|
+| C_maculatus_annotation_nonfiltered.gtf | /proj/naiss2023-6-65/Milena/annotation_pipeline/only_orthodb_annotation/C_maculatus/braker/braker.gtf |
+| C_maculatus_annotation_isoform_filtered.gff | /proj/naiss2023-6-65/Milena/annotation_pipeline/only_orthodb_annotation/C_maculatus/braker/braker_isoform_filtered.gff |
+| braker_proteins.fa | /proj/naiss2023-6-65/Milena/annotation_pipeline/only_orthodb_annotation/C_maculatus/braker/braker.aa |
+| C_maculatus_assembly.fna | /proj/naiss2023-6-65/Milena/annotation_pipeline/only_orthodb_annotation/C_maculatus/assembly_genomic.fna.masked |
+| OrthoFinder results | /proj/naiss2023-6-65/Milena/gene_family_analysis/orthofinder_orthoDB_TE_filtered/Results_May27/ |
+
+### Structural annotation:  
+C_maculatus_annotation_nonfiltered.gtf was converted to a gff3 file using:   
 agat_convert_sp_gxf2gxf.pl \  
     --gxf C_maculatus_annotation_nonfiltered.gtf \  
     -o braker_unfiltered.gff3  
@@ -48,237 +60,322 @@ agat_convert_sp_gxf2gxf.pl \
 Then, since STAR requires a gtf file to be run, this gff3 file was converted back to a .gtf file using:  
 gffread braker_unfiltered.gff3 -T -o C_maculatus_annotation_unfiltered_fixed.gtf 
 
-This creates a proper, standard .gtf file, fixes and normalizes some braker attribute formatting, skips start/stop codons and introns. For me, it made sure I had consistent transcript_id columns for each feature. 
+This standardizes BRAKER attribute formatting and ensures consistent transcript_id fields across all features. The resulting C_maculatus_annotation_unfiltered_fixed.gtf was used consistently for the STAR index and Salmon transcriptome.(why some scripts are named _consistent).  
 
-The annotation file C_maculatus_annotation_unfiltered_fixed.gtf was consistently used to create the transcriptome for Salmon and the STAR index to make sure the results are properly comparible (why some scripts are named _consistent).  
+After the mapping softwares were finished a final gff3 file was created for merging with the functional annotation and downstream comparative genomic analyses (gff is easier to handle) (**run_agat_gtf_to_gff3.sh**). 
 
-After the softwares were finished a final gff3 file was created for merging with the functional annotation and downstream comparative genomic analyses (gff is easier to handle) (**run_agat_gtf_to_gff3.sh**). 
+### Functional annotation:  
+eggNOG-mapper was run on the BRAKER protein sequences to assign functional annotation including GO terms, KEGG pathways, COG categories and PFAM domains (**run_eggnog.sh**). 
 
-Functional annotation:  
-I created a symbolic link to braker_proteins.aa in order to run eggNog to get functional annotation, which was combined with the structural annotation to create the "full annotation" in R (**run_eggnog.sh**). 
+### Orthology Inference:    
+The structural annotation, eggNOG results and OrthoFinder output (N0.tsv) were merged in R to produce the full annotation table (**create_full_annotation_fixed.R**). Each transcript was assigned a chromosomal location based on known X, Y and autosomal contigs.  
+Sex chromosome contigs had already been identified to:  
+x_contigs <- c(
+  'utg000057l', 'utg000114l', 'utg000139l', 'utg000191l',
+  'utg000326l', 'utg000359l', 'utg000532l', 'utg000602l'
+)
 
-Orthology Inference:    
-In R, this structural annotation file was merged with the results from eggnog as well as the results from OrthoFinder (N0.tsv file) to create a more comprehensive structural + functional annotation (**create_full_annotation_fixed.R**) I later added the age rank of each HOG as well into this annotation, see Paralog ancestry below.  
+y_contigs <- c(
+  'utg000322l', 'utg000312c', 'utg000610l', 'utg001235l'
+)  
 
-## RNA Dataset 1
+Contigs shorter than 100 kb were excluded, consistent with the paper. Unassigned contigs are labeled U. 
 
-Dataset 1 is based on "Sex-Specific Dominance of Gene Expression in Seed Beetles" by Kaufmann et.al 2024. 
+| Location   | Transcripts |
+|------------|------------|
+| Autosomal  | 28,651     |
+| X-linked   | 1,827      |
+| Y-linked   | 334        |
+| Unassigned | 7,176      |
 
-10 gen full sib inbred lines.  
-Lomè population of C_maculatus.  
-Three pairwise crosses of six isogenic lines.  
-Six homozygous (no signs of inbreeding depression), three heterozygote.  
-Used each isogenic line as both maternal and paternal = reciprocal crosses (4 genotypes per cross).  
-RNA seq: They sequenced 3 replicates for each of the 4 genotypes and sexes, giving 24 samples per cross and 72 samples in total.  
-Each sample consists of RNA extracted from abdominal tissues from a pool of 6 virgin beetle abdomens.   
+Gene age ranks were assigned by traversing the OrthoFinder resolved gene trees on UPPMAX (**parse_gene_trees_birth_nodes.py**, run via **run_parse_gene_trees.sh**). The script runs on the full OrthoFinder dataset and assigns a birth node to every gene across all species, which can be used for future studies of this phylogeny. Each gene gets one of three birth types:  
+| Birth type        | Description                                                                 |
+|------------------|-----------------------------------------------------------------------------|
+| duplication      | Birth node from gene tree traversal. Most reliable.                         |
+| mrca_inferred    | Gene never duplicated; age is the MRCA of all species in the orthogroup. Upper bound. |
+| species_specific | No orthologs detected in any other species. Age unknown (NA).              |
+
+Age ranks were mapped to nodes along the C_maculatus lineage in the species tree, from root (rank 1, oldest) to the C_maculatus tip (rank 9, most recent). 
+| SpeciesTreeNode        | node_depth_from_root | branch_length | age_rank |
+|------------------------|----------------------|---------------|----------|
+| N0                     | 0.000                | 0.000         | 1        |
+| N1                     | 0.351                | 0.351         | 2        |
+| N3                     | 0.398                | 0.047         | 3        |
+| N4                     | 0.421                | 0.023         | 4        |
+| N6                     | 0.458                | 0.037         | 5        |
+| N8                     | 0.629                | 0.171         | 6        |
+| N11                    | 0.661                | 0.032         | 7        |
+| N12                    | 0.697                | 0.036         | 8        |
+| C_maculatus (tip)      | 0.759                | 0.062         | 9        | 
+
+**Phylogeny with age ranks:**
+![alt text](image-3.png)
+
+**All duplication events in the C.mac lineage:**  
+![alt text](image-1.png)
+
+Birth type distribution across all C_maculatus transcripts in OrthoFinder:  
+| Birth type        | Transcripts |
+|------------------|------------|
+| duplication      | 20,026     |
+| mrca_inferred    | 6,733      |
+| species_specific | 559        |
+
+Age rank distribution across representative isoforms:
+ 
+| Age rank | 1     | 2     | 3    | 4    | 5    | 6     | 7    | 8    | 9      | NA   |
+|----------|-------|-------|------|------|------|-------|------|------|--------|------|
+| Transcripts    | 4,447 | 3,382 | 561  | 624  | 280  | 1,511 | 282  | 667  | 15,005 | 559  |
+
+Rank 9 contains the most transcripts as it captures all C_maculatus-specific and recently diverged genes. Makes sense in light of C. macs large and highly repetitive genome. Many of these might be TE-induced duplications.   
+Age ranks were propagated to all isoforms via a two-step join: first by transcript_id (26,759 transcripts matched directly), then by gene_id as fallback for non-representative isoforms of genes present in OrthoFinder (2,207 additional transcripts rescued). 9,022 transcripts remain without an age rank; these are genes fully absent from OrthoFinder or species-specific singletons.  
+
+Final age rank and birth type distribution in the full annotation:
+
+| Age rank | 1     | 2     | 3    | 4    | 5    | 6     | 7    | 8    | 9      | NA   |
+|----------|-------|-------|------|------|------|-------|------|------|--------|------|
+| Transcripts    | 4,995 | 3,695 | 625  | 692  | 301  | 1,609 | 297  | 710  | 16,042 | 9,022 | 
+
+| Birth type        | Transcripts |
+|------------------|------------|
+| duplication      | 21,572     |
+| mrca_inferred    | 7,394      |
+| species_specific | 572        |
+| NA               | 8,450      |
+
+### Related species
+Out of curiosity, the same rank approach was applied to five related species using (**add_age_related_species.R**):  
+* Coccinella septempunctata
+* Tribolium castaneum
+* Acanthoscelides obtectus
+* Bruchidius siliquastri
+* Callosobruchus chinensis 
+
+All species annotation files (braker.gtf) from their respective folder in:  
+/proj/naiss2023-6-65/Milena/annotation_pipeline/only_orthodb_annotation/
+
+Script function: builds a lineage specific age table for each species by walking its path through the shared species tree, then joins gene tree birth nodes from transcript_birth_nodes.tsv to assign age ranks. The same two-step transcript_id / gene_id join handles isoforms. Since transcript_birth_ndoes.tsv covers all species in the phylogeny, no additional UPPMAX jobs were needed, and deeper analyses are available in the fututre. 
+
+![alt text](image-4.png)
+
+The same pattern is seen for C. septempunctata, A. obtectus and C. chinensis. T.castaneum and B. siliquastri does not share the pattern. Hypethesis being that large and repetitive genomes lead to gene fsmaily expansion through TEs. 
+
+## RNA-Seq Data
+
+The dataset comes from the paper "Sex-Specific Dominance of Gene Expression in Seed Beetles" by Kaufmann et.al 2024. It provides sex-specific expression data across multple genotypes (will be accounted for). 
+
+- 10 gen full sib inbred lines, Lomé Population  
+- Three pairwise crosses of six isogenic lines.  
+- Six homozygous lines (no signs of inbreeding depression), three heterozygote.  
+- Each isogenic line used as both maternal and paternal (reciprocal crosses), giving 4 genotypes per cross  
+- 3 replicates per genotypes per sexes, 24 samples per cross, 72 samples in total.  
+- Each sample consists of RNA extracted from abdominal tissues from a pool of 6 virgin beetle abdomens.  
+
 The data was downloaded from https://www.ncbi.nlm.nih.gov/Traces/study/?acc=PRJEB70958&o=acc_s%3Aa with the script (**download_PRJEB70968.sh**).   
 
-Run FastQC and MultiQC (**run-fastqc_multiqc.sh**).
-Run fastp for trimming (**run_fastp_multiqc.sh**).
-Ran fastqc and multiqc again to confirm improvements (**run_fastqc_multiqc_post_trim.sh**).
+Run FastQC and MultiQC (**run-fastqc_multiqc.sh**)  
+Run fastp for trimming (**run_fastp_multiqc.sh**)  
+Run fastqc and multiqc again to confirm improvements (**run_fastqc_multiqc_post_trim.sh**).
 
 ### Metadata
 
 The metadata was found from the same SRA website with accesion-nr PREJB70958.  
 The original metadata from the study is found in **Philipp_dominance_metafile.xlsx** and **Philipp_dominance_notes_meta.pdf**.   
 
-Label corrected metadata used here for dataset 1 is found in **dominance_meta_corrected.xlxs** (all 72 entries), and in **dominance_meta_corrected_outlier_corrected.xlsx** and **dominance_meta_corrected_outlier_corrected.csv** (where the outliers are removed).   
+Label-corrected metadata is in **dominance_meta_corrected.xlxs** (all 72 entries), and **dominance_meta_corrected_outlier_corrected.xlsx** and **dominance_meta_corrected_outlier_corrected.csv** (where the outliers are removed).   
 
-To determine the sexes of the samples, i looked at the original fasta names submitted to SRA for each sample (ex. TF-2581-3_S3_L001_R1_001.fastq.gz) and linked these to the TF ID in the original excel file, which has the correct sexes in the Sex column.  
+**Sex-correction:** Sample sexes were determined by linking original FASTQ filenames submitted to SRA (ex. TF-2581-3_S3_L001_R1_001.fastq.gz) to the TF ID in the original Excel file, which has the correct sexes in the Sex column.  
 
-To determine the correct genotypes of the samples I looked at the Cross column in the excel file, and the pdf and translated it as follows:  
-13:20 = A   
-42:13 = B   
-21:5 = C   
-1:11 = D  
-47:1 = E  
-4:18 = F  
+**Genotype-translation:** Cross IDs from the original study were translated to letter codes similar to those in the published study as follows:  
+| Cross ID | Code |
+|----------|------|
+| 13:20    | A    |
+| 42:13    | B    |
+| 21:5     | C    |
+| 1:11     | D    |
+| 47:1     | E    |
+| 4:18     | F    | 
 
-Which leads to:  
-Reciprocal pairwise cross 1: 13:20 x 42:13, or A x B. For samples 1-24 (page 1 in pdf), resulting in AA, AB, BA and BB.  
-Reciprocal pairwise cross 2: 21:5 x 1:11, or C x D. For samples 25-48 (page 2 in pdf), resulting in CC, CD, DC, and DD.  
-Reciprocal pairwise cross 3: 47:1 x 4:18, or E x F. For samples 49-72 (page 3 in pdf), resulting in EE, EF, FE and FF.  
+| Cross | Samples   | Genotypes          |
+|-------|-----------|--------------------|
+| A x B | 1-24      | AA, AB, BA, BB     |
+| C x D | 25-48     | CC, CD, DC, DD     |
+| E x F | 49-72     | EE, EF, FE, FF     |
 
-I created an additional column Genotype where i collapsed the reciprocal crosses into Heterozygote (i.e AB + BA = AB), as the reciprocal didnt impact the results of the original study. The genotypes will be accounted for in the differential expression analysis and in the mixed models. 
+Reciprocal crosses were collapsed into a single Genotype column (AB + BA = AB), as cross direction did not affect results in the original study. Genotype is treated as a background variable in the differential expression analysis.
 
-I cant be entirely sure, but these genotype terms and pairwise cross distinction is the best i can think of to replicate what was used in the study. Even if the naming conventions would be different, the groupings of samples should stay the same for downstream analysis. As genotypes in this study is only relevant as background noice to be taken account for, i think this will suffice. 
+**Outlier correction:** After PCA visualization one sample (ERR12383283, DD) was changed from male to female due to clustering. Two samples were removed due to ambiguous sex:   
+ERR12383297 (male, FE) and   ERR12383303 (male, EF). 
+Three remaining samples are suspected of ambigous sex as they stray from the respective clusters in the PCA, but are kept (ERR12383254 (female, BA), ERR12383278 (male, AA), ERR12383310 (male, FF)). 
 
-After PCA visualization one sample (ERR12383283 (DD)) was changed from male to female due to clustering and suspected misidentification. Two samples were removed due to ambiguous sexes:   
-ERR12383297 (male, FE),  
-ERR12383303 (male, EF),  
-Three remaining samples are suspected of ambigous sex as they stray from the respective clusters in the PCA, but are kept (ERR12383254 (female, BA), ERR12383278 (male, AA), ERR12383310 (male, FF)). In total 70 samples, of whom 37 are female, and 33 are male. 
+Final sample count: 70 samples, of whom 37 are female, and 33 are male. 
 
+**Early PCA plot indicating outliers:**
 ![alt text](<Screenshot 2025-12-12 140934.png>) 
 
 # Mapping methods
 
-Three different mapping methods are used and will be compared. Salmons mapping based mode/quasi mapping/selective alignment, STAR with featureCounts, and the combined method of Salmons alignment based mode + STARs .bam files. For the main part of the project RNA-Seq data from dataset 1 was used. Analyses were run on the transcript level rather than gene level. 
+Three methods were tested to assess how each handles multi-mapping, which is a big concern when studying paralogs. All three were run on the transcript level using RNA-seq data from the Kaufmann 2024 dominance dataset.
 
-Information about the two salmon modes are found here: https://salmon.readthedocs.io/en/latest/salmon.html#
+- Salmon mapping-based mode (quasi-mapping / selective alignment)
+- STAR + featureCounts
+- STAR + Salmon alignment-based mode
+
+After comparing mapping rates, DE signal and correlation between methods, salmon-map
+was selected for the main analysis. 
+
+For details on the two Salmon modes, see:
+https://salmon.readthedocs.io/en/latest/salmon.html#
 
 ## Salmon-mapping based mode (Quasi-mapping) 
 
-Salmon maps directly to the transcriptome, on the fragment level (= read pairs = one RNA-molecule). The fragments are assigned to equivalence classes which represents the set of transcripts that are compatible with the given fragment sequence. It employ statistical models that tries to estimate the probability of a fragments origin. 
+Salmon maps directly to the transcriptome, on the fragment level (one fragment = read pairs = one RNA-molecule). Quasi-mapping uses a k-mer index rather than full base-by-base alignment. Salmon runs a sliding window across each read and identifies candidate transcript matches based on consistent k-mer hits. Reads compatible withthe same set of transcripts are grouped into equivalence classes, and a probabilistic EM algorithm resolves which transcript each fragment most likely originated from. This makes it well suited for paralog studies since ambiguous reads are modelled
+rather than discarded.
 
-Quasi-mapping = no full base-by-base alignment, no alignment score.
+**Step 1: Build transcriptome**    
+A transcriptome was created from `C_maculatus_assembly.fna` and
+`C_maculatus_annotation_unfiltered_fixed.gtf` using gffread
+(**create_transcript_unfiltered_consistent.sh**).
 
-Salmon builds an index of overlapping transcript k-mers. It runs a sliding window across the read (k-mer) to identify candidate transcript matches. If enough k-mers from the read hit the same transcript consistently it’s a possible match, evaluated using a lightweight fast scoring algorithm. For each read is given a list of possible transcripts. All the reads that have the same list of transcripts are put in the same equivalence class. The probabilistic algorithms are run on these equivalence classes which decreases run time substantially. 
+**Step 2: Build gentrome and decoy file**  
+The whole-genome decoy approach was used, where genome sequences serve as decoys. Fragments that map best to a decoy are discarded. A gentrome (transcripts followed by the full genome) and a decoy names file were generated (**generate_gentrome_decoys_consistent.sh**).
 
-Here, Salmon needs a transcriptome and a decoy file. 
+**Step 3: Build Salmon index**  
+A k-mer index was built from the gentrome and decoy files
+(**create_salmon_index_unfiltered_consistent.sh**).
 
-A transcriptome was created from the reference genome + C_maculatus_annotation_unfiltered_fixed.gtf using gffread (**create_transcript_unfiltered_consistent.sh**) 
+**Step 4: Quantify**
+Salmon was run with the following flags (**run_salmon_map_consistent.sh**):
 
-I used the whole genome decoys approach (where genome sequences themselves serve as decoys for the transcripts), and generated a gentrome (all transcripts first, then the genome/decoy sequences), and a decoy .txt file (which includes the names/headers of the genome sequences). If a fragment maps best to a decoy, its discarded (**generate_gentrome_decoys_consistent.sh**).
+- `--gcBias` corrects for GC-content bias during quantification
+- `--seqBias` corrects for sequence-specific bias at fragment starts
+- `--validateMappings` enables selective alignment mode (now default)
 
-Salmon builds an index of all transcripts using k-mers, this was created from the gentrome and the decoy files (**create_salmon_index_unfiltered_consistent.sh**).
-
-Using the k-mer index salmon performs quasi-mapping to see which trancript each read is compatible with. It groups the reads into equivalence classes (all reads compatible with the same set of transcripts). To resolve which transcript the reads belong to it uses its probabilistic algorithm. 
-
-Salmon was run using the flags:  
---qcBias  
-which corrects for GC-content during quantification,  
---seqBias  
-which corrects for sequence specific bias where fragments starting with certain motifs might get preferential sequencing,  
---ValidateMappings  
-which is the selective alignment mode (which is now default).
-(**run_salmon_map_consistent.sh**). 
-
-The alignments were transferred to R, where I;  
--ran txiimport on the transcript level,  
--filtered on ≥5 counts in at least 5 samples (Earlier for all methods i used ≥3 mean counts per sample in each sex, but as this removes genes that are only expressed in one sex i changed that. This is why the ipynb files are named _new_filtering)   
--DESeq2 for DE analysis based on male vs female, controlled for the underlying genotypes (~ Genotype + Sex),   
--used vst for count normalization with variance stabilization.  
+**Step 5: Differential expression in R**
 (**salmon_map_dominance_consistent_script.R**)  
 
-I combined the results with the structural and functional annotations and imported them to Visual Studio Code for plotting (PCA and Volcano Plot).  
-(**salmon_map_unfiltered_plotting_transcript_new_filtering.ipynb**)
+- tximport on the transcript level
+- Pre-filter transcript list exported before expression filtering as
+  `prefilter_transcripts_annotated_May27.csv`, annotated with HOG and gene_id.
+  Used downstream to get gene family sizes at the mapped genome level.
+- Expression filter: ≥5 counts in at least 5 samples. 
+- DESeq2: `~ Genotype + Sex`, contrast Male vs. Female. Genotypes from the cross-design in the paper taken into account here. 
+- VST normalization for PCA
+- Results annotated with `C_mac_full_annotation_with_age_fixed.csv`, which includes
+structural annotation, eggNOG functional annotation, OrthoFinder HOG membership
+and gene age ranks.
+
+**Step 6: Visualization in Python**
+Results were combined with the full annotation and imported into VS Code for PCA and volcano plots (**salmon_map_unfiltered_plotting_transcript_new_filtering.ipynb**).
 
 ## STAR (with featureCounts)
 
-STAR aligns the RNA-reads to the genome.
+STAR aligns RNA reads to the genome and is splice-junction aware. The alignment was split across three scripts due to UPPMAX time limits, with the continuation scripts checking for already completed samples before restarting. 
+(**star_alignment_dominance.sh**, **star_alignment_dominance_continuation.sh**, **star_alignment_dominance_continuation_2.sh**).
 
-Created a STAR index with the flags:
+**Step 1: Build STAR index and align**
 
---sjdbGTFfile,  
---sjdbOverhang 149 (the max read length -1)  
-for making it splice junction aware.  
-Requires a GTF annotation file. 
+Index was built with:
+- `--sjdbGTFfile` and `--sjdbOverhang 149` (read length 150 - 1) for splice-junction awareness
 
-Then aligned reads and counts using the flags:
+Alignment flags:
+- `--outSAMtype BAM SortedByCoordinate` sorts output by genomic location
+- `--quantMode GeneCounts` performs gene-level quantification
+- `--twopassMode Basic` enables novel junction discovery
+- `--outFilterMultimapNmax 20` discards reads mapping to more than 20 locations
 
---outSAMtype BAM SortedByCoordinate  
-sorted based on genomic location,  
---quantMode GeneCounts  
-performs gene-level quantification,  
---twopassMode Basic 
-can discover novel junctions not in the annotation,  
---outFilterMultimapNmax 20  
-max # of multiple alignment locations per read. 
+**Step 2: Mark duplicates and index BAM files**
 
-(**star_alignment_dominance.sh** (includes indexing), **star_alignment_dominance_continuation.sh**, **star_alignment_dominance_continuation_2.sh**).
+Picard was used to flag duplicate reads based on identical start positions. samtools indexed the resulting BAM files. Run as a SLURM array job, one task per sample (**run_picard_samtools.sh**).
 
-Picard was used to mark read ruplicates by setting a flag in the bam files based on identical start positions (can be removed later), and samtools were used to index the bam files and ease downstream analyses (**run_picard_samtools.sh**).  
+featureCounts was run in four modes on the exon level using the Picard-marked BAM files. Only mode 4 was used for the downstream comparison with Salmon, as it is the closest equivalent.
 
-Subread featureCounts was used to quantify on the exon-level based on the .bam files from STAR, including the reads that have multi-mapped. Here the multi-mapped are handled fractionally, so if a read maps to 3 exons, each gets 1/3 count. It doesn't take into account any transcript abundance or sequence uniqueness like Salmon does, which does risk inflating counts.
+| Mode | Level | Multimapping | Script |
+|------|-------|-------------|--------|
+| 1 | Gene | No | run_subread_featurecounts.sh |
+| 2 | Gene | Yes, fractional | run_subread_featurecounts.sh |
+| 3 | Transcript | No | run_subread_featurecounts.sh |
+| 4 | Transcript | Yes, fractional | run_subread_featureCounts_transcript_multi.sh
 
-I ran four different modes of featureCounts, but so far only used the fourth to make the closest comparison to Salmon:     
-Mode 1: Standard counting
-No multimapping, summarize counts by gene, can be used for differential expression analysis with the flags:  
--p -B -C   
-(paired-end fragments/read pairs, both must map, does not count chimeric fragments)  
--g "gene_id"  
--t "exon"  
--s 2   
-(reverse stranded)  
+Multimapped reads are split fractionally across all targets. This does not use sequence uniqueness or transcript abundance models the way Salmon does, which risks inflating counts or missassigning reads for paralogous transcripts. 
 
-Mode 2: gene level with multimapping. 
-Still the flags -g "gene_id" and -t "exon", but also adding the -M and --fraction flags for multimapping and fractional counting (splitting reads between the multipe targets). 
+**Step 4: Differential expression in R** (**star_DE_analysis.R**)
 
-Mode 3: transcript level counting. 
-To compare with the dominance paper. They said "summarizing exons per transcript". Using -f flag to count on the exon level and then later sum to get transcript level, and -g for grouping by transcript_id instead. 
+- Exon-level counts aggregated to transcript level by summing
+- Only mode 4 (transcript-level multimappers) used for DE analysis
+- Fractional counts rounded to integers before DESeq2 input
+- Expression filter: ≥5 counts in at least 5 samples
+- DESeq2: `~ Genotype + Sex`, contrast Male vs. Female
+- VST normalization for PCA
+- Results annotated with `C_mac_full_annotation_with_age_fixed.csv`, which includes
+structural annotation, eggNOG functional annotation, OrthoFinder HOG membership
+and gene age ranks.
 
-Mode 4: transcript level with multimapping  
-This is the most relevant comparison to Salmon.  
--M \
---fraction \
--f \
--g "transcript_id" \
--t "exon" \
-
-(**run_subread_featurecounts.sh**, **run_subread_featureCounts_transcript_multi.sh**)
-
-This created the files: 	
-gene_counts_standard.txt  
-gene_counts_multimappers.txt  
-transcript_counts.txt  
-Transcript_counts_multimappers.txt
-
-These files were imported to RStudio, where I: 
--Aggregate to transcript level by summing exon counts,  
--chose to only load and use the multimapped transcript counts,  
--filtered on ≥5 counts in at least 5 samples (Earlier for all methods i used ≥3 mean counts per sample in each sex, but as this removes genes that are only expressed in one sex i changed that. This is why the ipynb files are named _new_filtering),   
--DESeq2 for DE analysis based on male vs female, controlled for the underlying genotypes (~ Genotype + Sex),  
--used vst for count normalization with variance stabilization.  
-(**star_DE_analysis.R**)  
-
-I combined the results with the structural and functional annotations and imported them to Visual Studio Code for plotting (PCA and Volcano Plot).  
+**Step 5: Visualization in Python**
 (**STAR_plotting_new_filtering.ipynb**)
 
 ## Salmon-alingment based mode 
 
-First had to rerun STAR to be compatible with salmon and transcript alignment files. It uses the same star_index as the original run.  The reads are aligned to the genome, but gives transcript coordinates. STAR applies the same filtering as before and discards reads that mapped to more than 20 locations. 
+In this mode, STAR first aligns reads to the genome and outputs transcript-coordinate BAM files. Salmon then quantifies from those alignments using the same transcriptome as salmon-map. This is the most conservative of the three methods: reads that are too ambiguous for STAR alignment are discarded before Salmon ever sees them.
 
-Still splice junction aware with twopassMode Basic.  
---quantMode TranscriptomeSAM (Outputs a BAM file aligned to transcript sequences. Salmon requires reads to be mapped to transcriptome coordinates). 
---outSAMtype BAM SortedByCoordinate 
-(Sorted by reference coordinates)
---outSAMattributes NH HI AS nM XS GX GN
-(Tags needed for Salmon.  
-Nr alignmeds for a read, alignment index for multimappers, alignment score, nr of mismatches, strand information, Gene ID, Gene name.)  
---outFilterMultimapNmax 20
-(keeps up to 20 alignments per read)  
---winAnchorMultimapNmax 100  
-(How many "anchor points" per window. Max 100 regions)  
+**Step 1: STAR alignment to transcriptome coordinates**
 
-(**star_transcriptome_for_salmon_1.sh**, **star_transcriptome_for_salmon_2.sh**, **star_transcriptome_for_salmon_3.sh**)
+The same STAR index from the featureCounts pipeline was reused. STAR was run with `--quantMode TranscriptomeSAM` to produce BAM files in transcript coordinates for Salmon. Run was split across three scripts due to UPPMAX time limits, processing
+24 samples each (**star_transcriptome_for_salmon_1.sh**, **star_transcriptome_for_salmon_2.sh**, **star_transcriptome_for_salmon_3.sh**).
 
-Salmon looks at the provided alignments from the transcript .bam files and builds equivalence classes. It uses the same transcriptome as Salmon-map. Then the fragments are probabilistically assigned to the transcripts.  
+Key flags differing from the featureCounts STAR run:
+- `--quantMode TranscriptomeSAM` outputs BAM aligned to transcript coordinates
+- `--outSAMattributes NH HI AS nM XS GX GN` adds tags required by Salmon
+- `--alignEndsType EndToEnd` disables soft-clipping
+- `--outSAMmapqUnique 60` sets mapping quality for uniquely mapped reads
+- `--winAnchorMultimapNmax 100` allows more anchor points per window
+- `--outFilterMultimapNmax 20` discards reads mapping to more than 20 locations
 
-Salmon was run using the transcriptome .bam files created by STAR and the same transcriptome as Salmon-map, using similar flags:  
-    --targets "$TRANSCRIPTS" \
-    --gcBias \
-    --seqBias \  
-(**run_salmon_align_star_consistent.sh**)
+These flags differ from the featureCounts STAR run because the output goes to Salmon rather than featureCounts. The additional SAM attributes are required by Salmon to process the BAM. `--winAnchorMultimapNmax 100` increases the number
+of candidate anchor positions, giving STAR more opportunity to find valid alignments for reads near repetitive regions before passing them to Salmon. `--alignEndsType EndToEnd` disables soft-clipping to ensure only full-match reads enter Salmon's probabilistic model, though this also makes the alignment step slightly more conservative than the featureCounts run.
 
-The alignments were transferred to R, where I;  
--ran txiimport on the transcript level,  
--filtered on ≥5 counts in at least 5 samples (Earlier for all methods i used ≥3 mean counts per sample in each sex, but as this removes genes that are only expressed in one sex i changed that. This is why the ipynb files are named _new_filtering)   
--DESeq2 for DE analysis based on male vs female, controlled for the underlying genotypes (~ Genotype + Sex),  
--used vst for count normalization with variance stabilization.  
-(**salmon_align_dominance_consistent_script.R**)  
+**Step 2: Salmon quantification from BAM files**
 
-I combined the results with the structural and functional annotations and imported them to Visual Studio Code for plotting (PCA and Volcano Plot).  
-(**salmon_align_plotting_new_filtering.ipynb**)
+Salmon used the transcript-coordinate BAM files from STAR and the same transcriptome as salmon-map (**run_salmon_align_star_consistent.sh**).
+
+Flags used:
+- `--gcBias` corrects for GC-content bias
+- `--seqBias` corrects for sequence-specific bias at fragment starts
+
+**Step 3: Differential expression in R**
+(**salmon_align_dominance_consistent_script.R**)
+
+- tximport on the transcript level
+- Expression filter: ≥5 counts in at least 5 samples
+- DESeq2: `~ Genotype + Sex`, contrast Male vs. Female
+- VST normalization for PCA
+- Results annotated with `C_mac_full_annotation_with_age_fixed.csv`
+
+**Step 4: Visualization in Python** (**salmon_align_plotting_new_filtering.ipynb**)
 
 # Mapping software comparison  
+
+The three methods were compared on DE signal, expression agreement and mapping statistics. All results are filtered on (≥5 counts in ≥5 samples) and use the DESeq2 design `~ Genotype + Sex`. Log file summaries were computed by parsing the output logs from each software across all 70 samples (**mapping_software_comparison.R**).
 
 ## Differential Expression Analysis (male vs. female)
 
 ## PCA Plots 
 ### Salmon-Map  
-![alt text](image-18.png)  
+![alt text](image-10.png) 
 ### Salmon-Align  
-![alt text](image-19.png)  
+![alt text](image.png)
 ### STAR  
-![alt text](image-20.png)  
+![alt text](image-8.png)
 
 ## Volcano Plots  
 ### Salmon-Map  
-![alt text](image-21.png)  
+![alt text](image-11.png)
 ### Salmon-Align  
-![alt text](image-22.png)  
+![alt text](image-7.png) 
 ### STAR  
-![alt text](image-23.png)  
+![alt text](image-9.png)
+
+
 
 ## Post-DE method comparison summary table  
 
@@ -289,74 +386,73 @@ I combined the results with the structural and functional annotations and import
 | Salmon_alignment    | 37,989           | 16,563               | 12,645                       | 6,382                                          | 4,277           | 2,105             | 66.0                        |
 
 
-## Correlation tests  
-To see if the mapping methods agree on transcript expression levels, i did pairwise comparisons of baseMean per transcript correlation plots between the three softwares in python. 
+## Expression correlation   
+Pairwise comparisons of log10(baseMean + 1) per transcript between methods, computed on transcripts present in all three DE results (**mapping_software_comparison_correlation.ipynb**). 
 
 ### STAR vs. Salmon map
-![alt text](image-24.png)  
+![alt text](image-6.png)
 
 ### STAR vs. Salmon align
-![alt text](image-25.png)  
+![alt text](image-5.png)  
 
 ### Salmon map vs Salmon align
-![alt text](image-26.png)  
 
-Pearson, Spearman and R2 values are really high, indicating that the three methods assessed similar transcript expressions overall. Some differences are seen between STAR and the Salmon methods, but overall this is a good indicator 
+![alt text](image-2.png)
 
-## Log-file comparisons  
+Pearson, Spearman and R² values are high across all three pairs, indicating strong agreement on overall expression levels. Some divergence is visible between STAR and the Salmon methods, likely reflecting differences in how multimappers are handled.
 
-As the three softwares differ in their function and strategy they are difficult to compare directly. I created an R script for parsing the available information from each softwares log files and averaging across all samples and summing this in tables. (**mapping_software_comparison.R**).
+## Log File Sumamries  
 
 ### Salmon-Map Log files 
 
-| method      | n_samples | avg_total_fragments | avg_reads_in_eq_classes | avg_disc_mappings_align_score | avg_disc_fragment_align_score | avg_disc_fragments_decoys_map | avg_mapping_rate | nr_of_targets | nr_of_decoys | first_decoys_index |
-|------------|-----------|---------------------|--------------------------|-------------------------------|-------------------------------|-------------------------------|------------------|---------------|--------------|--------------------|
-| Salmon Map | 70        | 43044599.23         | 15698474.34              | 24226429.46                   | 9643824.77                    | 6633014.54                    | 36.23            | 37320         | 938          | 36380              |
+| Method | n samples | Avg total fragments | Avg reads in eq. classes | Avg disc. (align score) | Avg disc. (fragment score) | Avg disc. (decoy) | Avg mapping rate (%) | Targets | Decoys |
+|---|---|---|---|---|---|---|---|---|---|
+| Salmon-map | 70 | 43,044,599 | 15,698,474 | 24,226,429 | 9,643,825 | 6,633,015 | 36.2 | 37,320 | 938 |
 
-The mapping rate is very low, 36% on average, meaning 36% of fragments survived the alignment scoring, ambiguity resolution and decoy filtering. This could possibly be due to the default score threshold is too high, or the genome being too fractured, or the reads were too ambiguous to confidently assign to an equivalence class.  
-
+The mapping rate of 36% is low. Out of 43M fragments, 9.6M failed alignment scoring, 6.6M mapped best to a genome decoy and were discarded, and 15.7M were assigned to equivalence classes for probabilistic quantification. The low rate could  reflects the fragmented and repetitive nature of the C. maculatus genome rather than a methodological issue, since featureCounts also discards a large fraction of reads.  
 Mappings discarded due to alignment score = represents individual alignments that fail the scoring threshold.  
 Fragments discarded due to alignment score = fragments that failed all their mappings.  
 Fragments discarded due to decoy matching = they mapped best to a decoy.   
 
-Out of 43M fragments, 9.6M failed due to alignment score, 6.6M failed due to mapping best to a decoys, and the surviving 15.7 million fragments were assigned to equivalence classes. These contribute to quantification by being probabilistically assigned to transcripts using the Expectation-Maximization algorithm. After DE we still have quite a lot of significant transcripts (5061). 
-
 ### STAR Log files 
 
-| method | n_samples | avg_input_reads | avg_uniquely_mapped_reads | avg_multi_mapped_reads | avg_uniquely_mapped_reads_percent | avg_multi_mapped_reads_percent | avg_too_multi_mapped_reads | avg_too_multi_mapped_percent |
-|-------|-----------|-----------------|----------------------------|-------------------------|-----------------------------------|--------------------------------|----------------------------|------------------------------|
-| STAR  | 70        | 43044599.23     | 26447065.84                | 4964528.76              | 61.11                             | 11.63                          | 7722021.01                 | 18.18                        |
+| Method | n samples | Avg input reads | Avg uniquely mapped | Avg multi-mapped | Unique (%) | Multi-mapped (%) | Too many loci | Too many loci (%) |
+|---|---|---|---|---|---|---|---|---|
+| STAR | 70 | 43,044,599 | 26,447,066 | 4,964,529 | 61.1 | 11.6 | 7,722,021 | 18.2 |
 
-On average, 61.1% were uniquely mapped, 18% were multi-mapped to too many loci and discarded (set to --outFilterMultimapNmax 20), and 11.6% were multi-mapped and are reported across all those alignments in the BAM files.
+61.1% of reads mapped uniquely. 11.6% mapped to multiple loci and are reported in the BAM. 18.2% mapped to too many loci and were discarded. 
 
 ### FeatureCounts Log files 
 
-| method        | Assigned     | Unassigned_NoFeatures | Unassigned_Ambiguity |
-|---------------|--------------|------------------------|----------------------|
-| featureCounts | 22497597.69  | 42087518.83           | 17832472.58         |
+| Method | Avg assigned | Avg unassigned (no feature) | Avg unassigned (ambiguous) |
+|---|---|---|---|
+| featureCounts | 22,497,598 | 42,087,519 | 17,832,473 |
 
-We have 22.5M reads that are assigned, 42.1M reads that are aligned in the BAM but discarded as they dont overlap any annotated exon, and 17.8M reads that overlap more than one feature (multimap), and are resolved fractioanlly.
+22.5M reads assigned, 42.1M discarded as they did not overlap an annotated exon, and 17.8M overlapping multiple features resolved fractionally.
 
-These led to 37,989 transcripts, 14491 after the filtering and 5227 significantly differentially expressed transcripts between the sexes. The highest of the three. It also has the highest variance explained by the first PC.
-Here we have the strongest signal and the most transcripts to work with, but there might be uncertainty for the multimapped reads and they might also be inflated.  
+### STAR (transcriptome BAM for Salmon-align)
 
-### STAR transcriptBAM Log files 
+| Method | n samples | Avg input reads | Avg uniquely mapped | Avg multi-mapped | Unique (%) | Multi-mapped (%) | Too many loci | Too many loci (%) |
+|---|---|---|---|---|---|---|---|---|
+| STAR transcriptBAM | 70 | 43,044,599 | 23,277,654 | 4,459,149 | 53.8 | 10.5 | 7,606,532 | 17.9 |
 
-| method             | n_samples | avg_input_reads | avg_uniquely_mapped_reads | avg_multi_mapped_reads | avg_uniquely_mapped_reads_percent | avg_multi_mapped_reads_percent | avg_too_multi_mapped_reads | avg_too_multi_mapped_percent |
-|--------------------|-----------|-----------------|----------------------------|-------------------------|-----------------------------------|--------------------------------|----------------------------|------------------------------|
-| STAR_transcriptBAM | 70        | 43044599.23     | 23277654.27                | 4459149.10              | 53.83                             | 10.45                          | 7606532.23                 | 17.88                        |
+53.8% mapped uniquely, 17.9% discarded as too multi-mapped. The 10.5% that multi-mapped were passed to Salmon for probabilistic assignment.
 
-On average 53.8% were uniquely mapped, 17.9% were multi-mapped to too many locations and discarded. These are not seen by Salmon. 10.5% were multi-mapped and passed down to Salmon.
+### Salmon-Align
 
-### Salmon Align
+| Method | n samples | Avg total mapped | Avg uniquely mapped | Avg multi-mapped | Unique (%) | Multi (%) | Avg reads in eq. classes |
+|---|---|---|---|---|---|---|---|
+| Salmon-align | 70 | 11,685,928 | 10,533,184 | 1,152,744 | 89.9 | 10.1 | 11,558,587 |
 
-| method       | n_samples | avg_total_mapped_reads | avg_uniquely_mapped_reads | avg_multi_mapped_reads | avg_unique_percent | avg_multi_percent | avg_reads_in_eq_classes |
-|--------------|-----------|------------------------|----------------------------|-------------------------|--------------------|-------------------|--------------------------|
-| Salmon Align | 70        | 11685928.01            | 10533184.06                | 1152743.96              | 89.91              | 10.09             | 11558587.47              |
+Of the reads passed by STAR, 89.9% were assigned uniquely by Salmon and 10.1% were ambiguous and modelled probabilistically.
 
-This method has the lowest significant DE transcript counts (4484), and is the most conservative as the reads that are too ambiguous  were already filtered out during STAR alignment and cannot be recovered and assigned by Salmon.
+### Method Selection 
 
-### Mapping software result discussion
+
+
+
+
+
 For raw statistical power STAR + featureCounts has the most kept and significant transcripts. However, some of this apparent power can be inflated due to the fractional assignment of the paralogous transcripts.
 
 Salmon-Align has the lowest DE counts, lowest PC1 variance and is the most conservative approach as the most ambiguous reads were already filtered out during genome alignment.
