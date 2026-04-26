@@ -13,11 +13,28 @@ Master_thesis_sebastian/
 ├── .gitignore # Files to exclude from version control  
 └── README.md # This file  
 
+Here I am investigating how paralog age might predict sex-biased gene expression in C. maculatus, with a subtheme of how gene duplications might resolve intralocus sexual conflicts. 
+
+Some research questions to be answered: 
+ 
+Is sex-biased expression consistent among paralogs within a gene family?
+
+Does paralog age predict whether a copy evolves sex-biased expression?
+
+Are older copies within a family more or less biased than younger ones? 
+
+Does this depend on when the gene family itself originated? 
+
 # Datasets
 
 ## Reference Genome and Annotaions 
 
-The reference genome comes from the paper "Y-Linked Copy Number Polymorphism of Target of Rapamycin Is Associated with Sexual Size Dimorphism in Seed Beetles" by Kaufmann et. al 2023. Male virgin C_maculatus abdominal tissue samples from the Lomé population. I am using the the small male Y haplotype assembly from the paper, as it is more continuous, and the small Y haplotype is the most abundant haplotype in the population.  
+The reference genome comes from the paper "Y-Linked Copy Number Polymorphism of Target of Rapamycin Is Associated with Sexual Size Dimorphism in Seed Beetles" by Kaufmann et. al 2023. Male virgin C_maculatus abdominal tissue samples from the Lomé population. I am using the small male Y haplotype assembly from the paper, as it is more continuous, and the small Y haplotype is the most abundant haplotype in the population. 
+
+Genome size: 1.2 Gbp
+Genes: 35865
+Repeats: 72%
+Y assembled: 10 Mbp
 
 ### Annotation  
 (Several scripts are titeled "_unfiltered" as they are based the non-isoform filtered annotation files, as i want to conserv that information).   
@@ -38,9 +55,10 @@ The annotation file C_maculatus_annotation_unfiltered_fixed.gtf was consistently
 After the softwares were finished a final gff3 file was created for merging with the functional annotation and downstream comparative genomic analyses (gff is easier to handle) (**run_agat_gtf_to_gff3.sh**). 
 
 Functional annotation:  
-I created a symbolic link to braker_proteins.aa in order to run eggNog to get functional annotation, which was combined with the structural annotation to create the "full annotation" in R (**run_eggnog.sh**).    
+I created a symbolic link to braker_proteins.aa in order to run eggNog to get functional annotation, which was combined with the structural annotation to create the "full annotation" in R (**run_eggnog.sh**). 
 
-In R, this structural annotation file was merged with the results from eggnog as well as the results from OrthoFinder (N0.tsv file) to create a more comprehensive structural + functional annotation (**create_full_annotation.R**) I later added the age rank of each HOG as well into this annotation, see Paralog ancestry below.  
+Orthology Inference:    
+In R, this structural annotation file was merged with the results from eggnog as well as the results from OrthoFinder (N0.tsv file) to create a more comprehensive structural + functional annotation (**create_full_annotation_fixed.R**) I later added the age rank of each HOG as well into this annotation, see Paralog ancestry below.  
 
 ## RNA Dataset 1
 
