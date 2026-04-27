@@ -80,12 +80,12 @@ y_contigs <- c(
 
 **Location summary:**
 
-| Location   | Transcripts | After expression filtering |
-|------------|------------|-----------------------------|
-| Autosomal  | 28,651     | 16,630                      |
-| X-linked   | 1,827      | 719                         |
-| Y-linked   | 334        | 76                          |
-| Unassigned | 7,176      | 148                         |
+| Location | All transcripts | After expression filtering | Duplicates only | Expressed duplicates |
+|---|---|---|---|---|
+| Autosomal | 28,651 | 16,630 | 16,177 | 8,430 |
+| X-linked | 1,827 | 719 | 1,063 | 273 |
+| Y-linked | 334 | 76 | 249 | 46 |
+| Unassigned | 7,176 | 148 | 2,537 | 84 |
 
 ### Functional annotation:  
 eggNOG-mapper was run on the BRAKER protein sequences to assign functional annotation including GO terms, KEGG pathways, COG categories and PFAM domains (**run_eggnog.sh**). 
@@ -131,7 +131,7 @@ All recorded events, transcripts here can appear many times. Already indicates t
 
 Total: 37,988
 
-The 10,670 transcripts without a birth type consist of non-representative isoforms (.t2, .t3 etc.) and genes fully absent from OrthoFinder. OrthoFinder was run on one protein per gene, so only representative isoforms receive age and HOG data. All
+The 10,670 transcripts without a birth type consist of non-representative isoforms (.t2 suffix) and genes fully absent from OrthoFinder. OrthoFinder was run on one protein per gene, so only representative isoforms receive age and HOG data. All
 isoforms are retained in the full annotation for completeness, but they will not have any age ranks.
 
 Age rank distribution (all birth types):
@@ -146,7 +146,7 @@ Age rank distribution after filtering to duplication only (n = 20,026):
 |---|---|---|---|---|---|---|---|---|---|
 | Transcripts | 191 | 1,813 | 421 | 450 | 200 | 1,089 | 260 | 597 | 15,005 |
 
-Note the drop in rank 1 and 2 after filtering for duplication only. Most ancient transcripts are single-copy genes present across many species, including drosophila, with no duplication events recorded. Only 191 transcripts have a recorded event at rank 1. Paralog expansions in C. maculatus are overwhelmingly recent, concentrated at rank 9, consistent with TE-driven gene family expansion.
+Note the drop in rank 1 and 2 after filtering for duplication only. Most ancient transcripts are single-copy genes present across many species, including drosophila, with no duplication events recorded. Only 191 transcripts have a recorded duplication event at rank 1. Paralog expansions in C. maculatus are overwhelmingly recent, concentrated at rank 9, consistent with TE-driven gene family expansion.
 
 Since this project focuses on paralogs and duplications only, age rank analyses are restricted to transcripts with birth_type = duplication.
 
@@ -167,7 +167,7 @@ Duplicated transcript distributions:
 
 ![alt text](image-4.png)
 
-The same pattern is seen for C. septempunctata, A. obtectus and C. chinensis. T.castaneum and B. siliquastri does not share the pattern. Hypethesis being that large and repetitive genomes lead to gene family expansion through TEs. 
+The same pattern is seen for C. septempunctata, A. obtectus and C. chinensis. T.castaneum and B. siliquastri does not share the pattern. Hypothesis being that large and repetitive genomes lead to gene family expansion through TEs. 
 
 ## RNA-Seq Data
 
@@ -384,8 +384,6 @@ The three methods were compared on DE signal, expression agreement and mapping s
 ### STAR  
 ![alt text](image-9.png)
 
-
-
 ## Post-DE method comparison summary table  
 
 | Method              | Total Transcripts | Transcripts Retained | Significant DE (padj < 0.05) | Significant DE (padj < 0.05 & abs(log2FC) > 1) | Higher in Males | Higher in Females | PCA1 Variance Explained (%) |
@@ -475,26 +473,25 @@ OrthoFinder assigns genes to two levels of homology groups. An Orthogroup (OG) c
 Since all analyses here focus exclusively on C. maculatus, a HOG is equivalent to a gene family: it contains all paralogs in C. maculatus that share a common ancestor at a given node in the phylogeny. Gene family and HOG are used interchangeably throughout, but gene family is preferred for clarity. 
 
 OrthoFinder was run on isoform-filtered proteins, so only one isoform per gene was used for gene family and age rank assignment. Only representative isoforms (.t1) receive gene family and age rank data. Non-representative isoforms (.t2) are  present in the full structural annotation for completeness, but all paralog analyses use representative isoforms
-only, consistent with the OrthoFinder input. .t2 will not belong to any HOG or have an age rank. 
+only, consistent with the OrthoFinder input.  
+A small number of .t2 transcripts have leaked into the data through OrthoFinder and recieved age rank and HOG anyway. These are excluded from the paralog analyses by filtering on representative isoforms (.t1) explicitly. 
 
 # Gene family size and sex bias (**HOG_size_sex_bias.ipynb**)
 
-All analyses are restricted to transcripts with birth_type = duplication.
-Transcripts without a gene family assignment were removed before all analyses.
-
-| Level | Total transcripts | With gene family | Without gene family | # Gene families | # Families ≥ 2 members | Max family size | Median family size |
-|---|---|---|---|---|---|---|---|
-| Genome | 20,026 | 20,004 | 22 | 5,567 | 4,205 | 92 | 2 |
-| Mapped | 19,063 | 19,042 | 21 | 5,567 | 4,101 | 78 | 2 |
-| Expressed | 8,998 | 8,989 | 9 | 4,359 | 2,554 | 28 | 2 |
-
+All analyses are restricted to transcripts with birth_type = duplication.   
 Three size definitions are used throughout:  
 - genome (all annotated transcripts),  
 - mapped (all transcripts detected by Salmon before expression filtering)
 - expressed (transcripts passing the ≥5 counts in ≥5 samples filter).   
 
+| Level      | Total transcripts | With gene family | Without gene family | Gene families | Families ≥ 2 | Max size | Median size |
+|------------|------------------|------------------|----------------------|----------------|---------------|-----------|--------------|
+| Genome     | 19,556           | 19,534           | 22                   | 5,526          | 4,127         | 92        | 2            |
+| Mapped     | 18,627           | 18,606           | 21                   | 5,526          | 4,024         | 74        | 2            |
+| Expressed  | 8,842            | 8,833            | 9                    | 4,322          | 2,500         | 27        | 2            |
+
 The genome-level size reflects the true family size. Using only expressed sizes would underestimate family
-size. The largest expressed family has 28 members, while the largest genome-level family has 92. In reality those 28 expressed transcripts are a part of a 60 member family, where 28 are expressed.   
+size. The largest expressed family has 27 members, while the largest genome-level family has 92. In reality those 27 expressed transcripts belong to a larger family. 
 Since all transcripts here are confirmed duplications, the median family size is 2 at all levels. The 22 duplicated transcripts without a gene family assignment are genes OrthoFinder could not place into any orthogroup and are excluded from gene family analyses.
 
 ### Density plot of size distributions 
@@ -523,32 +520,32 @@ The outlier in red is N0.HOG0000646, a gene family within OG0000445 with 3 out o
 
 | transcript_id | log2FoldChange | padj | Description | PFAMs | hog_size_expressed | hog_size_genome |
 |---|---|---|---|---|---|---|
-| g14699.t1 | -2.35 | 1.51e-07 | RNA polymerase II regulatory region DNA binding | DUF659, Dimer_Tnp_hAT, zf-BED | 3 | 10 |
-| g16714.t1 | 29.99 | 5.53e-24 | RNA polymerase II regulatory region DNA binding | DUF659, Dimer_Tnp_hAT, zf-BED | 3 | 10 |
-| g19428.t1 | 0.03 | 0.97 | RNA polymerase II regulatory region DNA binding | DUF659, Dimer_Tnp_hAT, zf-BED | 3 | 10 |
+| g14699.t1 | -2.35 | 1.51e-07 | RNA polymerase II regulatory region DNA binding | DUF659, Dimer_Tnp_hAT, zf-BED | 3 | 9 |
+| g16714.t1 | 29.99 | 5.53e-24 | RNA polymerase II regulatory region DNA binding | DUF659, Dimer_Tnp_hAT, zf-BED | 3 | 9 |
+| g19428.t1 | 0.03 | 0.97 | RNA polymerase II regulatory region DNA binding | DUF659, Dimer_Tnp_hAT, zf-BED | 3 | 9 |
 
-The high variance is driven by g16714.t1 (log2FC ≈ 30), which seems very unlikely. This could be investigated at a later point. 
+The high variance is driven by g16714.t1 (log2FC ≈ 30), which seems very unlikely. This could be investigated at a later point. It might have to be removed for statistical analyses. 
 
 ### Within gene family directional bias  
 Gene families were classified by the combination of bias directions their transcripts contain: all unbiased, all male-biased, all female-biased, or mixed categories.
-| Category | Gene families |
-|---|---|
-| All unbiased | 1,066 |
-| All male-biased | 511 |
-| Male + Unbiased | 515 |
-| Female + Unbiased | 175 |
-| All female-biased | 200 |
-| Male + Female | 34 |
-| All three | 53 |
+| Category            | Families | Transcripts | Male % | Female % | Unbiased % |
+|---------------------|----------|-------------|--------|-----------|-------------|
+| All unbiased        | 1,044    | 2,379       | 0.0%   | 0.0%      | 100.0%      |
+| All male biased     | 504      | 1,233       | 100.0% | 0.0%      | 0.0%        |
+| Male + Unbiased     | 500      | 1,949       | 50.0%  | 0.0%      | 50.0%       |
+| Female + Unbiased   | 170      | 570         | 0.0%   | 47.5%     | 52.5%       |
+| All female biased   | 196      | 426         | 0.0%   | 100.0%    | 0.0%        |
+| Male + Female       | 35       | 114         | 55.3%  | 44.7%     | 0.0%        |
+| All three           | 51       | 340         | 34.7%  | 24.1%     | 41.2%       |
 
-Most families are all Unbiased, followed by Male-bias and Male + Unbiased. Its very rare to have both Male and Female bias in the same family. There are 34 Male + Female and 53 All three families. These will later be investigated with GO-term enrichement as they are potential candidates for intralocus sexual conflict resolution. 
+Most families are all Unbiased, followed by Male-bias and Male + Unbiased. Its very rare to have both Male and Female bias in the same family. There are 35 Male + Female and 51 All three families. These will later be investigated with GO-term enrichement as they are potential candidates for intralocus sexual conflict resolution. 
 
 ![alt text](image-16.png)
 
-For male + unbiased and female + unbiased, the transcript split is close to 50/50 between biased and unbiased. For male + female: 54.7% male, 45.3% female. For all three: 40.7% unbiased, 35.1% male-biased, 24.2% female-biased.
 
 ### Sizes of the families in each category: 
-![alt text](image-17.png)
+![alt text](image-17.png)  
+
 Generally families that are Male + Unbiased has the largest families. 
 (Diamond shapes for sizes=2 since the "All three" category cant have less than 3 members)
 
@@ -564,10 +561,10 @@ Age ranks were assigned as described in the Annotation section using gene tree t
 
 | Dataset | Transcripts (duplication only) | Age rank coverage |
 |---|---|---|
-| Full annotation | 20,026 | 100% |
-| Mapped (pre-filter) | 19,063 | 100% |
-| Expressed | 8,998 | 100% |
-| Significantly DE | 4,003 | 100% |
+| Full annotation | 19,556 | 100% |
+| Mapped (pre-filter) | 18,627 | 100% |
+| Expressed | 8,842 | 100% |
+| Significantly DE | 3,941 | 100% |
 
 ### Age rank distribution of duplicates across dataset levels
 ![alt text](image-19.png)
@@ -579,15 +576,18 @@ Most duplicated transcripts are C. mac specific and originated after the split w
 ## Age rank and sex bias
 
 ### Proportion sex-bias in age ranks  
-8,998 expressed duplicated transcipts with age plotted.  
-![alt text](image-20.png)
+8,842 expressed duplicated transcipts with age plotted.  
+![alt text](image-20.png)  
+
 A majority in each rank are unbiased, but ranks 5, 6 and 7 show a big proportional increase in male biased transcripts, while female-bias stays the same. These nodes correspond to bruchid+weevil nodes and bruchid-specific nodes in the phylogeny.
 
 ### Sex bias magnitude per age rank - significantly DE transcripts
-2,927 male biased and 1,076 female-biased transcripts with age rank plotted side by side for each age rank (padj < 0.05, |log2FC| > 1). 
+2,877 male biased and 1,064 female-biased transcripts with age rank plotted side by side for each age rank (padj < 0.05, |log2FC| > 1). 
 ![alt text](image-22.png)
 
 Male-bias is generally more common than female bias, but ranks 5, 6, and 7 again stand out with elevated levels of male-bias. 
+
+---
 
 # Mixed model analyses 
 I use lme4 on the post-DESeq2 data as a two-stage approach. The DESeq2 step identifies which transcripts are sex-biased while controlling for underlying genotypes. The lme4 step then asks whether evolutionary age predicts the pattern and magnitude of that sex bias across transcripts, with gene families as a random effect to account for the non-independence of transcripts within the same family.
@@ -610,16 +610,19 @@ emmeans (estimated marginal means) computes the predicted value of the response 
 
 ## Dataset Summary
 
-| | Count |
-|---|---|
-| Total transcripts loaded | 17,574 |
-| Transcripts with age rank | 9,796 |
-| Transcripts with HOG | 15,648 |
-| **Model data** (age rank + HOG + logFC) | **9,785** |
-| HOGs represented | 5,048 |
-| Unique gene_ids | 9,785 |
+|                                                    |  Count                      |
+|----------------------------------------------------|--------------------------------|
+| Total transcripts loaded                           | 17,574                         |
+| Model data (birth_type = duplication, .t1, age rank + HOG + logFC) | 8,833 |
+| HOGs represented                                   | 4,322                          |
+| HOG ≥ 2                                            | 7,011 transcripts / 2,500 HOGs |
+| HOG ≥ 3                                            | 3,541 transcripts / 765 HOGs   |
 
 OrthoFinder was run on an isoform-filtered proteome (one protein per gene) so eac htranscript maps to only one gene and one HOG. There is no isofrm nesting to wory about, so (1 | HOG) should be sufficient for the random  effects. 
+
+
+
+
 
 ### Dataset Issues
 Two structural properties of the data shape the analysis throughout:  
@@ -905,95 +908,3 @@ Controlling for family size and expression.
 | rel_age_cat:family_age_cat | 5.17    | 0.006   |
 
 The interaction survives covariate control. Expression level matters independently (higher expressed genes are more sex-biased), but it does not explain why old paralogs in intermediate-age families show elevated sex bias magnitude.
-
-# Part 3: Duplication Offset Models
-Instead of relative age i use a more direct approach. Since with relative age, the copy labeled as "youngest" within a family doesnt capture how long since the gamilies origin it originated. With offsets I wanted to capture different the founder copies are to the derived copies, and use this evolutionary distance instead. 
-
-Duplication offset = paralog age_rank − min(age_rank in HOG)
-
-* Offset = 0: founder copy — arose when the gene family was first established
-* Offset > 0: derived copy — arose through a later duplication event at a more recent node
-
-This uses the phylogenetic distance from the families node of origin, rather than relative position among siblings. All founder copies get offset 0 regardless of how many there are.
-
-This has some other limitations though.
-Three offset bins (founder / early / late) were structurally impossible. High offsets can only occur in old families, since a family that originated at node 8 cannot produce a copy five nodes later. The interaction table would have the same empty cell problem as Part 2. Binary (founder vs derived) is the only approach that worked. 
-
-Both models MO1 and MO2 use Analysis B (554 HOGs with sequential duplication), since the offset concept is only meaningful where paralogs arose at different nodes.
-
-Relative offset rescales the offset to 0-1 within each family's own evolutionary window: rel_offset = dup_offset / (9 - family_origin). This corrects for the fact that old families have had more time to accumulate high-offset copies. Used in the sensitivity model MO2, restricted to old and intermediate families because young families can only have rel_offset values of 0 or 1 (no continuous gradient to fit).
-
-### Model MO1: Binary Offset
-**Formula (magnitude):** `lmer(abs_logFC ~ offset_bin1 + family_age_2lev + (1 | HOG)`  
-**Formula (magnitude):** `glmer(sex_biased_bin ~ offset_bin1 + family_age_2lev + (1 | HOG)`
-
-No interaction term - the interaction between offset and family age is not estimable (empty cells, same structural reason as the three-bin problem).
-
-**EMMs - magnitude:**
-| Copy type | Family age | Predicted abs(log2FC) |
-|-----------|------------|----------------------|
-| Founder | Old | 1.50 |
-| Derived | Old | 1.60 (+0.11) |
-| Founder | Non-old | 1.98 |
-| Derived | Non-old | 2.08 (+0.11) |
-
-**EMMs - probability**
-| Copy type | Family age | Predicted P(sex-biased) |
-| --------- | ---------- | ----------------------- |
-| Founder   | Old        | 0.462                   |
-| Derived   | Old        | 0.509                   |
-| Founder   | Non-old    | 0.510                   |
-| Derived   | Non-old    | 0.557                   |
-
-**drop1 results:**
-| Term            | Model    | F / LRT    | p-value |
-| --------------- | -------- | ---------- | ------- |
-| offset_bin1     | MO1_mag  | F = 2.34   | 0.126   |
-| family_age_2lev | MO1_mag  | F = 9.71   | 0.002   |
-| offset_bin1     | MO1_prob | LRT = 2.93 | 0.087   |
-| family_age_2lev | MO1_prob | LRT = 1.39 | 0.239   |
-
-Family age is the dominant predictor of magnitude. Derived copies are 0.11 |log2FC| higher than founders on average, in the predicted direction, but this does not reach significance. For probability, offset is borderline (p = 0.087): founders have 17% lower odds of being sex-biased than derived copies (OR = 0.83).
-
-![alt text](image-78.png)
-
-### Model MO2: Continuous Relative Offset (Sensitivity)
-**Formula (magnitude):** `lmer(abs_logFC ~ rel_offset + family_age_2lev + (1 | HOG)`  
-**Formula (magnitude):** `glmer(sex_biased_bin ~ rel_offset + family_age_2lev + (1 | HOG)`
-
-Restricted to old and intermediate families (n = 2,406, 543 HOGs). Young families are excluded because their rel_offset is either 0 or 1 with nothing in between, making a continuous slope uninterpretable.
-
-| Term            | Model    | F / LRT    | p-value |
-| --------------- | -------- | ---------- | ------- |
-| rel_offset      | MO2_mag  | F = 2.15   | 0.143   |
-| family_age_2lev | MO2_mag  | F = 8.40   | 0.004   |
-| rel_offset      | MO2_prob | LRT = 3.31 | 0.069   |
-| family_age_2lev | MO2_prob | LRT = 0.80 | 0.371   |
-
-The continuous and binary approaches agree: moving from founder (rel_offset = 0) to the latest possible derived copy (rel_offset = 1) adds ~ 0.11 to |log2FC| (p = 0.14). The fact that the effect size and direction are identical in MO1 and MO2 rules out the binning choice as the reason for non-significance.
-
-### MO1_mag_cov: Covariate Control
-**Formula (magnitude):** `lmer(abs_logFC ~ offset_bin1 + family_age_2lev + hog_size_genome_scaled + (1 | HOG)`  
-| Term                   | F value | p-value |
-| ---------------------- | ------- | ------- |
-| offset_bin1            | 2.33    | 0.127   |
-| family_age_2lev        | 9.69    | 0.002   |
-| hog_size_genome_scaled | 0.0004  | 0.983   |
-
-Family size has essentially zero effect (F < 0.001). The offset result is not a confounder artifact - the effect is simply small.
-
-### Summary of results
-| Question                                                  | Model              | Key result                                                                                                                                       |
-| --------------------------------------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Does age predict direction of sex bias?                   | M1b unweighted     | N8 (rank 5) and N10 (rank 6) significantly more male-biased. Signal disappears when weighted.                                                    |
-| Does age predict magnitude of sex bias?                   | M2a_full           | Younger genes more sex-biased in magnitude (p = 2.5e-13). Effect smaller in multi-member families.                                               |
-| Does the magnitude–age relationship vary across families? | M2b                | Random slope justified (p < 2.2e-16). Average slope flat across families. High-bias families show steeper within-family age gradients.           |
-| Does the age–magnitude slope differ by sex bias class?    | M3                 | Yes (p = 0.002–0.018). Unbiased genes drive the age gradient. Sex-biased genes are flat across ages.                                             |
-| Which nodes show extreme sex bias magnitude?              | M3b                | Rank 4 (N5): extreme male magnitude (4.12). Rank 8 (N13): only node where female exceeds male.                                                   |
-| Does relative paralog age predict P(sex-biased)?          | MS1                | No significant interaction. Young paralogs in non-old families have borderline higher odds (OR = 0.57, p = 0.043).                               |
-| Does relative paralog age × family age predict magnitude? | MS2                | Yes (p = 0.006 and 0.024 in the two datasets). Old paralogs in intermediate-age families show highest magnitude.                      |
-| Does founder vs derived status predict sex bias?          | MO1                | Directional trend (derived +0.11).                                                                                                               |
-| Do covariates explain the age effects?                    | M2a_cov, MS2_A_cov | No. Age effects survive and strengthen after controlling for gene length, expression, and family size.                                           |
-
-**Overall conclusion**  
-Absolute family age is the strongest and most consistent predictor of sex bias. Gene families that originated at bruchid-specific nodes (particularly N5 and N10 for direction, and the intermediate age category for magnitude) show the highest sex bias. The within-family age effects (relative age, duplication offset) show directional trends consistent with the prediction that derived copies evolve more sex bias, but these effects are smaller and less consistent than the family age effect. Once a gene is sex-biased, its magnitude does not continue to increase with younger evolutionary age. It is unbiased genes that show the strongest age-magnitude gradient, possibly suggesting that evolutionary timing determines whether a gene crosses the threshold into sex-biased expression, but not how extreme that bias becomes once it does.
