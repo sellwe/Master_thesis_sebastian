@@ -64,12 +64,9 @@ This standardizes BRAKER attribute formatting and ensures consistent transcript_
 
 After the mapping softwares were finished a final gff3 file was created for merging with the functional annotation and downstream comparative genomic analyses (gff is easier to handle) (**run_agat_gtf_to_gff3.sh**). 
 
-### Functional annotation:  
-eggNOG-mapper was run on the BRAKER protein sequences to assign functional annotation including GO terms, KEGG pathways, COG categories and PFAM domains (**run_eggnog.sh**). 
-
-### Orthology Inference:    
-The structural annotation, eggNOG results and OrthoFinder output (N0.tsv) were merged in R to produce the full annotation table (**create_full_annotation_fixed.R**). Each transcript was assigned a chromosomal location based on known X, Y and autosomal contigs.  
-Sex chromosome contigs had already been identified to:  
+Chromosomal locations: 
+Each transcript was assigned a chromosomal location based on known X, Y and autosomal contigs. Contigs shorter than 100 kb were excluded to only use "true" autosomes, consistent with the paper. Unassigned contigs are labeled U.    
+Sex chromosome contigs had previously been identified to:  
 x_contigs <- c(
   'utg000057l', 'utg000114l', 'utg000139l', 'utg000191l',
   'utg000326l', 'utg000359l', 'utg000532l', 'utg000602l'
@@ -79,14 +76,20 @@ y_contigs <- c(
   'utg000322l', 'utg000312c', 'utg000610l', 'utg001235l'
 )  
 
-Contigs shorter than 100 kb were excluded, consistent with the paper. Unassigned contigs are labeled U. 
+**Location summary:**
 
-| Location   | Transcripts |
-|------------|------------|
-| Autosomal  | 28,651     |
-| X-linked   | 1,827      |
-| Y-linked   | 334        |
-| Unassigned | 7,176      |
+| Location   | Transcripts | After expression filtering |
+|------------|------------|-----------------------------|
+| Autosomal  | 28,651     | 16,630                      |
+| X-linked   | 1,827      | 719                         |
+| Y-linked   | 334        | 76                          |
+| Unassigned | 7,176      | 148                         |
+
+### Functional annotation:  
+eggNOG-mapper was run on the BRAKER protein sequences to assign functional annotation including GO terms, KEGG pathways, COG categories and PFAM domains (**run_eggnog.sh**). 
+
+### Orthology Inference:    
+The structural annotation, eggNOG results and OrthoFinder output (N0.tsv) were merged in R to produce the full annotation table (**create_full_annotation_fixed.R**). 
 
 Gene age ranks were assigned by traversing the OrthoFinder resolved gene trees on UPPMAX (**parse_gene_trees_birth_nodes.py**, run via **run_parse_gene_trees.sh**). The script runs on the full OrthoFinder dataset and assigns a birth node to every gene across all species, which can be used for future studies of this phylogeny. Each gene gets one of three birth types:  
 | Birth type        | Description                                                                 |
@@ -154,7 +157,7 @@ Out of curiosity, the same rank approach was applied to five related species usi
 All species annotation files (braker.gtf) from their respective folder in:  
 /proj/naiss2023-6-65/Milena/annotation_pipeline/only_orthodb_annotation/
 
-Script function: builds a lineage specific age table for each species by walking its path through the shared species tree, then joins gene tree birth nodes from transcript_birth_nodes.tsv to assign age ranks. The same two-step transcript_id / gene_id join handles isoforms. Since transcript_birth_ndoes.tsv covers all species in the phylogeny, no additional UPPMAX jobs were needed, and deeper analyses are available in the fututre. 
+Script function: builds a lineage specific age table for each species by walking its path through the shared species tree, then joins gene tree birth nodes from transcript_birth_nodes.tsv to assign age ranks. The same two-step transcript_id / gene_id join handles isoforms. Since transcript_birth_nodes.tsv covers all species in the phylogeny, no additional UPPMAX jobs were needed, and deeper analyses with all species are available in the fututre. 
 
 ![alt text](image-4.png)
 
@@ -448,271 +451,146 @@ Of the reads passed by STAR, 89.9% were assigned uniquely by Salmon and 10.1% we
 
 ### Method Selection 
 
+## Method Selection
 
+After also accounting for Genotypes in DESEq2, Salmon-map retained the most transcripts (17,574) and produced the highest number of significant DE transcripts (7,270), despite having the lowest mapping rate at the fragment level (36%). The low mapping rate seem to reflect the fragmented and repetitive C. maculatus genome. Fragments that do map are probabilistically assigned to transcripts via equivalence classes, and the whole-genome decoy approach ensures fragments that match the genome better than any transcript are discarded cleanly.
 
+STAR + featureCounts retained a similar number of transcripts (17,566) with a slightly lower DE count (6,964) but the highest PC1 variance (69.1%). The fractional counting of multimappers does risk inflating counts for paralogous transcripts, which is a concern here.
 
+Salmon-align is the most conservative across all metrics: fewest transcripts retained (16,563), lowest DE count (6,382) and lower PC1 variance (66.0%). This follows from its two-stage filtering: STAR discards 17.9% of reads as too ambiguous before Salmon ever sees them, leaving only 11.7M fragments for probabilistic assignment compared to 43M for salmon-map. The STAR run for this method also used slightly more stringent settings at the alignment stage compared to the featureCounts STAR run. All of this could contibute  to salmon-align being the strictest of the three methods, though it may also produce the most trustworthy results because of this. 
 
-
-For raw statistical power STAR + featureCounts has the most kept and significant transcripts. However, some of this apparent power can be inflated due to the fractional assignment of the paralogous transcripts.
-
-Salmon-Align has the lowest DE counts, lowest PC1 variance and is the most conservative approach as the most ambiguous reads were already filtered out during genome alignment.
-
-Salmon-mapping considers all fragments, uses probabilistic modelling for assigning ambiguous reads, doesn't discard ambiguous reads before the probibalistic modelling and still has a relatively high DE signal despite being more conservative. The low mapping rate is still a bit concerning, but seeing as featureCounts also discards a majority of reads, this might be a genome issue? 
-
-In our case, since we are interested in paralogs downstream, i think salmon map might be the best here. Its not as conservative as salmon align. It still has a high biological signal while using probibalistic modelling and decoy filterining to handle the ambigous reads instead of just fractal counting. We might trade some statistical raw power for more confidence in the origin on the reads.
-
-Later downstream the data from STAR could be used as a comparison and see if the results are comparable. 
+All three methods show strong expression correlation across shared transcripts, indicating the biological signal is consistent regardless of method. Salmon-map was selected for the main analysis as it combines the highest transcript retention and DE signal with principled handling of ambiguous reads, which is preferable to fractional counting when paralog identity is central to the downstream analysis.
 
 # Paralog analyses  
-I used preexisting data from Orthofinder that include 14 beetle species + Drosophyla melanogaster as an outgroup. This assigns each gene to an Orthogroup (OG) and a Hierarchical Orthogroup (HOG). OG groups all genes across all species that descend from a single gene in the root of the tree.  
-HOGs provide more context by breaking down OG at each node of the species tree, creating subfamilies within the same OG. A single OG might split into several HOGs depending on when speciation events occurred.  
 
-As we are only looking at genes/transcripts in C.mac for these analyses, using Hierarchical Orthologous Groups (HOGs) will be synonomous with gene family, as each HOG represents all transcripts in C_mac that share a common ancestor at a given node in the tree.  
+## Gene Family Definition 
 
-In the OrthoFinder analysis, the proteome was isoform filtered to retain only the canonical isoform per gene. Consequently, in my following analyses based on this data on things like HOG and age rank annotations, i will only have one transcript per gene represented. And no isoform-level random effets are necessary in the mixed models. 
+OrthoFinder assigns genes to two levels of homology groups. An Orthogroup (OG) clusters all genes across all species in the analysis that descend from a single ancestral gene at the root of the phylogeny. A Hierarchical Orthogroup (HOG) breaks each OG down at every node of the species tree, creating nested subfamilies that reflect when lineages diverged. A single OG can contain several HOGs depending on speciation history.
+
+Since all analyses here focus exclusively on C. maculatus, a HOG is equivalent to a gene family: it contains all paralogs in C. maculatus that share a common ancestor at a given node in the phylogeny. Gene family and HOG are used interchangeably throughout, but gene family is preferred for clarity. 
+
+OrthoFinder was run on isoform-filtered proteins, so only one isoform per gene was used for gene family and age rank assignment. In the full annotation the non-filtered one was used and all isoforms are present. The non-representative isoforms get the same HOG and age rank of the representative isoform via the gene_id fallback in **create_full_annotation_fixed.R**. 
 
 # Gene family size and sex bias (**HOG_size_sex_bias.ipynb**)
-First I wanted to investigate if the larger the gene family, the more sex baised paralogs it will have, as having more copies would lead me to suspect that there are more opportunities for sex-specific neofunctionalization to occur.  
-First i removed all the transcript that doest belong to a HOG, resulting in 15.648 transcripts.  
-I then defined three different sets of gene family sizes:  
-1. Genome wide  
-The size of the gene families are defined by all of the transcripts in the annotation.  
-2. Mapped / not expressed   
-These are all transcripts that managed to be mapped to the transcriptome by Salmon. These stem from the dataset prefilter_df which comes after tximport in the script **salmon_map_dominance_consistent_script.R**, but before the expression filtering (≥5 counts in ≥5 samples) and the differential expression analysis.  
-3. Expressed  
-These are the sizes defined by the transcripts in the result dataset, post filtering and DE-analysis.  
 
-I did this since only looking at the size definitions of expressed transcript would not reflect reality. For example, if we only looked at the Expressed set, the largest gene family size appears to be 25. But that is based only on the "visible" transcripts. But If we look at the entire genome from full_annotation, the largest gene family has 115 members (if all of those were expressed). This indicates that a majority of members in the large gene families are not expressed or lowly expressed in abdominal tissues.  
-In the dataset each expressed transcript has a column for each size definition. 
+Transcripts without a gene family were removed before all analyses.
 
-Regardless of size definition however, a majority of the expressed transcripts belong to very small gene families, and the median size is consistently 1. For most plots later we filter out size 1.  
+| Level | Total transcripts | With gene family | Without gene family | # Gene families | # Families ≥ 2 members | Max family size | Median family size |
+|---|---|---|---|---|---|---|---|
+| Genome | 37,988 | 31,408 | 6,580 | 14,402 | 5,746 | 92 | 1 |
+| Mapped | 36,382 | 29,943 | 6,439 | 14,402 | 5,304 | 78 | 1 |
+| Expressed | 17,574 | 15,594 | 1,980 | 10,807 | 2,650 | 28 | 1 |
 
-| Level | Total transcripts | Transcripts with Gene family | Transcripts without Gene family | # Gene families | Max family size | Median family size |
+Three size definitions are used throughout:  
+- genome (all annotated transcripts),  
+- mapped (all transcripts detected by Salmon before expression filtering)
+- expressed (transcripts passing the ≥5 counts in ≥5 samples filter).   
+
+The genome-level size reflects the true family size. Using only expressed sizes would underestimate family
+size. The largest expressed family has 28 members, while the largest genome-level family has 92. In reality those 28 expressed transcripts are a part of a 60 member family, where 28 are expressed.   
+Median family size is 1 across all levels, meaning most transcripts are singletons with no paralogs.
+
+### Density plot of size distributions 
+Gene families that have 2 or more members, linear and log scale:  
+![alt text](image-12.png)
+
+Most families are really small (less than 5 members) at all levels. The sizes of mapped and full annotation are largely similar, indicating that salmon mapped a majority of annotated transcripts, but that they did not pass the expression filter. 
+
+### Proportion of mapped and expressed transcripts by genome family size 
+Consistently, most transcripts are mapped but not expressed. On average 23% transcripts of a certain size are expressed.
+![alt text](image-13.png)
+
+
+### Transcript-level sex-bias as a function of gene family size 
+Sex-biased expression decreases as families increase in size. Male-bias is more common than female bias, and female bias becomes more rare in larger families. 
+
+![alt text](image-14.png) 
+
+### Within-family variance
+Size 1 filtered out:
+![alt text](image-15.png)
+Variance goes down as families increase in size. The larger the family becomes up to a point, the more copies agree on the strength of sex-bias. Maybe larger families face stronger selective constraint, or maybe they share regulatory architecture that limits divergence? Or this is a conequence of multimapping, where having more members makes it more difficult to assign the correct copy, even probibalisitcally.  
+The outlier in red is N0.HOG0000646, a gene family within OG0000445 with 3 out of 10 expressed members: 
+
+| transcript_id | log2FoldChange | padj | Description | PFAMs | hog_size_expressed | hog_size_genome |
 |---|---|---|---|---|---|---|
-| Genome | 37,988 | 31,507 | 6,481 | 14,563 | 115 | 1 |
-| Mapped | 36,382 | 30,041 | 6,341 | 14,563 | 114 | 1 |
-| Expressed | 17,574 | 15,648 | 1,926 | 10,850 | 25 | 1 |
+| g14699.t1 | -2.35 | 1.51e-07 | RNA polymerase II regulatory region DNA binding | DUF659, Dimer_Tnp_hAT, zf-BED | 3 | 10 |
+| g16714.t1 | 29.99 | 5.53e-24 | RNA polymerase II regulatory region DNA binding | DUF659, Dimer_Tnp_hAT, zf-BED | 3 | 10 |
+| g19428.t1 | 0.03 | 0.97 | RNA polymerase II regulatory region DNA binding | DUF659, Dimer_Tnp_hAT, zf-BED | 3 | 10 |
 
-### Density plot of size definition comparison 
-
-![alt text](image-55.png)  
-
-log10 transformed:  
-![alt text](image-56.png)  
-
-### Size category expression differences 
-
-If we look at the full genome definitions, what is the proportion of mapped and expressed transcripts?  
-![alt text](image-59.png)  
-
-Here we can see that consistently aross sizes, <50% of transcripts are not expressed, but a majority was mapped by salmon (but too lowly expressed). 
-
-### lFC within gene families vs. gene family size. 
-To investigate sex bias and gene family size i started by looking at the transcript logFoldChange (male vs female) within each gene family, against the size of each gene family.  
-First with the expressed size definition:   
-![alt text](image-11.png)  
-
-And with the full genome size definition, with :  
-![alt text](image-58.png)  
-
-This indicate however that the strength of sex-bias decreases the larger the gene family size is. Does indicate that male bias is more common than female bias, especially for larger sizes where female-bias is rarer. By looking at the full genome plot its made even more clear that sex-bias decreases with the size of the gene family.   
-
-### Bias direction among biased transcripts  
-To investigare further; within each gene family, which proportion is male biased at each gene family size? Due to the difference in sample sizes I added wilson confidence intervals (preferred over standard CI as proportions reaches 0 at some points).  
-![alt text](image-9.png)   
-Out of the transcripts that are sex-biased, more are male-biased. 
-
-What is the proportion of male biased, female biased and unbiased transcripts at each gene family size?  
-![alt text](image-10.png)
-
-A general trend can be observed with most transcripts being unbiased, followed by male-biased and female-biased.  
-The same two plots but with the full genome size definitions (a bit cluttered):  
-![alt text](image-46.png)  
-![alt text](image-47.png)
-
-### Variance vs. gene family size  
-Variance for all transcripts that belong to a gene family of a certain size. Here only looking at the expressed size definitions.   
-![alt text](image-48.png)  
-Expression differene decreases as the family size increases. But for HOG sizes larger than 15 we have very small sample sizes so variance is noisy and unreliable as small sample size makes variance unstable.
-
-### Variance within each gene family 
-If we instead look at each gene family individually:  
-![alt text](image-49.png)  
-Size 1 filtered out. This plot again shows a trend that the direction of expression in the larger gene families are more "in agreement" in direction than the smaller sizes. The outlier in red is N0.HOG0000055. 
+The high variance is driven by g16714.t1 (log2FC ≈ 30), which seems very unlikely. This could be investigated at a later point. 
 
 ### Within gene family directional bias  
-Next I categorized the gene families based on the expression direction of the transcripts they contain. These being all unbiased, all male-biased, all female-biased and the combinations of the three:  
-![alt text](image-50.png)  
+Gene families were classified by the combination of bias directions their transcripts contain: all unbiased, all male-biased, all female-biased, or mixed categories.
+![alt text](image-16.png)
 
-If we divide the multiple category bars into the overall proportion transcript bias within the categories, we see that its around 50% bias and unbiased in the double categories, and in the all three category its 40.2% unbiased, 36.3% male-biased and23.5% female-biased.    
-![alt text](image-68.png)  
+Most families are all Unbiased, followed by Male-bias and Male + Unbiased. Its very rare to have both Male and Female bias in the same family. For Male + Unbiased and Female + Unbiased, the split is roughly 50/50. 
+For Male + Female the split is 54.8% Male and 45.2% Female.  
+For all three the split is: Unbiased - 40.9%, Male - 34.9%, Female - 24.2% 
 
-We can visualize this further with the categories and the gene family sizes they include:  
-Expressed:    
-![alt text](image-52.png) 
+There are 38 Male + Female and 55 All three families. These will later be investigated with GO-term enrichement as they are potential candidates for intralocus sexual conflict resolution. 
 
-Full genome:  
-![alt text](image-51.png)
+### Sizes of the families in each category: 
+![alt text](image-17.png)
+Generally families that are Male + Unbiased has the largest families. 
+(Diamond shapes for sizes=2 since the "All three" category cant have less than 3 members)
 
-The largest families are found in the two sex biased + unbiased categories.  
+### Gene family size sex-bias category proportions 
+Proportionally, smaller families are more likely to be unbiased. And with increasing size Male + Unbiased becomes more frequent. Smaller families are unbiased, and they have the highest number, which explains why Unbiased is the most common category. 
+![alt text](image-18.png)
 
-### Gene family size sex-bias category proportions  
+---
 
-Expressed:  
-![alt text](image-53.png)  
+# Paralog Age Rank Analyses (**age_rank_analysis.ipynb**)  
+Age ranks were assigned to each transcript using gene tree traversal in (**parse_gene_trees_birth_nodes.py**), as described in the Annotation section. Each transcript gets a birth node: the point in the species tree where that gene copy first became a distinct lineage. Birth type is one of three:
 
-Full genome:  
-![alt text](image-60.png)  
+| Birth type | Method | Reliability |
+|---|---|---|
+| duplication | Birth node from gene tree traversal | Most reliable |
+| mrca_inferred | No duplication detected; age is MRCA of all species in orthogroup | Upper bound |
+| species_specific | No orthologs in any other species | Age unknown (NA) |
 
-# Paralog ancestry - Age rank analyses
-I will also look at the relative branch lengths within each HOG as a indicator of the age of each paralog using mixed models.  
-I downloaded SpeciesTree_rooted.txt, SpeciesTree_rooted_node_labels.txt, Duplications.tsv and SpeciesTree_Gene_Duplications_0.5_Support.txt from the OrthoFinder output.  
+Age ranks run from 1 (root, oldest) to 9 (C. maculatus tip, most recent). Transcripts with no age rank are either species-specific singletons or genes absent from OrthoFinder entirely.
 
-By uploading this file into Phylo.io I could visually inspect the phylogeny, see screenshot below:  
+| Dataset             | Transcripts | With age rank | Without age rank |
+|---------------------|-------------|----------------|-------------------|
+| Full annotation     | 37,988      | 28,966 (76.3%) | 9,022             |
+| Mapped (pre-filter) | 36,382      | 27,926 (76.7%) | 8,456             |
+| Expressed           | 17,574      | 16,048 (91.3%) | 1,526             |
+| Significantly DE    | 7,270       | 6,480 (89.1%)  | 790               |
 
-![alt text](image-69.png)    
+Of the 790 significantly DE transcripts without an age rank: 299 belong to a gene family but have no detectable orthologs outside C. maculatus (species-specific), and 491 have no gene family assignment at all (too diverged, lineage-specific, or TE-derived genes OrthoFinder could not cluster).
 
-In order to add the age rank i updated the script (**create_full_annotation.R**).   
-I loaded SpeciesTree_rooted_node_labels.txt in order to create a node age tree with the depths of the nodes to the roots and the branch lengths of the nodes that lead to C_maculatus in the phylogeny (N0, N1, N2, N5, N8, N10, N12, N13 and the tip node C_maculatus_proteinfaste_TE_filtered) and i ranked the nodes from oldest (N0 = 1) to youngest (C_maculatus_proteinfaste_TE_filtered = 9) in decending order, based on the node's depth from the root.  
+Birth type for the 6,480 significantly DE transcripts with age rank:
 
-![alt text](image-71.png) 
+| Birth type | Transcripts |
+|---|---|
+| duplication | 4,207 |
+| mrca_inferred | 2,273 |
 
-Then i load Duplications.tsv to get information about when duplication events occured, and which genes resulted from each duplicaiton, and i filtered for only C_mac transcripts and duplications that occured on the branches leading to C_Mac in the phylogeny. 
-I merged this with the age_rank table and exported this as dup_long which contains all the duplication events in the C_mac lineage.  
+### Age rank distribution across dataset levels
+![alt text](image-19.png)
 
-But this counts every single duplication event, so one transcript can appear many times (nested in the family tree history). 
+Most annotated transcripts are C. mac specific and originated after the split with C. chinensis, consistent with a large and hihgly repetitive genome or a result of recent gene family expansion. A majority of annotated transcripts were mapped by salmon, at least once. A majority of the young rank 9 trancripts did not pass the expression filter, suggesting they might be non-functional, TE-derived or maybe tissue-specific.  
 
-I therefore assigned each transcript its most recent duplication as we want the latest point where the copy became independant, into dup_most_recent. I created a transcript_id column and joined this with the rest of the full_annotation. 
-
-I imported dup_long.csv and full_annotation_with_age.csv into VSCode for plotting: 
-
-Age diversity of all duplication events:  
-
-![alt text](image-36.png)  
-
-A majority of all duplication events occurred in C_mac.
-
-I did a combined plot with 4 dataset levels:  
-
-1. Full annotation: All of the C-mac transcripts most recent copy.  
-
-2. Prefilter transcripts: I then merged the annotation with the mapping results from Salmon-map (**salmon_map_dominance_consistent_script.R**).  
-This was done after tximport but before the expression filter, exporting a new file "prefilter_transcripts_annotated.csv". Here we get the age_rank information about all of the transcripts mapped by Salmon.  
-
-3. DE results: Post-DE-analysis. Includes all expressed transcripts (5 counts in 5 samples).  
-
-4. Only the significnatly DE transcripts (M v F)
-
-| Dataset         | Info                                                        | Transcript count | Transcript count with age info |
-|-----------------|-------------------------------------------------------------|------------------|-------------------------------|
-| dup_long        | Total duplication events (multiple per transcript)          | 92,785           | 92,785 (100%)                 |
-| full_annotation | Most recent copy. All annotated transcripts                 | 37,988           | 21,484 (56.6%)                |
-| prefilter_df    | Mapped transcripts by Salmon                                | 36,382           | 20,467 (56.3%)                |
-| de_results      | Expressed transcripts (≥5 counts in ≥5 samples)             | 17,574           | 9,796 (55.7%)                 |
-| significant_de  | Significantly DE transcripts (padj < 0.05, \|LFC\| > 1)     | 7,270            | 4,319 (59.4%)                 |
-
-dup_long includes all of the duplication events in C_mac only, hence 100%. Full_annotation is defined from the .gff. In each level only around 50-60% of transcripts from the GFF have had a duplication event in the C_mac lineage. The remaining ~40% of transcripts could still belong to a HOG, but have no duplication events in the C_mac lineage. Or they could not belong to a HOG at all, and are novel C_Mac specific genes with no homologs, TE-derived or very fragmented in the assembly. 
-
-![alt text](image-37.png)  
-
-The common thread in all of these levels is that the majority of transcripts most recent copy originate in C.mac, consistent with the high number of predicted genes in the species, and the repetetive nature of the genome. There is a noteable drop in the amount of age 9 transcripts from mapped to expressed. Do these belong to the outstadningly large amount of annotated "genes" in the C_mac genome?  
-
-I wanted to see if we see the same pattern in related species. So i tried to replicate the grey bar for the full genome duplication ages for the species C_chienensis (sister species), A_obtectus (Bruchnae) and T_castaneum (Tenebrionidae).
-
-I softlinked their isoform_filtered annotation files and cleaned them up with the script **clean_gff_related_species.sh**. 
-
-![alt text](image-72.png)
+---
 
 ## Age rank and sex bias
 
-### Box plots:  
-Here i tried to replicate Milenas plot of the significantly DE expressed / sex-biased transcripts in each age rank, split between male and female biased (padj < 0.05, |log2FC| > 1, where log2FC > 1 = male-biased, log2FC <1 = female-biased).
-
-4319 transcripts with age rank were plotted. (2951 significantlly DE transcripts are missing age rank. Out of these 2158 belong to a gene family, and 793 does not).
-
-![alt text](image-38.png)  
-
-Higer male bias across all ranks. 
-
-Age ranks 4(N5), 5(N8), 6(N10) interesting here? Big variance, high mean and high median?  
-N5 is where R_ferrugineus and D_ponderosae splits off  
-N8 is where A_obtectus splits off  
-N10 is where B_siliquastri splits off  
-
 ### Proportion sex-bias in age ranks  
-Here i tried to replicate Milenas plot of the proportions of unbiased, male-biased or female-biased transcripts within each age rank.  
-9796 expressed transcripts were plotted, significance was defined by padj < 0.05, |log2FC| > 1, where log2FC > 1 = male-biased, log2FC <1 = female-biased. 
+16,048 expressed transcipts with age plotted.  
+![alt text](image-20.png)
+A majority in each rank are unbiased, but ranks 5, 6 and 7 show a big proportional increase in male biased transcripts, while female-bias stays the same. These nodes correspond to brucid+weevil nodes and bruchid-specific nodes in the phylogeny.
 
-![alt text](image-39.png)  
+### Sex bias magnitude per age rank - significantly DE transcripts
+4,409 male biased and 2,071 female-biased transcripts with age rank plotted side by side for each age rank (padj < 0.05, |log2FC| > 1). 
+![alt text](image-21.png)
 
-In all ages, most are unbiased, followed by male-biased and last female-biased. There is an increase in proportionally male-biased transcripts in ages 4(N5), 5(N8) and 6(N10) once again, hinting at intermediate age increase in male-bias. 
-
-## Age rank and gene family size  
- 
-| Dataset         | Total transcripts | With age_rank        | With HOG             | With both (plotted)     |
-|-----------------|------------------|-----------------------|-----------------------|---------------------------|
-| full_annotation | 37,988           | 21,484 (56.6%)        | 31,507 (82.9%)        | 21,467 (56.5%)            |
-| prefilter_df    | 36,382           | 20,467 (56.3%)        | 30,041 (82.6%)        | 20,450 (56.2%)            |
-| de_results      | 17,574           | 9,796 (55.7%)         | 15,648 (89.0%)        | 9,785 (55.7%)             |
-| sig             | 7,270            | 4,319 (59.4%)         | 6,472 (89.0%)         | 4,314 (59.3%)             |
-
-A higher proportion of transcripts belong to a HOG than have age rank information, making age rank the limiting factor. 
-
-### Within gene family transcript age rank diversity:   
-Looking at the number of different ages within each gene family:
-
-![alt text](image-40.png)
-
-Most gene families only have transcripts of the same age, but there are still candidates of gene families with 2 or 3 different ages in the significantlly DE dataset.  
-
-### Top 10 most age diverse 
-Top 10 most age rank diverse gene families. This is all gene families with more than 3 DE transcripts in them. The age range might indicate an continously expanding gene family (darker), with duplication events occuring throughout time rather in shorter bursts (lighter) (max age rank - min age rank +1). 
-
-![alt text](image-42.png) 
-
-I might come back to this later and investigate those families.  
-
-### Age rank distribution by gene family size  
-Plotted the 9785 transcripts with both HOG and age rank info. 
-![alt text](image-66.png)   
-
-### Age rank vs. Gene family size with sex-bias info.  
-
-Same sex bias definition. With the gene family sizes as the y-axis.    
-Genome sizes:  
-![alt text](image-61.png)
-Expressed sizes:   
-![alt text](image-62.png) 
-
-Again indicates that most gene family expansions are happening within C_mac. 
-
-I also tried to do it with box plots separated into unbiased, male-biased and female-biased:    
-Genome sizes:  
-![alt text](image-63.png)
-Expressed sizes:  
-![alt text](image-64.png)   
-These are all of the expressed trasncripts, not just the significant ones. 
-
-And as proporitonal bars, where i grouped together the genome-defined sizes into singeltons, small, medium and large families to limit this to 4 plots.  
-![alt text](image-67.png) 
-
-# Chromosomal location analyses 
-
-Sex Chromosomal contigs: 
-
-{ X : ['utg000057l_1','utg000114l_1','utg000139l_1','utg000191l_1','utg000326l_1','utg000359l_1','utg000532l_1','utg000602l_1'],
-  Y : ['utg000322l_1','utg 000312c_1','utg 000610l_1','utg 001235l_1']}
+Male-bias is higher than female-bias across all ranks, but ranks 5, 6, and 7 again stand out with elevated levels of male-bias. 
 
 
-From the paper i filtered contigs longer than 100kbp to identify "true" autosomes. The locations X, Y, A (autosome) and U (unassigned/belongs to the short contigs). 
 
-#transcripts on each before expression filtering:  
-    A     U     X     Y 
-28651  7176  1827   334
 
-After expression filtering:  
-    A     U     X     Y 
-16630   148   719    76
 
 # Mixed model analyses 
 I use lme4 on the post-DESeq2 data as a two-stage approach. The DESeq2 step identifies which transcripts are sex-biased while controlling for underlying genotypes. The lme4 step then asks whether evolutionary age predicts the pattern and magnitude of that sex bias across transcripts, with gene families as a random effect to account for the non-independence of transcripts within the same family.
