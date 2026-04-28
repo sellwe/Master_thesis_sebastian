@@ -82,10 +82,10 @@ y_contigs <- c(
 
 | Location | All transcripts | After expression filtering | Duplicates only | Expressed duplicates |
 |---|---|---|---|---|
-| Autosomal | 28,651 | 16,630 | 16,177 | 8,430 |
-| X-linked | 1,827 | 719 | 1,063 | 273 |
-| Y-linked | 334 | 76 | 249 | 46 |
-| Unassigned | 7,176 | 148 | 2,537 | 84 |
+| Autosomal | 28,651 | 16,630 | 16,177 | 8,574 |
+| X-linked | 1,827 | 719 | 1,063 | 281 |
+| Y-linked | 334 | 76 | 249 | 47 |
+| Unassigned | 7,176 | 148 | 2,537 | 87 |
 
 **Multiple Isoform distribution:**  
 | Number of isoforms | Number of genes |
@@ -163,13 +163,15 @@ The 10,670 transcripts without a birth type consist of the non-representative is
 |---|---|---|---|---|---|---|---|---|---|---|
 | Transcripts | 4,447 | 3,382 | 561 | 624 | 280 | 1,511 | 282 | 667 | 15,005 | 11,229 |
 
+(10,670 with no birth rank + 559 species specific = 11,229 NA)
+
 **Age rank distribution after filtering to duplication only (n = 20,026):**
 
 | Age rank | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
 |---|---|---|---|---|---|---|---|---|---|
 | Transcripts | 191 | 1,813 | 421 | 450 | 200 | 1,089 | 260 | 597 | 15,005 |
 
-Note the drop in rank 1 and 2 after filtering for duplication only. Most ancient transcripts are single-copy genes present across many species, including drosophila, with no duplication events recorded. Only 191 transcripts have a recorded duplication event at rank 1. Paralog expansions in C. maculatus are overwhelmingly recent, concentrated at rank 9, consistent with TE-driven gene family expansion.
+Note the drop in rank 1 and 2 after filtering for duplication only. Most ancient transcripts are single-copy genes present across many species, including drosophila, with no duplication events recorded (mrca_inferred). Only 191 transcripts have a recorded duplication event at rank 1. Paralog expansions in C. maculatus are overwhelmingly recent, concentrated at rank 9, consistent with TE-driven gene family expansion.
 
 Since this project focuses on paralogs and duplications only, age rank analyses are restricted to transcripts with birth_type = duplication.
 
@@ -556,7 +558,7 @@ Gene families were classified by the combination of bias directions their transc
 | Male + Female       | 34       | 106         | 54.7%  | 45.3%     | 0.0%        |
 | All three           | 53       | 356         | 35.1%  | 24.2%     | 40.7%       |
 
-Most families are all Unbiased, followed by Male-bias and Male + Unbiased. Its very rare to have both Male and Female bias in the same family. There are 35 Male + Female and 51 All three families. These will later be investigated with GO-term enrichement as they are potential candidates for intralocus sexual conflict resolution. 
+Most families are all Unbiased, followed by Male-bias and Male + Unbiased. Its very rare to have both Male and Female bias in the same family. There are 34 Male + Female and 53 All three families. These will later be investigated with GO-term enrichement as they are potential candidates for intralocus sexual conflict resolution. 
 
 ![alt text](image-16.png)
 
@@ -605,6 +607,122 @@ Male-bias is generally more common than female bias, but ranks 5, 6, and 7 again
 
 ---
 
+# GO-term Enrichement (**GO-term_enrichement.R**) 
+Here i looked at two subsets of conflict-candidate gene families: the 34 Male + Female families (106 transcripts) and 53 All-three families (356 transcripts). These are the families there paralogs within the same gene family have different direction in their sex-bias, making them candidates for intralocus sexual conflict resolution through gene duplications.
+
+| Category                         | Transcript Count |
+|----------------------------------|------------------|
+| Male + Female (all)              | 106              |
+| Male + Female (male-biased)      | 58               |
+| Male + Female (female-biased)    | 48               |
+| All three (all)                  | 356              |
+| All three (male-biased)          | 125              |
+| All three (female-biased)        | 86               |
+
+As a background i used the 8,989 expressed duplicated transcripts that belong to a gene family. 5,012 (~55%)transcripts in this set has at least one GO term, which is expected for a non-model organism annotated with BRAKER and eggNOG-mapper. All enrichment results can only be concluded based on this set of annotated transcripts. 
+
+Noteably the Go annotation coverage is lower in the conflict-candidate categories than the rest of the backgorund, so the enrichment results will be convervative rather than inflated. 
+
+| Category         | Transcripts | GO- term Annotated | Go-term Coverage |
+|------------------|-------------|-----------|----------|
+| All unbiased     | 2,429       | 1,735     | 71.4%    |
+| All female biased| 434         | 283       | 65.2%    |
+| All male biased  | 1,250       | 588       | 47.0%    |
+| Male + Female    | 106         | 51        | 48.1%    |
+| Female + Unbiased| 588         | 274       | 46.6%    |
+| All three        | 356         | 148       | 41.6%    |
+| Male + Unbiased  | 2,021       | 708       | 35.0%    |
+| NA               | 1805        | 1225      | 67.9%    |
+
+I used the topGO package with the weight01 algorithm and Fisher test. Weight01  accounts for the non-independence of GO terms by propagating signal through the GO  graph, which reduces redundancy compared to a standalone Fisher test. I ran both  Biological Process (BP) and Molecular Function (MF) ontologies. Each category was tested three ways: all transcripts in the family, male-biased copies only, and female-biased copies only. 
+
+One BP term cluster (response to DDT, insecticide metabolic process) was excluded from interpretation after checking that all 12 transcripts driving the signal came from a single expanded detoxification family (N0.HOG0000027). This could be a gene family expansion artifact rather than a general pattern across conflict-candidate families.
+
+**BP results:**  
+10 BP terms were significant in both candidate categories independently. The enrichment signal is spread across families rather than being HOG-specific: 20 out of 34 Male+Female HOGs and 19 out of 53 All three HOGs carry at least one significant GO term.
+
+The 10 shared terms with observed and expected counts from both categories:  
+| GO ID      | Term                                  | MF sig | MF exp | MF p     | AT sig | AT exp | AT p      |
+|------------|---------------------------------------|--------|--------|----------|--------|--------|-----------|
+| GO:0032310 | prostaglandin secretion               | 3      | 0.31   | 3.4e-03  | 6      | 0.77   | 9.2e-05   |
+| GO:0018094 | protein polyglycylation               | 2      | 0.15   | 9.3e-03  | 4      | 0.37   | 3.9e-04   |
+| GO:1901571 | fatty acid derivative transport       | 3      | 0.45   | 9.7e-03  | 6      | 1.12   | 7.6e-04   |
+| GO:0002576 | platelet degranulation                | 3      | 0.48   | 1.2e-02  | 6      | 1.20   | 1.1e-03   |
+| GO:0008152 | metabolic process                     | 40     | 36.9   | 1.3e-02  | 108    | 92.6   | 2.3e-09   |
+| GO:0098656 | monoatomic anion transmembrane transp.| 5      | 1.68   | 2.5e-02  | 10     | 4.22   | 9.1e-03   |
+| GO:0040040 | thermosensory behavior                | 2      | 0.26   | 2.6e-02  | 12     | 0.64   | 1.6e-13   |
+| GO:0036270 | response to diuretic                  | 2      | 0.27   | 2.8e-02  | 12     | 0.67   | 3.0e-13   |
+| GO:0007618 | mating                                | 4      | 1.26   | 3.7e-02  | 10     | 3.17   | 1.2e-03   |
+| GO:0046717 | acid secretion                        | 3      | 0.77   | 4.0e-02  | 6      | 1.92   | 1.2e-02   |
+
+Plot 1: 
+![alt text](image-27.png)
+
+The mating term (GO:0007618) and the prostaglandin and fatty acid signalling cluster are the most biologically interpretable. Finding mating-related functions enriched in both candidate categories independently is the most direct support for the conflict resolution hypothesis. The metabolic process term (GO:0008152) is too broad of a term and is not interpreted directly.
+
+Plot 3b overview (top 8 BP terms per comparison within Male+Female families,
+ordered by p-value; includes shared and unique terms):
+![alt text](go_plot3b_BP_overview_MaleFemale.png)
+
+Plot 3a overview (top 8 BP terms per comparison within All three families,
+ordered by p-value; includes shared and unique terms):  
+![alt text](go_plot3a_BP_overview_AllThree.png)
+
+The tables below show terms unique to each category only (not found in the other
+category). The overview plots above show the top 8 terms per comparison by p-value
+and include both shared and unique terms.
+
+Top unique BP terms for Male+Female families (50 unique terms total):
+
+| GO ID      | Term                                              | Sig | Exp  | p         |
+|------------|---------------------------------------------------|-----|------|-----------|
+| GO:0007171 | activation of transmembrane receptor prot. TK     | 5   | 0.12 | 4.9e-08   |
+| GO:0050965 | detection of temperature stimulus (pain)          | 5   | 0.13 | 8.3e-08   |
+| GO:2000273 | positive regulation of signaling receptor act.    | 5   | 0.23 | 2.6e-06   |
+| GO:0061098 | positive regulation of protein tyrosine kinase    | 5   | 0.34 | 1.8e-05   |
+| GO:0060271 | cilium assembly                                   | 12  | 2.30 | 2.9e-05   |
+| GO:0006719 | juvenile hormone catabolic process                | 3   | 0.11 | 1.3e-04   |
+
+The top two terms (GO:0007171 and GO:0050965) are driven by 10 transcripts across three HOGs: a carboxylesterase family (N0.HOG0009620), a fibrinogen-domain family (N0.HOG0000377) and a TRP channel family (N0.HOG0012871). Each has only male and female biased copies, confirming the signal is not HOG-specific. Cilium assembly can connect to sperm flagella function in beetles. Juvenile hormone catabolism connects to reproductive maturation timing.
+
+Top unique BP terms for All three families (124 unique terms total, excluding the
+single-HOG detoxification signal):
+
+| GO ID      | Term                                              | Sig | Exp  | p         |
+|------------|---------------------------------------------------|-----|------|-----------|
+| GO:0048252 | lauric acid metabolic process                     | 12  | 0.32 | 7.7e-20   |
+| GO:0006012 | galactose metabolic process                       | 13  | 0.75 | 5.0e-14   |
+| GO:0042811 | pheromone biosynthetic process                    | 9   | 0.27 | 5.1e-14   |
+| GO:0031000 | response to caffeine                              | 12  | 0.67 | 3.0e-13   |
+| GO:0002118 | aggressive behavior                               | 12  | 0.69 | 5.4e-13   |
+| GO:0033227 | dsRNA transport                                   | 11  | 0.67 | 1.0e-11   |
+| GO:0046693 | sperm storage                                     | 9   | 0.40 | 2.3e-11   |
+| GO:0046008 | regulation of female receptivity, post-mating     | 9   | 0.40 | 2.3e-11   |
+
+Pheromone biosynthesis, sperm storage and regulation of female post-mating receptivity are three terms representing two sides of the same post-mating conflict. Finding them enriched in families where paralogs split into male-biased, female-biased and unbiased copies is consistent with duplication resolving antagonism over reproductive gene expression.
+
+**MF results:**
+
+4 MF terms were shared across both categories: prostaglandin dehydrogenase activity (GO:0016404) and three ATPase-coupled ion transporter terms (GO:0043225, GO:0015662,GO:0042625). The prostaglandin activity term confirms the BP prostaglandin secretion signal at the enzyme level.
+
+The directional MF analysis revealed clear molecular subfunctionalization between sex-biased copies within All three families.
+
+Plot 2a: Male terms:  
+![alt text](go_plot2a_MF_AllThree_maleCopies.png)  
+
+Male-biased copies were uniquely enriched for odorant binding (GO:0005549, 4 obs vs 0.12 exp), electron transfer
+activity (GO:0009055, 9 obs vs 0.73 exp) and lipid metabolism activities including triacylglycerol lipase and acylcarnitine hydrolase, connecting to pheromone production and male-specific metabolic functions. 
+
+Plot 2b: Female terms: 
+![alt text](go_plot2b_MF_AllThree_femaleCopies.png)  
+
+Female-biased copies were uniquely enriched for cytoskeletal organisation (actin binding, microtubule binding, myosin binding), protein folding chaperone activity (GO:0044183, 4 obs vs 0.13 exp), protein kinase C inhibitor activity (GO:0008426, 4 obs vs 0.06 exp) and juvenile hormone esterase activity (GO:0004453), pointing to roles in oocyte development and post-mating female regulatory control.
+
+Taken together, conflict-candidate families are enriched for mating, pheromone and reproductive signalling functions at both the process and molecular activity level. Within these families, male and female copies diverged toward distinct molecular
+functions after duplication, consistent with subfunctionalization as a mechanism for resolving intralocus sexual conflict.
+
+---
+
 # Mixed model analyses 
 I use lme4 on the post-DESeq2 data as a two-stage approach. The DESeq2 step identifies which transcripts are sex-biased while controlling for underlying genotypes. The lme4 step then asks whether evolutionary age predicts the pattern and magnitude of that sex bias across transcripts, with gene families as a random effect to account for the non-independence of transcripts within the same family.
 Two types of models are used throughout:
@@ -612,42 +730,46 @@ Two types of models are used throughout:
 lmer for continuous responses (log2FoldChange, |log2FoldChange|)  
 glmer for binary responses (is this gene sex-biased: yes/no)  
 
-Mixed models have fixed and random effects. Fixed effects are the variable we wish to estimate and interpret. Such as age rank or the sex-bias class. 
+Fixed effects are the variable we wish to estimate and interpret, such as age rank or the sex-bias class. 
+Random effects are variables we want to control for but not interpret directly. Here the random effect is always (1 | HOG), a random intercept that gives each family its own baseline expression bia, accounting for the non-independence of paralogs within the same family.  
 
-Random effects are variables we want to control for but not interpret directly. Here the random effect is always (1 | HOG) which is a random intercept that gives each gene family its own baseline expression bias. This will account for the fact that paralogs within the same family are not independent observations. 
-
-I use REML (Restricted Maximum Likelihood) to fit the variance components in lmer models. This gives unbiased estimates of the random effect variance compared to regular maximum likelihood. For likelihood ratio tests (LRT) comparing two models, both models must be fitted with regular maximum likelihood so they are on the same scale.
+REML (Restricted Maximum Likelihood) fits the variace components in lmer models. For likelihood ration tests (LRT) comparing two models, both models are fitted with regular maximum likelihood so they are on the same scale. 
 
 Two tools are used to interpret results beyond the coefficient tables:
 
-drop1 performs a likelihood ratio test by dropping one term at a time from the full model and testing whether removing it significantly worsens the fit. This is a Type III test, meaning it tests each term after accounting for all others. This lets me see if an interaction or main effect is justified in the model. 
+drop1 performs a likelihood ratio test by dropping one term at a time from the full model. This is a Type III test, meaning it tests each term after accounting for all others.
 
 emmeans (estimated marginal means) computes the predicted value of the response for each combination of factor levels, averaged over all other predictors in the model. This is what the model thinks the mean response would be for a typical gene in each group. Contrasts then compare pairs of these predicted means directly.
 
 ## Dataset Summary
 
-|                                                    |  Count                      |
-|----------------------------------------------------|--------------------------------|
-| Total transcripts loaded                           | 17,574                         |
-| Model data (birth_type = duplication, .t1, age rank + HOG + logFC) | 8,833 |
-| HOGs represented                                   | 4,322                          |
-| HOG ≥ 2                                            | 7,011 transcripts / 2,500 HOGs |
-| HOG ≥ 3                                            | 3,541 transcripts / 765 HOGs   |
+|                                            | Count                          |
+|--------------------------------------------|--------------------------------|
+| Total transcripts loaded from DESeq2       | 17,574                         |
+| After birth_type == duplication filter     | 8,998                          | 
+| Model data (age rank + HOG + logFC)        | 8,989 transcripts / 4,359 HOGs |
+| HOG ≥ 2                                    | 7,184 transcripts / 2,554 HOGs |
+| HOG ≥ 3                                    | 3,640 transcripts / 782 HOGs   |
+| Singletons (one expressed member)          | 1,805 (41.4%)                  |
+| Same age rank (HOG ≥ 2, expressed)         | 2,095 families (82%)           |
+| Mixed age rank (HOG ≥ 2, expressed)        | 459 families                   |
+| Same age rank (HOG ≥ 2, genome)            | 3,449 families (82%)           |
+| Mixed age rank (HOG ≥ 2, genome)           | 756 families                   |
 
-OrthoFinder was run on an isoform-filtered proteome (one protein per gene) so eac htranscript maps to only one gene and one HOG. There is no isofrm nesting to wory about, so (1 | HOG) should be sufficient for the random  effects. 
+The 9 transcripts dropped between 8,998 and 8,989 are confirmed duplications that OrthoFinder assigned an age rank to but could not place in any orthogroup. They have no HOG and are excluded from all gene family analyses. 
 
+Of the 4,359 HOGs in model_data, 2,554 have more than one expressed member, and 1,805 have only one expressed member (41.4%). These are not biological singletons but only one member passed the expression filtering. These are excluded from within-family analyses because there are no other expressed paralogs to compare against.   
+And among the 2,554 families with at least 2 expressed members, 82% have all expressed members at the same age rank, meaning most family expansions happened as a single burst event at the same phylogenetic node. At the genome-level this still holds, meaning its not an artifact due to the expression filtering.  
+Relative age is then only biologically meaningful in those 459 gene families that have expressed transcripts at different age ranks.  
 
+OrthoFinder was run on an isoform-filtered proteome (one protein per gene) so eaachtranscript maps to only one gene and one HOG. There is no isofrm nesting to wory about, so (1 | HOG) should be sufficient for the random  effects. 
 
+The analyses are divided into two parts. 
+Script 1: **mm_00_data_prep.R**  
+Script 2: **mm_01_absolute_age.R** (raw utputs saved as mixed_model_part_1_results_fixed.txt)
+Script 3: **mm_02_relative_age.R** (raw outputs saved as mixed_model_part2_within_family_results_fixed.txt)
 
-
-### Dataset Issues
-Two structural properties of the data shape the analysis throughout:  
-24.8% of genes are singletons (gene families of size 1). These genes have no family members to compare against, so they have no relative age within a family. They are excluded from any within-family analysis.  
-
-89% of gene families have all paralogs at the same age rank. This means most gene family expansions happened in a single burst duplication event at one node. Relative age is only biologically meaningful in the 554 families where paralogs arose at different nodes. This is why i did the two-dataset design used in Parts 2 and 3.
-
-I divided the analyses in three parts. The raw model outputs can be found in the corresponding mixed_model_partX_results.txt files.
-
+---
 
 # Part 1: Absolute Age Models 
 Does the absolute evolutionary age of a gene predict how sex-biased it is? Age is deined using 9 discrete ranks (1 = oldest, shared with Diptera; 9 = youngest, C. mac specific).
@@ -924,3 +1046,4 @@ Controlling for family size and expression.
 | rel_age_cat:family_age_cat | 5.17    | 0.006   |
 
 The interaction survives covariate control. Expression level matters independently (higher expressed genes are more sex-biased), but it does not explain why old paralogs in intermediate-age families show elevated sex bias magnitude.
+
