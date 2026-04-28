@@ -42,7 +42,7 @@ The reference genome comes from the paper "Y-Linked Copy Number Polymorphism of 
 | Y assembled  | 10 Mbp  |
 
 ## Annotations  
-Scripts titled _unfiltered are based on the non-isoform filtered annotation, to preserve all isoform information for downstream use. 
+Scripts titled _unfiltered are based on the non-isoform filtered annotation.
 
 **Source files:**  
 | Softlinked File Name | Source path |
@@ -87,13 +87,24 @@ y_contigs <- c(
 | Y-linked | 334 | 76 | 249 | 46 |
 | Unassigned | 7,176 | 148 | 2,537 | 84 |
 
+**Multiple Isoform distribution:**  
+| Number of isoforms | Number of genes |
+|--------------------|-----------------|
+| 2                  | 1,989           |
+| 3                  | 201             |
+| 4                  | 28              |
+| 5                  | 6               |
+
+2,224 genes have multiple isoforms in total, resulting in 2,499 extra transcripts in this data (non-representative isoforms).   
+
 ### Functional annotation:  
 eggNOG-mapper was run on the BRAKER protein sequences to assign functional annotation including GO terms, KEGG pathways, COG categories and PFAM domains (**run_eggnog.sh**). 
 
 ### Orthology Inference:    
 The structural annotation, eggNOG results and OrthoFinder output (N0.tsv) were merged in R to produce the full annotation table (**create_full_annotation_fixed.R**). 
 
-Gene age ranks were assigned by traversing the OrthoFinder resolved gene trees on UPPMAX (**parse_gene_trees_birth_nodes.py**, run via **run_parse_gene_trees.sh**). The script runs on the full OrthoFinder dataset and assigns a birth node to every gene across all species, which can be used for future studies of this phylogeny.  
+Gene age ranks were assigned by traversing the OrthoFinder resolved gene trees on UPPMAX (**parse_gene_trees_birth_nodes.py**, run via **run_parse_gene_trees.sh**). The script runs on the full OrthoFinder dataset and assigns a birth node to every gene across all species, which can be used for future studies of this phylogeny. 
+
 Each gene gets one of three birth types:  
 | Birth type        | Description                                                                 |
 |------------------|-----------------------------------------------------------------------------|
@@ -121,6 +132,19 @@ Age ranks were mapped to nodes along the C_maculatus lineage in the species tree
 ![alt text](image-1.png)
 All recorded events, transcripts here can appear many times. Already indicates that most duplication evens occurr in C. mac after the split with C. chinensis. 
 
+**Isoforms**  
+OrthoFinder was run on an isoform-filtered proteome, keeping the longest isoform per gene as a representative. This is most often the .t1 transcript but can be .t2 or higher. Only the representiative isoform per gene recieves an Orthogroup, Hierarchical Orthogroup (HOG) and age rank data. All other isoforms retain NA for these column and are excluded from paralog analyses by the HOG and age rank filters.  
+
+To confirm that combining the structural non-isoform filtered and isoformiltered OrthoFinder data does not introduce any non-independencies in later analyses, three checks was run: 
+
+| Check | Result |
+|---|---|
+| Genes with multiple HOG-assigned isoforms | 0 |
+| Genes with multiple age-rank-assigned isoforms | 0 |
+| Genes with multiple isoforms in full structural annotation | 2,224 |
+
+This confirms that only one isoform per gene as been assigned age rank and OrthoFinder-related data. No gene contributes two independent data points to any paralog analysis.
+
 **Birth type distribution**  
 | Birth type | Transcripts |
 |---|---|
@@ -131,16 +155,15 @@ All recorded events, transcripts here can appear many times. Already indicates t
 
 Total: 37,988
 
-The 10,670 transcripts without a birth type consist of non-representative isoforms (.t2 suffix) and genes fully absent from OrthoFinder. OrthoFinder was run on one protein per gene, so only representative isoforms receive age and HOG data. All
-isoforms are retained in the full annotation for completeness, but they will not have any age ranks.
+The 10,670 transcripts without a birth type consist of the non-representative isoforms and genes fully absent from OrthoFinder. All isoforms are retained in the full annotation for completeness, but they will not have any age ranks or gene family data.
 
-Age rank distribution (all birth types):
+**Age rank distribution (all birth types):**
 
 | Age rank | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | NA |
 |---|---|---|---|---|---|---|---|---|---|---|
 | Transcripts | 4,447 | 3,382 | 561 | 624 | 280 | 1,511 | 282 | 667 | 15,005 | 11,229 |
 
-Age rank distribution after filtering to duplication only (n = 20,026):
+**Age rank distribution after filtering to duplication only (n = 20,026):**
 
 | Age rank | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
 |---|---|---|---|---|---|---|---|---|---|
@@ -472,10 +495,6 @@ OrthoFinder assigns genes to two levels of homology groups. An Orthogroup (OG) c
 
 Since all analyses here focus exclusively on C. maculatus, a HOG is equivalent to a gene family: it contains all paralogs in C. maculatus that share a common ancestor at a given node in the phylogeny. Gene family and HOG are used interchangeably throughout, but gene family is preferred for clarity. 
 
-OrthoFinder was run on isoform-filtered proteins, so only one isoform per gene was used for gene family and age rank assignment. Only representative isoforms (.t1) receive gene family and age rank data. Non-representative isoforms (.t2) are  present in the full structural annotation for completeness, but all paralog analyses use representative isoforms
-only, consistent with the OrthoFinder input.  
-A small number of .t2 transcripts have leaked into the data through OrthoFinder and recieved age rank and HOG anyway. These are excluded from the paralog analyses by filtering on representative isoforms (.t1) explicitly. 
-
 # Gene family size and sex bias (**HOG_size_sex_bias.ipynb**)
 
 All analyses are restricted to transcripts with birth_type = duplication.   
@@ -486,12 +505,12 @@ Three size definitions are used throughout:
 
 | Level      | Total transcripts | With gene family | Without gene family | Gene families | Families ≥ 2 | Max size | Median size |
 |------------|------------------|------------------|----------------------|----------------|---------------|-----------|--------------|
-| Genome     | 19,556           | 19,534           | 22                   | 5,526          | 4,127         | 92        | 2            |
-| Mapped     | 18,627           | 18,606           | 21                   | 5,526          | 4,024         | 74        | 2            |
-| Expressed  | 8,842            | 8,833            | 9                    | 4,322          | 2,500         | 27        | 2            |
+| Genome     | 20,026           | 20,004           | 22                   | 5,567          | 4,205         | 92        | 2            |
+| Mapped     | 19,063           | 19,042           | 21                   | 5,567          | 4,101         | 78        | 2            |
+| Expressed  | 8,998            | 8,989            | 9                    | 4,359          | 2,554         | 28        | 2            |
 
 The genome-level size reflects the true family size. Using only expressed sizes would underestimate family
-size. The largest expressed family has 27 members, while the largest genome-level family has 92. In reality those 27 expressed transcripts belong to a larger family. 
+size. The largest expressed family has 28 members, while the largest genome-level family has 92. In reality those 28 expressed transcripts belong to a larger family. 
 Since all transcripts here are confirmed duplications, the median family size is 2 at all levels. The 22 duplicated transcripts without a gene family assignment are genes OrthoFinder could not place into any orthogroup and are excluded from gene family analyses.
 
 ### Density plot of size distributions 
@@ -503,7 +522,6 @@ Most families are really small (less than 5 members) at all levels. The sizes of
 ### Proportion of mapped and expressed transcripts by genome family size 
 Consistently, most transcripts are mapped but not expressed. On average ~24% transcripts of a given size are expressed.
 ![alt text](image-24.png)
-
 
 ### Transcript-level sex-bias as a function of gene family size 
 Sex-biased expression decreases as families increase in size. Male-bias is more common than female bias, and female bias becomes more rare in larger families. 
@@ -530,18 +548,17 @@ The high variance is driven by g16714.t1 (log2FC ≈ 30), which seems very unlik
 Gene families were classified by the combination of bias directions their transcripts contain: all unbiased, all male-biased, all female-biased, or mixed categories.
 | Category            | Families | Transcripts | Male % | Female % | Unbiased % |
 |---------------------|----------|-------------|--------|-----------|-------------|
-| All unbiased        | 1,044    | 2,379       | 0.0%   | 0.0%      | 100.0%      |
-| All male biased     | 504      | 1,233       | 100.0% | 0.0%      | 0.0%        |
-| Male + Unbiased     | 500      | 1,949       | 50.0%  | 0.0%      | 50.0%       |
-| Female + Unbiased   | 170      | 570         | 0.0%   | 47.5%     | 52.5%       |
-| All female biased   | 196      | 426         | 0.0%   | 100.0%    | 0.0%        |
-| Male + Female       | 35       | 114         | 55.3%  | 44.7%     | 0.0%        |
-| All three           | 51       | 340         | 34.7%  | 24.1%     | 41.2%       |
+| All unbiased        | 1,066    | 2,429       | 0.0%   | 0.0%      | 100.0%      |
+| All male biased     | 511      | 1,250       | 100.0% | 0.0%      | 0.0%        |
+| Male + Unbiased     | 515      | 2,021       | 50.1%  | 0.0%      | 49.9%       |
+| Female + Unbiased   | 175      | 588         | 0.0%   | 47.3%     | 52.7%       |
+| All female biased   | 200      | 434         | 0.0%   | 100.0%    | 0.0%        |
+| Male + Female       | 34       | 106         | 54.7%  | 45.3%     | 0.0%        |
+| All three           | 53       | 356         | 35.1%  | 24.2%     | 40.7%       |
 
 Most families are all Unbiased, followed by Male-bias and Male + Unbiased. Its very rare to have both Male and Female bias in the same family. There are 35 Male + Female and 51 All three families. These will later be investigated with GO-term enrichement as they are potential candidates for intralocus sexual conflict resolution. 
 
 ![alt text](image-16.png)
-
 
 ### Sizes of the families in each category: 
 ![alt text](image-17.png)  
@@ -558,13 +575,12 @@ Proportionally, smaller families are more likely to be unbiased. And with increa
 # Paralog Age Rank Analyses (**age_rank_analysis.ipynb**)  
 Age ranks were assigned as described in the Annotation section using gene tree traversal in **parse_gene_trees_birth_nodes.py**. All analyses here are restricted to birth_type = duplication. Age ranks run from 1 (root, oldest) to 9 (C. maculatus tip, most recent). All duplicated transcripts have an age rank assigned by definition. Transcripts with no age rank are either species-specific singletons or genes absent from OrthoFinder entirely.
 
-
-| Dataset | Transcripts (duplication only) | Age rank coverage |
-|---|---|---|
-| Full annotation | 19,556 | 100% |
-| Mapped (pre-filter) | 18,627 | 100% |
-| Expressed | 8,842 | 100% |
-| Significantly DE | 3,941 | 100% |
+| Dataset              | Transcripts (duplication only) | Age rank coverage |
+|----------------------|--------------------------------|-------------------|
+| Full annotation      | 20,026                         | 100%              |
+| Mapped (pre-filter)  | 19,063                         | 100%              |
+| Expressed            | 8,998                          | 100%              |
+| Significantly DE     | 4,003                          | 100%              |
 
 ### Age rank distribution of duplicates across dataset levels
 ![alt text](image-19.png)
@@ -576,13 +592,13 @@ Most duplicated transcripts are C. mac specific and originated after the split w
 ## Age rank and sex bias
 
 ### Proportion sex-bias in age ranks  
-8,842 expressed duplicated transcipts with age plotted.  
+8,998 expressed duplicated transcipts with age plotted.  
 ![alt text](image-20.png)  
 
 A majority in each rank are unbiased, but ranks 5, 6 and 7 show a big proportional increase in male biased transcripts, while female-bias stays the same. These nodes correspond to bruchid+weevil nodes and bruchid-specific nodes in the phylogeny.
 
 ### Sex bias magnitude per age rank - significantly DE transcripts
-2,877 male biased and 1,064 female-biased transcripts with age rank plotted side by side for each age rank (padj < 0.05, |log2FC| > 1). 
+2,927 male biased and 1,076 female-biased transcripts with age rank plotted side by side for each age rank (padj < 0.05, |log2FC| > 1). 
 ![alt text](image-22.png)
 
 Male-bias is generally more common than female bias, but ranks 5, 6, and 7 again stand out with elevated levels of male-bias. 
