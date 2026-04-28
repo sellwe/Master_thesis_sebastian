@@ -153,11 +153,11 @@ This confirms that only one isoform per gene as been assigned age rank and Ortho
 | species_specific | 559 |
 | NA (non-representative isoform or absent from OrthoFinder) | 10,670 | 
 
-Total: 37,988
+**Total:** 37,988
 
 The 10,670 transcripts without a birth type consist of the non-representative isoforms and genes fully absent from OrthoFinder. All isoforms are retained in the full annotation for completeness, but they will not have any age ranks or gene family data.
 
-**Age rank distribution (all birth types):**
+**Age rank distribution (duplicates 20,026 + mrca_inferred 6,733):**
 
 | Age rank | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | NA |
 |---|---|---|---|---|---|---|---|---|---|---|
@@ -165,7 +165,7 @@ The 10,670 transcripts without a birth type consist of the non-representative is
 
 (10,670 with no birth rank + 559 species specific = 11,229 NA)
 
-**Age rank distribution after filtering to duplication only (n = 20,026):**
+**Age rank distribution (duplication only (n = 20,026)):**
 
 | Age rank | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
 |---|---|---|---|---|---|---|---|---|---|
@@ -513,7 +513,7 @@ Three size definitions are used throughout:
 
 The genome-level size reflects the true family size. Using only expressed sizes would underestimate family
 size. The largest expressed family has 28 members, while the largest genome-level family has 92. In reality those 28 expressed transcripts belong to a larger family. 
-Since all transcripts here are confirmed duplications, the median family size is 2 at all levels. The 22 duplicated transcripts without a gene family assignment are genes OrthoFinder could not place into any orthogroup and are excluded from gene family analyses.
+Since all transcripts here are confirmed duplications, the median family size is 2 at all levels. The 22 duplicated transcripts without a gene family assignment are genes OrthoFinder could not place into any orthogroup and are excluded from gene family analyses (they might be present in the resolved gene trees, but are not in N0.tsv, and can be found in Orthogroups_UnassignedGenes.tsv)
 
 ### Density plot of size distributions 
 Gene families that have 2 or more members, linear and log scale:  
@@ -608,7 +608,7 @@ Male-bias is generally more common than female bias, but ranks 5, 6, and 7 again
 ---
 
 # GO-term Enrichement (**GO-term_enrichement.R**) 
-Here i looked at two subsets of conflict-candidate gene families: the 34 Male + Female families (106 transcripts) and 53 All-three families (356 transcripts). These are the families there paralogs within the same gene family have different direction in their sex-bias, making them candidates for intralocus sexual conflict resolution through gene duplications.
+Here i looked at two subsets of conflict-candidate gene families: the 34 Male + Female families (106 transcripts) and 53 All-three families (356 transcripts). These are the families where paralogs within the same gene family have different direction in their sex-bias, making them candidates for intralocus sexual conflict resolution through gene duplications.
 
 | Category                         | Transcript Count |
 |----------------------------------|------------------|
@@ -619,7 +619,7 @@ Here i looked at two subsets of conflict-candidate gene families: the 34 Male + 
 | All three (male-biased)          | 125              |
 | All three (female-biased)        | 86               |
 
-As a background i used the 8,989 expressed duplicated transcripts that belong to a gene family. 5,012 (~55%)transcripts in this set has at least one GO term, which is expected for a non-model organism annotated with BRAKER and eggNOG-mapper. All enrichment results can only be concluded based on this set of annotated transcripts. 
+As a background i used the 8,989 expressed duplicated transcripts that belong to a gene family. 5,012 (~55%) transcripts in this set has at least one GO term, which is expected for a non-model organism annotated with BRAKER and eggNOG-mapper. All enrichment results can only be concluded based on this set of annotated transcripts. 
 
 Noteably the Go annotation coverage is lower in the conflict-candidate categories than the rest of the backgorund, so the enrichment results will be convervative rather than inflated. 
 
@@ -632,17 +632,17 @@ Noteably the Go annotation coverage is lower in the conflict-candidate categorie
 | Female + Unbiased| 588         | 274       | 46.6%    |
 | All three        | 356         | 148       | 41.6%    |
 | Male + Unbiased  | 2,021       | 708       | 35.0%    |
-| NA               | 1805        | 1225      | 67.9%    |
 
 I used the topGO package with the weight01 algorithm and Fisher test. Weight01  accounts for the non-independence of GO terms by propagating signal through the GO  graph, which reduces redundancy compared to a standalone Fisher test. I ran both  Biological Process (BP) and Molecular Function (MF) ontologies. Each category was tested three ways: all transcripts in the family, male-biased copies only, and female-biased copies only. 
 
 One BP term cluster (response to DDT, insecticide metabolic process) was excluded from interpretation after checking that all 12 transcripts driving the signal came from a single expanded detoxification family (N0.HOG0000027). This could be a gene family expansion artifact rather than a general pattern across conflict-candidate families.
 
-**BP results:**  
+### BP (Biological Process) results:  
 10 BP terms were significant in both candidate categories independently. The enrichment signal is spread across families rather than being HOG-specific: 20 out of 34 Male+Female HOGs and 19 out of 53 All three HOGs carry at least one significant GO term.
 
+**Shared terms:**  
 The 10 shared terms with observed and expected counts from both categories:  
-| GO ID      | Term                                  | MF sig | MF exp | MF p     | AT sig | AT exp | AT p      |
+| GO ID      | Term                                  | M + F sig | M + F exp | M + F p     | AT sig | AT exp | AT p      |
 |------------|---------------------------------------|--------|--------|----------|--------|--------|-----------|
 | GO:0032310 | prostaglandin secretion               | 3      | 0.31   | 3.4e-03  | 6      | 0.77   | 9.2e-05   |
 | GO:0018094 | protein polyglycylation               | 2      | 0.15   | 9.3e-03  | 4      | 0.37   | 3.9e-04   |
@@ -669,8 +669,10 @@ ordered by p-value; includes shared and unique terms):
 ![alt text](go_plot3a_BP_overview_AllThree.png)
 
 The tables below show terms unique to each category only (not found in the other
-category). The overview plots above show the top 8 terms per comparison by p-value
+category). The overview plots show the top 8 terms per comparison by p-value
 and include both shared and unique terms.
+
+**Unique terms for Male + Female:** 
 
 Top unique BP terms for Male+Female families (50 unique terms total):
 
@@ -683,8 +685,9 @@ Top unique BP terms for Male+Female families (50 unique terms total):
 | GO:0060271 | cilium assembly                                   | 12  | 2.30 | 2.9e-05   |
 | GO:0006719 | juvenile hormone catabolic process                | 3   | 0.11 | 1.3e-04   |
 
-The top two terms (GO:0007171 and GO:0050965) are driven by 10 transcripts across three HOGs: a carboxylesterase family (N0.HOG0009620), a fibrinogen-domain family (N0.HOG0000377) and a TRP channel family (N0.HOG0012871). Each has only male and female biased copies, confirming the signal is not HOG-specific. Cilium assembly can connect to sperm flagella function in beetles. Juvenile hormone catabolism connects to reproductive maturation timing.
+The top two terms (GO:0007171 and GO:0050965) are driven by 10 transcripts across three HOGs: a carboxylesterase family (N0.HOG0009620), a fibrinogen-domain family (N0.HOG0000377) and a TRP channel family (N0.HOG0012871). This confirms that the signal is not HOG-specific. Cilium assembly can connect to sperm flagella function in beetles. Juvenile hormone catabolism connects to reproductive maturation timing.
 
+**Unique terms for All three:**  
 Top unique BP terms for All three families (124 unique terms total, excluding the
 single-HOG detoxification signal):
 
@@ -701,10 +704,11 @@ single-HOG detoxification signal):
 
 Pheromone biosynthesis, sperm storage and regulation of female post-mating receptivity are three terms representing two sides of the same post-mating conflict. Finding them enriched in families where paralogs split into male-biased, female-biased and unbiased copies is consistent with duplication resolving antagonism over reproductive gene expression.
 
-**MF results:**
+### MF (Molecular Function) results:
 
 4 MF terms were shared across both categories: prostaglandin dehydrogenase activity (GO:0016404) and three ATPase-coupled ion transporter terms (GO:0043225, GO:0015662,GO:0042625). The prostaglandin activity term confirms the BP prostaglandin secretion signal at the enzyme level.
 
+**MF for AllThree:**  
 The directional MF analysis revealed clear molecular subfunctionalization between sex-biased copies within All three families.
 
 Plot 2a: Male terms:  
@@ -718,6 +722,10 @@ Plot 2b: Female terms:
 
 Female-biased copies were uniquely enriched for cytoskeletal organisation (actin binding, microtubule binding, myosin binding), protein folding chaperone activity (GO:0044183, 4 obs vs 0.13 exp), protein kinase C inhibitor activity (GO:0008426, 4 obs vs 0.06 exp) and juvenile hormone esterase activity (GO:0004453), pointing to roles in oocyte development and post-mating female regulatory control.
 
+**MF for Male + Female:**   
+Directional MF analysis was also run for Male + Female families which has smaller subsets (58 male, 48 female transcripts) which makes this more unreliable. Male biased copies only had 2 unique terms: voltage-gated (GO:0005245) and intracellularly gated (GO:0015278) calcium channel activity, consistent with roles in sperm motility and neuromuscular signalling. Female-biased copies returned 5 unique terms, 4 of whichare the same prostaglandin dehydrogenase and ATPase ion transporter cluster foundin the All three female directional analysis. Female-biased copies in conflict families converge on the same molecular functions regardless of whether their family also contains unbiased copies. Male-biased copies show no such overlap across the two categories.
+
+**Conclusion:**   
 Taken together, conflict-candidate families are enriched for mating, pheromone and reproductive signalling functions at both the process and molecular activity level. Within these families, male and female copies diverged toward distinct molecular
 functions after duplication, consistent with subfunctionalization as a mechanism for resolving intralocus sexual conflict.
 
