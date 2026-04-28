@@ -544,7 +544,7 @@ The outlier in red is N0.HOG0000646, a gene family within OG0000445 with 3 out o
 | g16714.t1 | 29.99 | 5.53e-24 | RNA polymerase II regulatory region DNA binding | DUF659, Dimer_Tnp_hAT, zf-BED | 3 | 9 |
 | g19428.t1 | 0.03 | 0.97 | RNA polymerase II regulatory region DNA binding | DUF659, Dimer_Tnp_hAT, zf-BED | 3 | 9 |
 
-The high variance is driven by g16714.t1 (log2FC ≈ 30), which seems very unlikely. This could be investigated at a later point. It might have to be removed for statistical analyses. 
+The high variance is driven by g16714.t1 (log2FC ≈ 30), which seems very unlikely. It might have to be removed for statistical analyses. 
 
 ### Within gene family directional bias  
 Gene families were classified by the combination of bias directions their transcripts contain: all unbiased, all male-biased, all female-biased, or mixed categories.
