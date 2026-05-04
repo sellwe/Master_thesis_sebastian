@@ -1,0 +1,2589 @@
+HOG,category,hog_size_expressed,hog_size_genome,hog_size_mapped
+N0.HOG0000009,Male + Unbiased,9,27,26
+N0.HOG0000011,Male + Unbiased,7,33,33
+N0.HOG0000014,Male + Unbiased,17,56,56
+N0.HOG0000015,All female biased,2,2,2
+N0.HOG0000020,All female biased,5,5,5
+N0.HOG0000023,Female + Unbiased,13,15,15
+N0.HOG0000024,Female + Unbiased,3,3,3
+N0.HOG0000027,All three,12,12,12
+N0.HOG0000029,Male + Female,3,3,3
+N0.HOG0000030,Male + Unbiased,10,10,10
+N0.HOG0000031,Male + Unbiased,2,2,2
+N0.HOG0000032,Male + Unbiased,14,52,51
+N0.HOG0000033,Male + Unbiased,19,53,51
+N0.HOG0000034,Female + Unbiased,4,42,41
+N0.HOG0000035,Female + Unbiased,3,17,16
+N0.HOG0000043,All three,5,8,8
+N0.HOG0000044,All unbiased,3,3,3
+N0.HOG0000045,Male + Unbiased,18,18,18
+N0.HOG0000046,Male + Unbiased,23,80,78
+N0.HOG0000047,All male biased,6,6,6
+N0.HOG0000048,Male + Unbiased,3,22,22
+N0.HOG0000049,Male + Female,3,18,17
+N0.HOG0000052,Male + Unbiased,11,17,17
+N0.HOG0000053,Male + Unbiased,2,4,4
+N0.HOG0000054,Male + Unbiased,6,13,13
+N0.HOG0000055,Male + Unbiased,6,17,17
+N0.HOG0000056,All three,6,6,6
+N0.HOG0000058,Male + Unbiased,4,18,17
+N0.HOG0000059,Male + Unbiased,6,6,6
+N0.HOG0000060,All three,11,40,38
+N0.HOG0000061,Male + Unbiased,4,4,4
+N0.HOG0000062,Male + Unbiased,2,11,11
+N0.HOG0000067,Male + Unbiased,2,4,4
+N0.HOG0000068,Male + Unbiased,24,48,48
+N0.HOG0000069,Male + Unbiased,5,19,19
+N0.HOG0000070,Male + Unbiased,4,49,48
+N0.HOG0000073,Male + Unbiased,18,18,18
+N0.HOG0000074,Male + Unbiased,8,38,35
+N0.HOG0000075,All unbiased,5,10,10
+N0.HOG0000076,Male + Unbiased,4,49,48
+N0.HOG0000077,Male + Unbiased,8,21,21
+N0.HOG0000078,All male biased,7,7,7
+N0.HOG0000080,Male + Unbiased,6,6,6
+N0.HOG0000085,All three,7,7,7
+N0.HOG0000086,All male biased,3,3,3
+N0.HOG0000089,Male + Unbiased,8,8,8
+N0.HOG0000090,All male biased,2,33,32
+N0.HOG0000091,Male + Unbiased,12,12,12
+N0.HOG0000095,All three,14,14,14
+N0.HOG0000096,Male + Unbiased,28,60,60
+N0.HOG0000097,Male + Unbiased,13,35,35
+N0.HOG0000098,Male + Unbiased,4,22,22
+N0.HOG0000099,All three,8,8,8
+N0.HOG0000100,All male biased,2,2,2
+N0.HOG0000102,All three,9,20,20
+N0.HOG0000108,All three,9,10,10
+N0.HOG0000110,All three,9,19,18
+N0.HOG0000111,Male + Unbiased,23,62,62
+N0.HOG0000112,Male + Unbiased,3,3,3
+N0.HOG0000113,Male + Unbiased,6,6,6
+N0.HOG0000114,Male + Unbiased,5,22,19
+N0.HOG0000115,Male + Unbiased,4,19,19
+N0.HOG0000116,Male + Unbiased,6,18,18
+N0.HOG0000117,Male + Unbiased,6,19,19
+N0.HOG0000119,Male + Unbiased,3,3,3
+N0.HOG0000120,Male + Unbiased,3,3,3
+N0.HOG0000122,Male + Unbiased,7,12,12
+N0.HOG0000123,All unbiased,2,11,11
+N0.HOG0000133,Male + Unbiased,2,15,14
+N0.HOG0000135,All male biased,2,9,9
+N0.HOG0000139,Male + Unbiased,3,3,3
+N0.HOG0000140,Female + Unbiased,5,6,6
+N0.HOG0000141,All three,9,10,10
+N0.HOG0000142,All unbiased,3,4,4
+N0.HOG0000143,All three,7,28,26
+N0.HOG0000144,All male biased,6,6,6
+N0.HOG0000145,Male + Unbiased,8,8,8
+N0.HOG0000146,Male + Unbiased,3,12,10
+N0.HOG0000147,All male biased,2,16,16
+N0.HOG0000148,Male + Female,13,13,13
+N0.HOG0000149,Male + Unbiased,4,8,8
+N0.HOG0000151,Male + Unbiased,12,34,31
+N0.HOG0000153,Male + Unbiased,4,11,11
+N0.HOG0000154,Male + Unbiased,4,15,15
+N0.HOG0000156,Male + Unbiased,2,20,19
+N0.HOG0000158,All unbiased,3,11,9
+N0.HOG0000160,All female biased,2,2,2
+N0.HOG0000161,All female biased,2,2,2
+N0.HOG0000162,Male + Unbiased,6,46,44
+N0.HOG0000163,All three,5,15,15
+N0.HOG0000164,Male + Unbiased,2,5,5
+N0.HOG0000178,Male + Unbiased,2,29,27
+N0.HOG0000179,All three,13,13,13
+N0.HOG0000181,Male + Unbiased,2,29,29
+N0.HOG0000182,All male biased,5,5,5
+N0.HOG0000184,All male biased,3,3,3
+N0.HOG0000188,Male + Unbiased,4,4,4
+N0.HOG0000196,Male + Unbiased,3,30,27
+N0.HOG0000198,All three,12,12,12
+N0.HOG0000201,Male + Unbiased,10,22,22
+N0.HOG0000203,Male + Unbiased,7,29,28
+N0.HOG0000204,All three,7,7,7
+N0.HOG0000205,Male + Unbiased,4,28,23
+N0.HOG0000206,Male + Unbiased,4,5,5
+N0.HOG0000207,All three,8,23,22
+N0.HOG0000218,Male + Unbiased,4,4,4
+N0.HOG0000220,Female + Unbiased,8,8,8
+N0.HOG0000224,Male + Female,3,3,3
+N0.HOG0000227,Female + Unbiased,2,7,7
+N0.HOG0000228,Male + Unbiased,5,17,17
+N0.HOG0000229,Male + Unbiased,4,8,8
+N0.HOG0000231,All unbiased,3,3,3
+N0.HOG0000236,Male + Unbiased,6,10,10
+N0.HOG0000241,Male + Unbiased,3,4,4
+N0.HOG0000242,Male + Unbiased,2,13,12
+N0.HOG0000244,All unbiased,2,2,2
+N0.HOG0000250,Male + Unbiased,8,26,25
+N0.HOG0000251,All male biased,5,5,5
+N0.HOG0000253,Male + Unbiased,6,6,6
+N0.HOG0000255,All male biased,2,7,7
+N0.HOG0000256,Male + Unbiased,2,11,11
+N0.HOG0000258,Female + Unbiased,2,25,24
+N0.HOG0000259,All unbiased,2,86,70
+N0.HOG0000260,All three,11,14,12
+N0.HOG0000262,All unbiased,4,4,4
+N0.HOG0000265,All female biased,2,2,2
+N0.HOG0000269,Male + Unbiased,9,17,17
+N0.HOG0000274,Male + Female,2,3,3
+N0.HOG0000276,All three,8,8,8
+N0.HOG0000277,All male biased,4,7,7
+N0.HOG0000278,All three,10,10,10
+N0.HOG0000282,All unbiased,2,2,2
+N0.HOG0000284,Female + Unbiased,8,8,8
+N0.HOG0000286,Male + Unbiased,6,15,15
+N0.HOG0000289,Male + Female,3,3,3
+N0.HOG0000296,Male + Unbiased,10,23,23
+N0.HOG0000297,Male + Unbiased,6,6,6
+N0.HOG0000299,Male + Unbiased,11,25,24
+N0.HOG0000300,All three,4,4,4
+N0.HOG0000301,Male + Unbiased,5,5,5
+N0.HOG0000302,Female + Unbiased,3,3,3
+N0.HOG0000304,Female + Unbiased,2,2,2
+N0.HOG0000305,All three,8,8,8
+N0.HOG0000307,Male + Unbiased,3,3,3
+N0.HOG0000310,Male + Unbiased,2,2,2
+N0.HOG0000311,All male biased,2,2,2
+N0.HOG0000314,Male + Unbiased,3,3,3
+N0.HOG0000315,All male biased,3,3,3
+N0.HOG0000316,All unbiased,5,5,5
+N0.HOG0000319,Male + Unbiased,7,7,7
+N0.HOG0000320,Male + Unbiased,11,11,11
+N0.HOG0000321,All three,6,21,21
+N0.HOG0000323,Male + Unbiased,12,23,22
+N0.HOG0000332,All male biased,2,8,7
+N0.HOG0000334,Male + Unbiased,5,10,10
+N0.HOG0000335,Male + Unbiased,2,11,10
+N0.HOG0000337,All male biased,4,8,8
+N0.HOG0000346,Male + Unbiased,6,12,12
+N0.HOG0000347,Male + Unbiased,2,28,28
+N0.HOG0000348,Male + Unbiased,9,33,31
+N0.HOG0000351,Male + Unbiased,4,4,4
+N0.HOG0000352,All unbiased,2,3,3
+N0.HOG0000356,All unbiased,2,2,2
+N0.HOG0000359,All unbiased,2,2,2
+N0.HOG0000361,All three,8,22,21
+N0.HOG0000362,All male biased,5,6,6
+N0.HOG0000364,All three,5,13,12
+N0.HOG0000367,All three,9,21,20
+N0.HOG0000368,Male + Female,2,5,5
+N0.HOG0000369,Male + Unbiased,5,30,30
+N0.HOG0000372,All unbiased,2,2,2
+N0.HOG0000373,All unbiased,2,2,2
+N0.HOG0000375,All three,4,4,4
+N0.HOG0000377,Male + Female,5,5,5
+N0.HOG0000378,Male + Unbiased,4,4,4
+N0.HOG0000380,All female biased,2,5,5
+N0.HOG0000381,All unbiased,2,2,2
+N0.HOG0000397,Female + Unbiased,2,2,2
+N0.HOG0000399,Male + Unbiased,4,4,4
+N0.HOG0000408,All unbiased,2,3,3
+N0.HOG0000411,Male + Unbiased,2,2,2
+N0.HOG0000416,All unbiased,4,4,4
+N0.HOG0000417,Male + Unbiased,5,17,17
+N0.HOG0000425,Male + Unbiased,7,58,55
+N0.HOG0000426,All three,4,5,5
+N0.HOG0000427,All male biased,3,13,13
+N0.HOG0000429,Male + Unbiased,4,20,20
+N0.HOG0000430,Male + Unbiased,3,5,5
+N0.HOG0000433,Male + Unbiased,2,2,2
+N0.HOG0000434,Female + Unbiased,7,7,7
+N0.HOG0000435,Male + Unbiased,6,57,57
+N0.HOG0000439,Male + Unbiased,6,6,6
+N0.HOG0000442,All three,3,5,5
+N0.HOG0000443,Male + Unbiased,2,2,2
+N0.HOG0000444,All three,11,15,15
+N0.HOG0000445,Female + Unbiased,3,3,3
+N0.HOG0000448,All unbiased,3,9,7
+N0.HOG0000449,All unbiased,2,2,2
+N0.HOG0000450,Male + Unbiased,6,6,6
+N0.HOG0000451,Male + Unbiased,4,11,11
+N0.HOG0000452,All male biased,2,2,2
+N0.HOG0000453,Male + Unbiased,3,3,3
+N0.HOG0000455,Female + Unbiased,16,42,38
+N0.HOG0000456,All unbiased,2,14,14
+N0.HOG0000457,All male biased,10,11,11
+N0.HOG0000458,All male biased,4,11,11
+N0.HOG0000459,All unbiased,2,2,2
+N0.HOG0000460,All unbiased,3,3,3
+N0.HOG0000463,All male biased,5,9,9
+N0.HOG0000465,Male + Unbiased,3,3,3
+N0.HOG0000466,Male + Unbiased,9,46,46
+N0.HOG0000468,Male + Unbiased,4,4,4
+N0.HOG0000469,Female + Unbiased,12,15,15
+N0.HOG0000471,Female + Unbiased,2,2,2
+N0.HOG0000476,Female + Unbiased,2,3,3
+N0.HOG0000477,Male + Unbiased,16,34,34
+N0.HOG0000478,Male + Unbiased,12,24,23
+N0.HOG0000482,Male + Unbiased,2,9,9
+N0.HOG0000485,All unbiased,2,3,3
+N0.HOG0000489,All male biased,4,4,4
+N0.HOG0000492,Female + Unbiased,3,3,3
+N0.HOG0000499,Male + Unbiased,2,4,4
+N0.HOG0000500,Male + Unbiased,5,24,22
+N0.HOG0000501,Female + Unbiased,3,3,3
+N0.HOG0000502,Male + Unbiased,5,9,9
+N0.HOG0000503,All three,6,7,6
+N0.HOG0000505,All unbiased,6,6,6
+N0.HOG0000506,Male + Unbiased,3,3,3
+N0.HOG0000510,Male + Unbiased,7,21,20
+N0.HOG0000512,Male + Unbiased,2,2,2
+N0.HOG0000513,Male + Unbiased,4,5,5
+N0.HOG0000514,Male + Unbiased,3,3,3
+N0.HOG0000516,Female + Unbiased,4,4,4
+N0.HOG0000517,Male + Unbiased,4,4,4
+N0.HOG0000518,All three,6,6,6
+N0.HOG0000525,All male biased,3,5,4
+N0.HOG0000526,All male biased,4,4,4
+N0.HOG0000529,Male + Female,2,2,2
+N0.HOG0000530,Male + Unbiased,4,20,19
+N0.HOG0000531,All three,8,8,8
+N0.HOG0000535,All unbiased,2,36,26
+N0.HOG0000538,All unbiased,2,2,2
+N0.HOG0000541,All male biased,4,4,4
+N0.HOG0000542,All unbiased,3,14,14
+N0.HOG0000543,All male biased,5,5,5
+N0.HOG0000544,Male + Unbiased,2,6,6
+N0.HOG0000546,Male + Unbiased,7,22,22
+N0.HOG0000547,Male + Unbiased,4,8,8
+N0.HOG0000549,Male + Unbiased,2,3,3
+N0.HOG0000553,Male + Unbiased,3,10,10
+N0.HOG0000555,Male + Unbiased,3,4,4
+N0.HOG0000557,All unbiased,2,2,2
+N0.HOG0000558,Male + Female,2,3,3
+N0.HOG0000559,All male biased,4,4,4
+N0.HOG0000560,All unbiased,2,2,2
+N0.HOG0000563,Male + Unbiased,10,23,23
+N0.HOG0000565,Female + Unbiased,6,6,6
+N0.HOG0000566,All male biased,4,7,7
+N0.HOG0000569,All male biased,2,3,3
+N0.HOG0000576,All male biased,3,3,3
+N0.HOG0000577,All unbiased,2,4,4
+N0.HOG0000578,All three,4,13,10
+N0.HOG0000579,All unbiased,2,2,2
+N0.HOG0000581,All three,3,3,3
+N0.HOG0000584,Female + Unbiased,6,7,7
+N0.HOG0000585,All unbiased,3,4,4
+N0.HOG0000589,All unbiased,3,10,10
+N0.HOG0000590,All unbiased,2,3,3
+N0.HOG0000591,Male + Unbiased,5,5,5
+N0.HOG0000593,All male biased,3,5,5
+N0.HOG0000594,All unbiased,2,9,8
+N0.HOG0000595,Male + Unbiased,3,3,3
+N0.HOG0000596,Male + Unbiased,7,7,7
+N0.HOG0000606,Male + Unbiased,6,11,11
+N0.HOG0000607,All unbiased,2,2,2
+N0.HOG0000612,All male biased,3,4,4
+N0.HOG0000614,Male + Unbiased,2,2,2
+N0.HOG0000616,Male + Unbiased,3,10,10
+N0.HOG0000624,All unbiased,2,2,2
+N0.HOG0000626,All male biased,2,2,2
+N0.HOG0000627,Male + Unbiased,6,6,6
+N0.HOG0000628,Male + Unbiased,3,3,3
+N0.HOG0000629,Female + Unbiased,3,4,4
+N0.HOG0000630,All three,4,4,4
+N0.HOG0000633,Male + Unbiased,4,8,7
+N0.HOG0000636,Male + Unbiased,4,41,41
+N0.HOG0000640,Male + Unbiased,8,8,8
+N0.HOG0000644,Male + Unbiased,2,2,2
+N0.HOG0000645,Male + Unbiased,3,3,3
+N0.HOG0000646,All three,3,10,5
+N0.HOG0000648,Male + Unbiased,4,4,4
+N0.HOG0000652,All unbiased,4,4,4
+N0.HOG0000653,Male + Unbiased,3,3,3
+N0.HOG0000655,Male + Unbiased,3,3,3
+N0.HOG0000657,All unbiased,2,4,4
+N0.HOG0000661,Male + Unbiased,3,5,5
+N0.HOG0000663,Male + Unbiased,2,2,2
+N0.HOG0000669,Female + Unbiased,3,3,3
+N0.HOG0000672,Male + Unbiased,3,29,29
+N0.HOG0000673,All male biased,2,2,2
+N0.HOG0000675,All male biased,5,18,17
+N0.HOG0000676,Male + Unbiased,14,43,41
+N0.HOG0000680,Male + Unbiased,5,10,10
+N0.HOG0000682,All unbiased,2,2,2
+N0.HOG0000684,Male + Unbiased,4,5,5
+N0.HOG0000685,All male biased,2,2,2
+N0.HOG0000688,Male + Unbiased,3,4,4
+N0.HOG0000690,All male biased,2,2,2
+N0.HOG0000693,All male biased,2,2,2
+N0.HOG0000695,All unbiased,7,16,13
+N0.HOG0000696,Female + Unbiased,3,7,7
+N0.HOG0000705,All unbiased,2,2,2
+N0.HOG0000710,All unbiased,2,2,2
+N0.HOG0000712,All unbiased,2,2,2
+N0.HOG0000713,All male biased,4,6,6
+N0.HOG0000716,Male + Unbiased,3,3,3
+N0.HOG0000717,Male + Unbiased,4,4,4
+N0.HOG0000718,All unbiased,3,3,3
+N0.HOG0000719,Male + Unbiased,3,3,3
+N0.HOG0000725,All unbiased,3,3,3
+N0.HOG0000729,Male + Unbiased,3,3,3
+N0.HOG0000730,All male biased,2,2,2
+N0.HOG0000731,All unbiased,5,5,5
+N0.HOG0000738,All three,4,5,5
+N0.HOG0000740,All male biased,2,3,3
+N0.HOG0000747,Male + Unbiased,4,4,4
+N0.HOG0000756,All male biased,2,2,2
+N0.HOG0000761,Male + Unbiased,5,5,5
+N0.HOG0000763,All unbiased,2,2,2
+N0.HOG0000764,All unbiased,2,2,2
+N0.HOG0000765,Male + Female,6,6,6
+N0.HOG0000766,Male + Unbiased,3,13,13
+N0.HOG0000768,All unbiased,2,2,2
+N0.HOG0000773,All three,8,25,24
+N0.HOG0000774,Female + Unbiased,5,9,9
+N0.HOG0000779,Male + Unbiased,9,32,28
+N0.HOG0000782,All unbiased,2,2,2
+N0.HOG0000784,All male biased,2,2,2
+N0.HOG0000786,All male biased,2,5,5
+N0.HOG0000792,All unbiased,2,2,2
+N0.HOG0000796,Male + Female,2,9,9
+N0.HOG0000800,Female + Unbiased,2,2,2
+N0.HOG0000801,Male + Female,2,2,2
+N0.HOG0000805,Male + Unbiased,3,4,4
+N0.HOG0000806,Male + Unbiased,2,2,2
+N0.HOG0000807,Male + Unbiased,6,32,31
+N0.HOG0000812,Male + Unbiased,4,4,4
+N0.HOG0000813,Male + Unbiased,2,4,4
+N0.HOG0000814,All unbiased,4,4,4
+N0.HOG0000818,All male biased,3,25,3
+N0.HOG0000820,All three,3,20,20
+N0.HOG0000825,All male biased,2,2,2
+N0.HOG0000826,All unbiased,2,2,2
+N0.HOG0000827,Male + Unbiased,6,6,6
+N0.HOG0000831,All three,5,5,5
+N0.HOG0000832,All unbiased,2,2,2
+N0.HOG0000834,Female + Unbiased,2,2,2
+N0.HOG0000836,Male + Unbiased,8,8,8
+N0.HOG0000838,Male + Unbiased,2,2,2
+N0.HOG0000839,All unbiased,2,7,4
+N0.HOG0000840,All male biased,2,2,2
+N0.HOG0000848,Male + Unbiased,4,4,4
+N0.HOG0000851,All male biased,3,6,6
+N0.HOG0000852,All unbiased,4,4,4
+N0.HOG0000853,All three,6,6,6
+N0.HOG0000854,Male + Unbiased,2,2,2
+N0.HOG0000861,All unbiased,3,4,4
+N0.HOG0000862,All male biased,9,11,11
+N0.HOG0000863,Female + Unbiased,2,2,2
+N0.HOG0000865,All unbiased,2,2,2
+N0.HOG0000870,All unbiased,2,4,4
+N0.HOG0000871,All male biased,7,30,7
+N0.HOG0000879,All unbiased,2,2,2
+N0.HOG0000880,Male + Unbiased,15,22,19
+N0.HOG0000884,All male biased,2,2,2
+N0.HOG0000886,Female + Unbiased,3,3,3
+N0.HOG0000888,All unbiased,3,3,3
+N0.HOG0000889,All male biased,8,9,9
+N0.HOG0000890,All unbiased,2,2,2
+N0.HOG0000894,All male biased,2,2,2
+N0.HOG0000896,Female + Unbiased,5,5,5
+N0.HOG0000897,All male biased,2,2,2
+N0.HOG0000900,Male + Female,2,2,2
+N0.HOG0000904,All unbiased,2,2,2
+N0.HOG0000905,All male biased,5,6,6
+N0.HOG0000908,All unbiased,7,10,10
+N0.HOG0000915,All unbiased,2,2,2
+N0.HOG0000917,All unbiased,2,2,2
+N0.HOG0000918,Male + Unbiased,2,2,2
+N0.HOG0000919,Female + Unbiased,4,4,4
+N0.HOG0000926,Female + Unbiased,2,2,2
+N0.HOG0000934,Male + Unbiased,3,3,3
+N0.HOG0000938,Male + Unbiased,5,5,5
+N0.HOG0000939,All unbiased,2,2,2
+N0.HOG0000940,All unbiased,2,4,4
+N0.HOG0000941,All male biased,3,3,3
+N0.HOG0000942,All unbiased,2,2,2
+N0.HOG0000944,Male + Unbiased,3,3,3
+N0.HOG0000945,All male biased,2,2,2
+N0.HOG0000946,All unbiased,2,2,2
+N0.HOG0000947,Female + Unbiased,2,2,2
+N0.HOG0000949,All unbiased,2,23,2
+N0.HOG0000951,Male + Unbiased,4,31,31
+N0.HOG0000953,All female biased,2,8,7
+N0.HOG0000960,Male + Unbiased,3,4,4
+N0.HOG0000961,All male biased,2,2,2
+N0.HOG0000962,Male + Unbiased,2,2,2
+N0.HOG0000966,Female + Unbiased,3,3,3
+N0.HOG0000967,Male + Unbiased,9,23,23
+N0.HOG0000968,All male biased,2,2,2
+N0.HOG0000970,All unbiased,2,2,2
+N0.HOG0000971,Male + Unbiased,2,2,2
+N0.HOG0000976,Female + Unbiased,2,2,2
+N0.HOG0000983,Male + Unbiased,2,4,4
+N0.HOG0000984,All male biased,3,3,3
+N0.HOG0000985,All male biased,3,3,3
+N0.HOG0000993,All unbiased,2,4,4
+N0.HOG0000995,Male + Unbiased,4,33,33
+N0.HOG0000996,All unbiased,4,21,20
+N0.HOG0001002,All unbiased,2,2,2
+N0.HOG0001016,All unbiased,2,2,2
+N0.HOG0001020,Female + Unbiased,3,3,3
+N0.HOG0001021,Male + Unbiased,3,3,3
+N0.HOG0001022,Male + Unbiased,2,3,3
+N0.HOG0001023,All male biased,3,3,3
+N0.HOG0001024,Male + Unbiased,2,2,2
+N0.HOG0001026,All unbiased,2,2,2
+N0.HOG0001027,Male + Unbiased,2,2,2
+N0.HOG0001028,All unbiased,2,2,2
+N0.HOG0001029,Male + Unbiased,2,3,3
+N0.HOG0001031,All unbiased,3,3,3
+N0.HOG0001032,Male + Unbiased,2,2,2
+N0.HOG0001035,Male + Unbiased,2,2,2
+N0.HOG0001041,All unbiased,2,2,2
+N0.HOG0001043,All unbiased,2,2,2
+N0.HOG0001045,Male + Unbiased,2,19,18
+N0.HOG0001057,Male + Unbiased,2,2,2
+N0.HOG0001058,All unbiased,3,3,3
+N0.HOG0001064,All male biased,2,2,2
+N0.HOG0001065,All unbiased,2,2,2
+N0.HOG0001066,All male biased,2,2,2
+N0.HOG0001068,Male + Unbiased,4,29,29
+N0.HOG0001074,Male + Unbiased,2,2,2
+N0.HOG0001077,Male + Unbiased,2,2,2
+N0.HOG0001078,All male biased,2,2,2
+N0.HOG0001087,All unbiased,2,2,2
+N0.HOG0001088,All female biased,2,2,2
+N0.HOG0001089,Male + Unbiased,3,3,3
+N0.HOG0001091,Male + Unbiased,8,8,8
+N0.HOG0001092,All unbiased,2,5,5
+N0.HOG0001095,Male + Unbiased,2,2,2
+N0.HOG0001096,All male biased,2,2,2
+N0.HOG0001097,All unbiased,3,4,4
+N0.HOG0001098,Female + Unbiased,2,2,2
+N0.HOG0001099,Male + Unbiased,3,4,4
+N0.HOG0001101,All unbiased,3,3,3
+N0.HOG0001102,All male biased,3,3,3
+N0.HOG0001110,Male + Unbiased,6,29,28
+N0.HOG0001113,All unbiased,2,2,2
+N0.HOG0001116,Male + Unbiased,2,2,2
+N0.HOG0001117,All unbiased,3,3,3
+N0.HOG0001118,All male biased,2,2,2
+N0.HOG0001119,All male biased,3,3,3
+N0.HOG0001125,Female + Unbiased,5,9,9
+N0.HOG0001128,Male + Unbiased,2,2,2
+N0.HOG0001129,Male + Unbiased,2,2,2
+N0.HOG0001130,Male + Unbiased,4,4,4
+N0.HOG0001131,Male + Unbiased,3,3,3
+N0.HOG0001134,Male + Unbiased,2,2,2
+N0.HOG0001137,All male biased,2,2,2
+N0.HOG0001138,Male + Unbiased,2,3,2
+N0.HOG0001139,All male biased,2,2,2
+N0.HOG0001145,All male biased,2,2,2
+N0.HOG0001146,All unbiased,4,4,4
+N0.HOG0001147,All unbiased,2,22,21
+N0.HOG0001151,All unbiased,2,2,2
+N0.HOG0001152,Male + Unbiased,4,4,4
+N0.HOG0001158,Female + Unbiased,2,2,2
+N0.HOG0001159,Male + Unbiased,2,2,2
+N0.HOG0001160,All three,8,20,19
+N0.HOG0001161,All male biased,2,2,2
+N0.HOG0001162,Male + Unbiased,2,2,2
+N0.HOG0001165,All male biased,2,2,2
+N0.HOG0001166,All unbiased,2,2,2
+N0.HOG0001167,Male + Unbiased,4,5,5
+N0.HOG0001173,Male + Unbiased,2,2,2
+N0.HOG0001174,All unbiased,2,2,2
+N0.HOG0001177,Male + Unbiased,2,2,2
+N0.HOG0001178,All unbiased,2,2,2
+N0.HOG0001181,Male + Unbiased,3,3,3
+N0.HOG0001185,Female + Unbiased,4,4,4
+N0.HOG0001187,Male + Unbiased,2,2,2
+N0.HOG0001201,All unbiased,4,5,5
+N0.HOG0001202,All unbiased,2,2,2
+N0.HOG0001206,All unbiased,2,3,2
+N0.HOG0001208,Male + Unbiased,2,2,2
+N0.HOG0001209,All male biased,4,5,5
+N0.HOG0001215,All male biased,5,5,5
+N0.HOG0001217,Male + Unbiased,2,3,3
+N0.HOG0001219,All unbiased,2,2,2
+N0.HOG0001220,Male + Unbiased,3,3,3
+N0.HOG0001225,Male + Unbiased,2,2,2
+N0.HOG0001226,All male biased,2,5,5
+N0.HOG0001227,Male + Unbiased,2,2,2
+N0.HOG0001231,Male + Unbiased,3,3,3
+N0.HOG0001232,All male biased,3,3,3
+N0.HOG0001233,Female + Unbiased,2,2,2
+N0.HOG0001235,All unbiased,3,4,3
+N0.HOG0001236,Male + Female,6,6,6
+N0.HOG0001239,Female + Unbiased,2,2,2
+N0.HOG0001240,All unbiased,5,5,5
+N0.HOG0001243,All unbiased,2,2,2
+N0.HOG0001246,Male + Female,2,2,2
+N0.HOG0001248,Male + Unbiased,3,3,3
+N0.HOG0001249,Male + Unbiased,2,2,2
+N0.HOG0001250,All unbiased,3,3,3
+N0.HOG0001251,Female + Unbiased,4,4,4
+N0.HOG0001252,Female + Unbiased,5,5,5
+N0.HOG0001254,Male + Unbiased,2,2,2
+N0.HOG0001255,All unbiased,2,2,2
+N0.HOG0001258,All female biased,2,2,2
+N0.HOG0001259,Male + Unbiased,2,2,2
+N0.HOG0001260,All unbiased,5,7,7
+N0.HOG0001264,Female + Unbiased,4,4,4
+N0.HOG0001265,Male + Unbiased,7,15,15
+N0.HOG0001275,All unbiased,2,5,5
+N0.HOG0001277,Male + Unbiased,4,26,26
+N0.HOG0001278,Male + Unbiased,3,25,24
+N0.HOG0001285,Male + Unbiased,2,2,2
+N0.HOG0001296,All unbiased,2,2,2
+N0.HOG0001298,Male + Unbiased,2,2,2
+N0.HOG0001299,All male biased,2,2,2
+N0.HOG0001300,Male + Unbiased,2,6,6
+N0.HOG0001301,Male + Unbiased,3,3,3
+N0.HOG0001302,All unbiased,2,2,2
+N0.HOG0001305,Female + Unbiased,20,21,21
+N0.HOG0001310,Male + Unbiased,6,6,6
+N0.HOG0001311,All unbiased,3,3,3
+N0.HOG0001313,Male + Unbiased,2,2,2
+N0.HOG0001314,All male biased,2,3,3
+N0.HOG0001315,All unbiased,2,2,2
+N0.HOG0001316,All unbiased,3,3,3
+N0.HOG0001319,Male + Female,2,2,2
+N0.HOG0001320,Male + Unbiased,5,14,14
+N0.HOG0001323,Male + Unbiased,10,24,24
+N0.HOG0001324,Male + Unbiased,2,2,2
+N0.HOG0001325,All unbiased,3,3,3
+N0.HOG0001326,Female + Unbiased,2,3,3
+N0.HOG0001327,All female biased,2,2,2
+N0.HOG0001328,All unbiased,8,12,8
+N0.HOG0001330,All male biased,5,5,5
+N0.HOG0001337,All unbiased,2,2,2
+N0.HOG0001338,All male biased,2,2,2
+N0.HOG0001339,All unbiased,2,2,2
+N0.HOG0001340,Male + Unbiased,2,2,2
+N0.HOG0001341,Male + Unbiased,3,3,3
+N0.HOG0001346,All female biased,3,3,3
+N0.HOG0001347,Male + Unbiased,2,2,2
+N0.HOG0001352,Male + Unbiased,3,3,3
+N0.HOG0001354,All unbiased,4,4,4
+N0.HOG0001355,All unbiased,2,2,2
+N0.HOG0001356,All unbiased,2,2,2
+N0.HOG0001357,Female + Unbiased,2,3,3
+N0.HOG0001362,All unbiased,2,3,3
+N0.HOG0001364,Male + Unbiased,7,11,11
+N0.HOG0001370,Female + Unbiased,2,2,2
+N0.HOG0001378,Female + Unbiased,8,8,8
+N0.HOG0001383,Male + Unbiased,3,3,3
+N0.HOG0001384,All unbiased,2,2,2
+N0.HOG0001386,All male biased,2,2,2
+N0.HOG0001387,Male + Unbiased,2,2,2
+N0.HOG0001391,Male + Unbiased,2,2,2
+N0.HOG0001394,Female + Unbiased,3,3,3
+N0.HOG0001396,Male + Unbiased,8,9,9
+N0.HOG0001397,All male biased,2,2,2
+N0.HOG0001398,All unbiased,2,2,2
+N0.HOG0001399,Male + Female,2,3,2
+N0.HOG0001400,All unbiased,4,4,4
+N0.HOG0001406,Male + Unbiased,3,6,6
+N0.HOG0001408,All unbiased,2,2,2
+N0.HOG0001409,All male biased,3,4,4
+N0.HOG0001410,All unbiased,3,3,3
+N0.HOG0001413,Male + Unbiased,2,2,2
+N0.HOG0001416,All male biased,2,2,2
+N0.HOG0001417,Male + Unbiased,3,3,3
+N0.HOG0001423,Female + Unbiased,3,3,3
+N0.HOG0001425,All male biased,2,3,3
+N0.HOG0001426,Male + Female,3,3,3
+N0.HOG0001431,All unbiased,3,3,3
+N0.HOG0001433,All unbiased,2,2,2
+N0.HOG0001434,All female biased,3,3,3
+N0.HOG0001435,Male + Unbiased,2,2,2
+N0.HOG0001436,Female + Unbiased,2,3,3
+N0.HOG0001438,All male biased,4,4,4
+N0.HOG0001439,All male biased,5,5,5
+N0.HOG0001442,All male biased,3,4,4
+N0.HOG0001443,All unbiased,2,2,2
+N0.HOG0001444,Male + Unbiased,3,3,3
+N0.HOG0001451,Male + Unbiased,4,21,20
+N0.HOG0001454,All male biased,3,26,26
+N0.HOG0001464,Male + Unbiased,5,6,6
+N0.HOG0001470,All unbiased,2,3,3
+N0.HOG0001473,All unbiased,2,2,2
+N0.HOG0001476,Female + Unbiased,2,2,2
+N0.HOG0001480,Female + Unbiased,3,3,3
+N0.HOG0001481,All unbiased,2,2,2
+N0.HOG0001482,Male + Unbiased,2,2,2
+N0.HOG0001483,All unbiased,2,2,2
+N0.HOG0001487,Male + Unbiased,3,3,3
+N0.HOG0001494,All three,4,4,4
+N0.HOG0001500,Male + Unbiased,2,2,2
+N0.HOG0001501,All unbiased,2,2,2
+N0.HOG0001503,All unbiased,3,3,3
+N0.HOG0001507,All male biased,2,2,2
+N0.HOG0001509,All unbiased,3,3,3
+N0.HOG0001510,All female biased,2,2,2
+N0.HOG0001513,All male biased,3,3,3
+N0.HOG0001514,All male biased,2,2,2
+N0.HOG0001518,All unbiased,2,2,2
+N0.HOG0001523,All male biased,2,2,2
+N0.HOG0001525,All unbiased,2,2,2
+N0.HOG0001530,All male biased,2,2,2
+N0.HOG0001531,Male + Female,2,2,2
+N0.HOG0001533,All male biased,2,2,2
+N0.HOG0001535,All unbiased,2,2,2
+N0.HOG0001536,Female + Unbiased,2,4,4
+N0.HOG0001539,All unbiased,2,2,2
+N0.HOG0001541,All unbiased,3,3,3
+N0.HOG0001544,All unbiased,2,2,2
+N0.HOG0001545,All male biased,3,3,3
+N0.HOG0001546,All female biased,2,2,2
+N0.HOG0001550,All unbiased,8,23,21
+N0.HOG0001556,All male biased,2,4,3
+N0.HOG0001561,All unbiased,2,2,2
+N0.HOG0001573,All male biased,2,2,2
+N0.HOG0001576,Male + Unbiased,11,12,12
+N0.HOG0001577,Female + Unbiased,3,3,3
+N0.HOG0001578,Male + Unbiased,2,8,8
+N0.HOG0001579,All unbiased,3,3,3
+N0.HOG0001580,Male + Unbiased,3,3,3
+N0.HOG0001581,All male biased,3,3,3
+N0.HOG0001583,Male + Unbiased,2,2,2
+N0.HOG0001588,All unbiased,2,2,2
+N0.HOG0001589,Male + Unbiased,2,2,2
+N0.HOG0001591,All unbiased,2,3,3
+N0.HOG0001594,All unbiased,3,3,3
+N0.HOG0001595,Male + Unbiased,6,19,17
+N0.HOG0001596,All male biased,2,2,2
+N0.HOG0001597,Male + Unbiased,3,3,3
+N0.HOG0001598,Male + Female,6,7,7
+N0.HOG0001602,All male biased,2,3,3
+N0.HOG0001603,Male + Unbiased,4,4,4
+N0.HOG0001605,Male + Unbiased,3,3,3
+N0.HOG0001609,All male biased,2,2,2
+N0.HOG0001610,All unbiased,5,5,5
+N0.HOG0001611,All unbiased,2,2,2
+N0.HOG0001614,All unbiased,3,3,3
+N0.HOG0001615,Female + Unbiased,2,2,2
+N0.HOG0001619,All three,8,16,16
+N0.HOG0001621,Male + Unbiased,2,2,2
+N0.HOG0001623,Female + Unbiased,2,2,2
+N0.HOG0001630,Male + Unbiased,2,2,2
+N0.HOG0001632,Male + Unbiased,4,4,4
+N0.HOG0001635,All unbiased,2,2,2
+N0.HOG0001642,All unbiased,2,2,2
+N0.HOG0001643,Male + Unbiased,3,3,3
+N0.HOG0001647,Male + Unbiased,3,3,3
+N0.HOG0001648,All unbiased,2,2,2
+N0.HOG0001649,All male biased,2,2,2
+N0.HOG0001650,All male biased,3,3,3
+N0.HOG0001656,All unbiased,2,2,2
+N0.HOG0001657,All female biased,2,2,2
+N0.HOG0001658,All male biased,2,2,2
+N0.HOG0001669,Male + Unbiased,2,25,25
+N0.HOG0001682,All unbiased,2,2,2
+N0.HOG0001686,Male + Unbiased,4,6,6
+N0.HOG0001687,All unbiased,2,2,2
+N0.HOG0001688,All female biased,2,2,2
+N0.HOG0001693,All male biased,2,2,2
+N0.HOG0001697,All unbiased,4,4,4
+N0.HOG0001698,Male + Unbiased,3,3,3
+N0.HOG0001702,Male + Unbiased,2,2,2
+N0.HOG0001704,Male + Unbiased,4,4,4
+N0.HOG0001705,All male biased,2,2,2
+N0.HOG0001706,All unbiased,2,2,2
+N0.HOG0001707,All male biased,2,2,2
+N0.HOG0001710,Male + Unbiased,2,2,2
+N0.HOG0001711,All unbiased,9,14,11
+N0.HOG0001713,Male + Unbiased,7,8,8
+N0.HOG0001719,Male + Unbiased,6,7,7
+N0.HOG0001723,All male biased,5,8,8
+N0.HOG0001724,All unbiased,3,4,4
+N0.HOG0001725,Male + Unbiased,3,3,3
+N0.HOG0001728,All male biased,3,3,3
+N0.HOG0001732,All male biased,3,3,3
+N0.HOG0001733,All unbiased,2,2,2
+N0.HOG0001735,Male + Unbiased,2,2,2
+N0.HOG0001736,All male biased,2,2,2
+N0.HOG0001739,All male biased,2,2,2
+N0.HOG0001743,Male + Unbiased,2,2,2
+N0.HOG0001744,All unbiased,2,2,2
+N0.HOG0001745,All male biased,4,6,6
+N0.HOG0001746,All female biased,2,3,3
+N0.HOG0001747,All unbiased,4,7,6
+N0.HOG0001748,All female biased,2,2,2
+N0.HOG0001749,All unbiased,2,2,2
+N0.HOG0001751,Female + Unbiased,2,2,2
+N0.HOG0001754,All unbiased,2,2,2
+N0.HOG0001755,All male biased,2,2,2
+N0.HOG0001756,All unbiased,3,4,4
+N0.HOG0001758,All unbiased,2,2,2
+N0.HOG0001765,Female + Unbiased,10,11,11
+N0.HOG0001768,All unbiased,2,2,2
+N0.HOG0001771,All male biased,2,2,2
+N0.HOG0001775,All unbiased,2,2,2
+N0.HOG0001776,All unbiased,2,2,2
+N0.HOG0001777,All unbiased,2,2,2
+N0.HOG0001780,Male + Unbiased,3,16,14
+N0.HOG0001782,Male + Female,2,2,2
+N0.HOG0001783,All male biased,2,2,2
+N0.HOG0001784,All unbiased,2,2,2
+N0.HOG0001786,All unbiased,3,3,3
+N0.HOG0001787,Female + Unbiased,5,5,5
+N0.HOG0001788,All male biased,2,2,2
+N0.HOG0001791,Male + Unbiased,3,3,3
+N0.HOG0001792,All unbiased,4,4,4
+N0.HOG0001793,All unbiased,2,3,3
+N0.HOG0001799,All three,6,15,15
+N0.HOG0001803,Female + Unbiased,20,23,23
+N0.HOG0001804,Male + Unbiased,4,24,22
+N0.HOG0001805,All male biased,2,4,4
+N0.HOG0001817,Male + Unbiased,3,3,3
+N0.HOG0001825,All female biased,2,2,2
+N0.HOG0001828,Male + Unbiased,2,2,2
+N0.HOG0001829,All unbiased,2,17,17
+N0.HOG0001831,Male + Unbiased,2,8,8
+N0.HOG0001833,Male + Unbiased,2,2,2
+N0.HOG0001838,All unbiased,2,5,4
+N0.HOG0001839,Male + Unbiased,3,3,3
+N0.HOG0001840,All male biased,3,3,3
+N0.HOG0001841,All three,5,5,5
+N0.HOG0001842,All male biased,2,2,2
+N0.HOG0001843,All male biased,2,2,2
+N0.HOG0001844,All male biased,2,2,2
+N0.HOG0001845,All unbiased,2,4,4
+N0.HOG0001846,All unbiased,2,2,2
+N0.HOG0001854,Male + Female,3,5,5
+N0.HOG0001856,All male biased,3,3,3
+N0.HOG0001858,All male biased,2,2,2
+N0.HOG0001861,All male biased,2,2,2
+N0.HOG0001862,Female + Unbiased,4,5,5
+N0.HOG0001864,Female + Unbiased,2,2,2
+N0.HOG0001873,All male biased,2,2,2
+N0.HOG0001875,All male biased,3,3,3
+N0.HOG0001881,All male biased,2,2,2
+N0.HOG0001883,All female biased,2,2,2
+N0.HOG0001888,All unbiased,2,2,2
+N0.HOG0001889,All unbiased,3,3,3
+N0.HOG0001892,All unbiased,2,2,2
+N0.HOG0001894,All unbiased,2,2,2
+N0.HOG0001895,All unbiased,2,2,2
+N0.HOG0001896,All female biased,2,2,2
+N0.HOG0001902,All male biased,2,2,2
+N0.HOG0001903,All unbiased,2,2,2
+N0.HOG0001904,All female biased,7,7,7
+N0.HOG0001907,All unbiased,3,3,3
+N0.HOG0001908,All unbiased,2,2,2
+N0.HOG0001912,All unbiased,2,2,2
+N0.HOG0001913,All unbiased,2,2,2
+N0.HOG0001915,All unbiased,3,3,3
+N0.HOG0001918,All female biased,4,4,4
+N0.HOG0001919,All male biased,2,2,2
+N0.HOG0001920,All male biased,2,2,2
+N0.HOG0001922,Male + Unbiased,2,2,2
+N0.HOG0001923,All female biased,3,3,3
+N0.HOG0001924,Female + Unbiased,3,3,3
+N0.HOG0001925,All male biased,3,3,3
+N0.HOG0001928,All unbiased,2,4,4
+N0.HOG0001929,All unbiased,3,3,3
+N0.HOG0001930,All unbiased,2,2,2
+N0.HOG0001931,All unbiased,2,2,2
+N0.HOG0001932,All female biased,2,2,2
+N0.HOG0001933,All unbiased,2,2,2
+N0.HOG0001952,All unbiased,5,23,20
+N0.HOG0001969,All unbiased,2,2,2
+N0.HOG0001970,All unbiased,2,4,4
+N0.HOG0001972,All unbiased,3,3,3
+N0.HOG0001976,All unbiased,2,18,18
+N0.HOG0001978,All unbiased,2,2,2
+N0.HOG0001982,All unbiased,2,2,2
+N0.HOG0001984,All unbiased,2,3,3
+N0.HOG0001985,All male biased,2,2,2
+N0.HOG0001987,Male + Unbiased,3,3,3
+N0.HOG0001989,Female + Unbiased,4,4,4
+N0.HOG0001993,All male biased,3,3,3
+N0.HOG0001998,All unbiased,3,3,3
+N0.HOG0002001,All unbiased,2,2,2
+N0.HOG0002004,All unbiased,2,2,2
+N0.HOG0002007,All female biased,2,2,2
+N0.HOG0002008,All male biased,4,6,5
+N0.HOG0002009,All unbiased,4,4,4
+N0.HOG0002011,All unbiased,2,2,2
+N0.HOG0002015,All male biased,2,2,2
+N0.HOG0002018,All unbiased,2,2,2
+N0.HOG0002019,All male biased,4,4,4
+N0.HOG0002020,All unbiased,2,2,2
+N0.HOG0002024,All male biased,2,2,2
+N0.HOG0002026,All unbiased,2,4,3
+N0.HOG0002027,All unbiased,2,2,2
+N0.HOG0002037,All male biased,2,3,3
+N0.HOG0002040,All male biased,3,3,3
+N0.HOG0002041,Female + Unbiased,3,4,4
+N0.HOG0002042,Female + Unbiased,5,6,6
+N0.HOG0002044,Male + Female,2,2,2
+N0.HOG0002047,All female biased,2,3,3
+N0.HOG0002050,Female + Unbiased,2,2,2
+N0.HOG0002051,Female + Unbiased,7,7,7
+N0.HOG0002053,All unbiased,2,2,2
+N0.HOG0002055,All unbiased,2,2,2
+N0.HOG0002057,All female biased,2,2,2
+N0.HOG0002060,All female biased,2,2,2
+N0.HOG0002061,All male biased,2,2,2
+N0.HOG0002064,All unbiased,3,3,3
+N0.HOG0002068,All female biased,2,2,2
+N0.HOG0002072,All unbiased,2,3,3
+N0.HOG0002073,All unbiased,4,4,4
+N0.HOG0002074,All unbiased,2,2,2
+N0.HOG0002081,All male biased,3,3,3
+N0.HOG0002082,All female biased,3,3,3
+N0.HOG0002084,Female + Unbiased,2,2,2
+N0.HOG0002085,All unbiased,2,2,2
+N0.HOG0002086,Male + Unbiased,2,2,2
+N0.HOG0002088,All unbiased,2,2,2
+N0.HOG0002089,Female + Unbiased,7,9,8
+N0.HOG0002090,All unbiased,2,2,2
+N0.HOG0002091,All unbiased,2,2,2
+N0.HOG0002092,All male biased,2,2,2
+N0.HOG0002096,All unbiased,2,2,2
+N0.HOG0002098,All unbiased,6,7,7
+N0.HOG0002105,All male biased,2,2,2
+N0.HOG0002110,All male biased,2,2,2
+N0.HOG0002111,All male biased,3,3,3
+N0.HOG0002113,All female biased,2,2,2
+N0.HOG0002115,All female biased,2,2,2
+N0.HOG0002117,All unbiased,2,2,2
+N0.HOG0002119,All unbiased,2,4,4
+N0.HOG0002120,Male + Unbiased,2,2,2
+N0.HOG0002121,Male + Unbiased,2,2,2
+N0.HOG0002123,All female biased,2,2,2
+N0.HOG0002129,All unbiased,3,3,3
+N0.HOG0002132,All male biased,2,2,2
+N0.HOG0002148,All unbiased,5,16,15
+N0.HOG0002163,All unbiased,2,2,2
+N0.HOG0002164,All male biased,2,2,2
+N0.HOG0002170,Female + Unbiased,3,3,3
+N0.HOG0002171,All unbiased,2,2,2
+N0.HOG0002172,All unbiased,3,3,3
+N0.HOG0002179,Male + Unbiased,2,4,4
+N0.HOG0002180,All unbiased,2,2,2
+N0.HOG0002184,Female + Unbiased,2,8,8
+N0.HOG0002188,Male + Unbiased,2,2,2
+N0.HOG0002189,Male + Unbiased,2,2,2
+N0.HOG0002194,All unbiased,2,2,2
+N0.HOG0002195,Female + Unbiased,2,2,2
+N0.HOG0002197,All unbiased,2,2,2
+N0.HOG0002198,Male + Unbiased,7,9,8
+N0.HOG0002204,All unbiased,2,3,3
+N0.HOG0002209,All unbiased,2,2,2
+N0.HOG0002216,Male + Unbiased,2,2,2
+N0.HOG0002217,Male + Unbiased,3,4,4
+N0.HOG0002219,All male biased,3,5,5
+N0.HOG0002221,All unbiased,2,2,2
+N0.HOG0002226,All unbiased,3,3,3
+N0.HOG0002227,All female biased,2,2,2
+N0.HOG0002228,Male + Unbiased,2,2,2
+N0.HOG0002229,All unbiased,2,2,2
+N0.HOG0002231,Male + Unbiased,2,2,2
+N0.HOG0002232,All female biased,3,3,3
+N0.HOG0002234,All three,4,4,4
+N0.HOG0002236,All female biased,2,2,2
+N0.HOG0002238,All unbiased,5,5,5
+N0.HOG0002239,Female + Unbiased,2,2,2
+N0.HOG0002243,All female biased,2,2,2
+N0.HOG0002246,All unbiased,2,2,2
+N0.HOG0002248,All unbiased,2,2,2
+N0.HOG0002249,All unbiased,2,2,2
+N0.HOG0002251,All unbiased,2,2,2
+N0.HOG0002256,All unbiased,3,3,3
+N0.HOG0002258,All unbiased,2,2,2
+N0.HOG0002259,All unbiased,2,2,2
+N0.HOG0002264,Male + Unbiased,4,4,4
+N0.HOG0002265,All unbiased,2,2,2
+N0.HOG0002266,All female biased,2,2,2
+N0.HOG0002269,All male biased,2,2,2
+N0.HOG0002270,All male biased,2,2,2
+N0.HOG0002274,Female + Unbiased,2,2,2
+N0.HOG0002275,Male + Unbiased,2,2,2
+N0.HOG0002276,All male biased,2,2,2
+N0.HOG0002277,All male biased,2,2,2
+N0.HOG0002280,All male biased,2,2,2
+N0.HOG0002281,All unbiased,2,2,2
+N0.HOG0002282,All male biased,3,3,3
+N0.HOG0002283,Male + Unbiased,2,2,2
+N0.HOG0002284,All unbiased,4,4,4
+N0.HOG0002285,Female + Unbiased,4,4,4
+N0.HOG0002297,All male biased,4,5,5
+N0.HOG0002298,All male biased,2,2,2
+N0.HOG0002299,All male biased,2,2,2
+N0.HOG0002302,All male biased,2,2,2
+N0.HOG0002303,All unbiased,2,4,4
+N0.HOG0002304,Female + Unbiased,7,7,7
+N0.HOG0002309,All male biased,2,2,2
+N0.HOG0002310,Male + Unbiased,3,3,3
+N0.HOG0002312,Male + Unbiased,2,2,2
+N0.HOG0002316,Male + Unbiased,2,2,2
+N0.HOG0002331,All three,4,4,4
+N0.HOG0002332,All male biased,2,2,2
+N0.HOG0002333,All unbiased,2,2,2
+N0.HOG0002335,All unbiased,2,2,2
+N0.HOG0002336,All unbiased,2,4,4
+N0.HOG0002338,Female + Unbiased,2,2,2
+N0.HOG0002340,All unbiased,2,2,2
+N0.HOG0002341,All unbiased,2,2,2
+N0.HOG0002342,All unbiased,4,4,4
+N0.HOG0002343,All unbiased,3,3,3
+N0.HOG0002344,All unbiased,2,2,2
+N0.HOG0002345,All unbiased,2,2,2
+N0.HOG0002346,All male biased,2,3,3
+N0.HOG0002353,All male biased,2,14,14
+N0.HOG0002354,All unbiased,2,2,2
+N0.HOG0002364,All female biased,2,2,2
+N0.HOG0002373,All male biased,5,18,5
+N0.HOG0002375,Male + Unbiased,6,17,17
+N0.HOG0002377,Male + Unbiased,4,11,10
+N0.HOG0002405,Male + Unbiased,2,2,2
+N0.HOG0002414,All unbiased,2,2,2
+N0.HOG0002418,All male biased,2,2,2
+N0.HOG0002428,All unbiased,2,3,3
+N0.HOG0002429,All unbiased,3,6,6
+N0.HOG0002432,Male + Female,2,2,2
+N0.HOG0002437,All female biased,2,2,2
+N0.HOG0002440,All female biased,2,2,2
+N0.HOG0002446,All unbiased,2,2,2
+N0.HOG0002451,Male + Unbiased,2,2,2
+N0.HOG0002452,All male biased,3,3,3
+N0.HOG0002453,Male + Unbiased,2,2,2
+N0.HOG0002456,All unbiased,5,6,5
+N0.HOG0002472,All unbiased,4,6,6
+N0.HOG0002473,All unbiased,2,4,4
+N0.HOG0002474,All unbiased,4,4,4
+N0.HOG0002476,All female biased,2,2,2
+N0.HOG0002478,All unbiased,2,2,2
+N0.HOG0002479,All male biased,2,2,2
+N0.HOG0002480,Male + Unbiased,2,2,2
+N0.HOG0002484,All unbiased,2,15,10
+N0.HOG0002485,All unbiased,2,2,2
+N0.HOG0002487,All male biased,2,2,2
+N0.HOG0002488,All unbiased,2,2,2
+N0.HOG0002492,All unbiased,2,2,2
+N0.HOG0002493,All unbiased,3,4,4
+N0.HOG0002497,All unbiased,2,2,2
+N0.HOG0002499,Male + Unbiased,2,2,2
+N0.HOG0002500,All male biased,2,3,3
+N0.HOG0002509,All unbiased,2,2,2
+N0.HOG0002511,All unbiased,2,2,2
+N0.HOG0002512,All unbiased,2,2,2
+N0.HOG0002513,All unbiased,2,2,2
+N0.HOG0002514,All unbiased,2,2,2
+N0.HOG0002518,Male + Unbiased,3,3,3
+N0.HOG0002526,Male + Unbiased,4,4,4
+N0.HOG0002528,All unbiased,2,2,2
+N0.HOG0002529,All unbiased,2,2,2
+N0.HOG0002530,All male biased,2,2,2
+N0.HOG0002531,Female + Unbiased,3,3,3
+N0.HOG0002534,All unbiased,2,2,2
+N0.HOG0002538,All male biased,2,2,2
+N0.HOG0002540,Male + Unbiased,2,2,2
+N0.HOG0002550,All male biased,3,3,3
+N0.HOG0002553,Female + Unbiased,2,2,2
+N0.HOG0002555,All female biased,2,2,2
+N0.HOG0002560,All unbiased,2,2,2
+N0.HOG0002563,Male + Unbiased,3,3,3
+N0.HOG0002564,All unbiased,2,2,2
+N0.HOG0002569,All unbiased,2,3,3
+N0.HOG0002570,All male biased,3,3,3
+N0.HOG0002575,All unbiased,2,3,2
+N0.HOG0002576,All unbiased,3,3,3
+N0.HOG0002596,All unbiased,2,2,2
+N0.HOG0002597,All male biased,2,2,2
+N0.HOG0002598,All unbiased,2,2,2
+N0.HOG0002600,All unbiased,2,2,2
+N0.HOG0002603,All male biased,2,2,2
+N0.HOG0002604,All unbiased,4,4,4
+N0.HOG0002605,All unbiased,2,2,2
+N0.HOG0002606,All female biased,2,2,2
+N0.HOG0002608,All female biased,2,2,2
+N0.HOG0002612,All unbiased,2,2,2
+N0.HOG0002614,Male + Unbiased,4,6,6
+N0.HOG0002616,All unbiased,5,6,6
+N0.HOG0002617,Female + Unbiased,3,3,3
+N0.HOG0002619,All male biased,3,3,3
+N0.HOG0002624,Male + Unbiased,3,3,3
+N0.HOG0002625,All unbiased,2,2,2
+N0.HOG0002631,All unbiased,2,2,2
+N0.HOG0002639,All male biased,2,2,2
+N0.HOG0002645,All female biased,2,2,2
+N0.HOG0002650,All female biased,2,2,2
+N0.HOG0002652,Male + Unbiased,3,6,5
+N0.HOG0002653,All unbiased,2,2,2
+N0.HOG0002655,All unbiased,3,3,3
+N0.HOG0002656,All unbiased,2,2,2
+N0.HOG0002657,All unbiased,5,5,5
+N0.HOG0002658,All unbiased,2,2,2
+N0.HOG0002659,All unbiased,2,2,2
+N0.HOG0002660,All unbiased,2,2,2
+N0.HOG0002662,All female biased,2,2,2
+N0.HOG0002663,All female biased,2,2,2
+N0.HOG0002664,All male biased,2,2,2
+N0.HOG0002666,All unbiased,2,2,2
+N0.HOG0002667,All unbiased,6,6,6
+N0.HOG0002669,All unbiased,2,3,3
+N0.HOG0002670,All male biased,3,3,3
+N0.HOG0002676,All unbiased,2,2,2
+N0.HOG0002677,All unbiased,2,2,2
+N0.HOG0002678,All unbiased,3,3,3
+N0.HOG0002682,All unbiased,4,4,4
+N0.HOG0002686,All female biased,2,2,2
+N0.HOG0002687,All unbiased,2,2,2
+N0.HOG0002688,All unbiased,3,3,3
+N0.HOG0002689,All unbiased,2,2,2
+N0.HOG0002691,All male biased,2,2,2
+N0.HOG0002692,All unbiased,2,2,2
+N0.HOG0002705,Male + Unbiased,2,12,12
+N0.HOG0002706,Male + Unbiased,5,14,14
+N0.HOG0002707,Male + Unbiased,2,2,2
+N0.HOG0002708,Male + Unbiased,4,16,15
+N0.HOG0002713,Male + Unbiased,7,12,12
+N0.HOG0002714,All unbiased,6,20,20
+N0.HOG0002727,All unbiased,2,2,2
+N0.HOG0002736,Male + Unbiased,2,2,2
+N0.HOG0002737,Male + Female,3,3,3
+N0.HOG0002739,All male biased,2,2,2
+N0.HOG0002746,All male biased,3,3,3
+N0.HOG0002752,All male biased,3,3,3
+N0.HOG0002769,All unbiased,2,2,2
+N0.HOG0002770,All unbiased,2,2,2
+N0.HOG0002777,All female biased,2,2,2
+N0.HOG0002778,All unbiased,2,2,2
+N0.HOG0002783,All unbiased,2,2,2
+N0.HOG0002792,All unbiased,2,2,2
+N0.HOG0002798,All unbiased,4,4,4
+N0.HOG0002799,All male biased,2,2,2
+N0.HOG0002802,All unbiased,2,2,2
+N0.HOG0002803,All unbiased,2,2,2
+N0.HOG0002810,All unbiased,2,2,2
+N0.HOG0002812,Male + Unbiased,3,3,3
+N0.HOG0002815,All unbiased,2,2,2
+N0.HOG0002816,Male + Unbiased,3,3,3
+N0.HOG0002817,All unbiased,2,2,2
+N0.HOG0002823,All unbiased,2,2,2
+N0.HOG0002828,All male biased,2,2,2
+N0.HOG0002829,All unbiased,4,4,4
+N0.HOG0002832,All female biased,3,3,3
+N0.HOG0002834,All male biased,2,2,2
+N0.HOG0002836,All unbiased,2,2,2
+N0.HOG0002839,All female biased,2,2,2
+N0.HOG0002840,All unbiased,2,2,2
+N0.HOG0002845,All unbiased,2,2,2
+N0.HOG0002848,All male biased,2,2,2
+N0.HOG0002849,Female + Unbiased,2,2,2
+N0.HOG0002852,All male biased,3,12,10
+N0.HOG0002853,All male biased,2,2,2
+N0.HOG0002856,All unbiased,2,2,2
+N0.HOG0002859,All unbiased,2,2,2
+N0.HOG0002861,All unbiased,3,3,3
+N0.HOG0002862,All unbiased,2,2,2
+N0.HOG0002878,Female + Unbiased,2,2,2
+N0.HOG0002881,All unbiased,2,2,2
+N0.HOG0002885,All unbiased,2,2,2
+N0.HOG0002889,Female + Unbiased,2,4,4
+N0.HOG0002891,Male + Unbiased,3,5,5
+N0.HOG0002892,Male + Unbiased,4,5,5
+N0.HOG0002893,Female + Unbiased,2,2,2
+N0.HOG0002897,All male biased,2,2,2
+N0.HOG0002898,Female + Unbiased,2,2,2
+N0.HOG0002903,All unbiased,2,2,2
+N0.HOG0002905,All unbiased,2,2,2
+N0.HOG0002912,All male biased,2,2,2
+N0.HOG0002915,Male + Unbiased,3,4,4
+N0.HOG0002918,All male biased,2,2,2
+N0.HOG0002919,All unbiased,2,3,3
+N0.HOG0002920,All unbiased,2,4,3
+N0.HOG0002928,All unbiased,3,3,3
+N0.HOG0002939,All unbiased,2,2,2
+N0.HOG0002940,Male + Unbiased,2,2,2
+N0.HOG0002946,All male biased,2,2,2
+N0.HOG0002949,Male + Unbiased,2,2,2
+N0.HOG0002967,All male biased,2,2,2
+N0.HOG0002974,All unbiased,2,2,2
+N0.HOG0002981,All unbiased,2,2,2
+N0.HOG0002994,All male biased,2,2,2
+N0.HOG0002996,All unbiased,3,3,3
+N0.HOG0002997,All unbiased,4,4,4
+N0.HOG0003002,All unbiased,2,2,2
+N0.HOG0003003,Male + Unbiased,7,15,15
+N0.HOG0003005,All unbiased,2,2,2
+N0.HOG0003007,Female + Unbiased,3,3,3
+N0.HOG0003022,All unbiased,2,2,2
+N0.HOG0003030,All unbiased,2,2,2
+N0.HOG0003035,All unbiased,2,2,2
+N0.HOG0003036,All unbiased,2,2,2
+N0.HOG0003042,Male + Unbiased,2,2,2
+N0.HOG0003044,Male + Unbiased,2,2,2
+N0.HOG0003046,All unbiased,2,2,2
+N0.HOG0003047,All unbiased,2,2,2
+N0.HOG0003048,All male biased,2,2,2
+N0.HOG0003049,All female biased,2,3,3
+N0.HOG0003051,Male + Unbiased,2,2,2
+N0.HOG0003055,Male + Unbiased,2,2,2
+N0.HOG0003056,All female biased,2,2,2
+N0.HOG0003058,Male + Unbiased,4,5,5
+N0.HOG0003059,All unbiased,2,2,2
+N0.HOG0003060,All female biased,2,2,2
+N0.HOG0003061,All male biased,2,2,2
+N0.HOG0003062,All male biased,2,2,2
+N0.HOG0003063,All unbiased,2,2,2
+N0.HOG0003065,Male + Unbiased,4,4,4
+N0.HOG0003066,All unbiased,2,2,2
+N0.HOG0003072,All unbiased,2,2,2
+N0.HOG0003073,All male biased,4,4,4
+N0.HOG0003074,All unbiased,3,3,3
+N0.HOG0003075,All male biased,3,3,3
+N0.HOG0003076,All unbiased,3,3,3
+N0.HOG0003077,Male + Unbiased,2,3,3
+N0.HOG0003078,Male + Unbiased,2,2,2
+N0.HOG0003079,All unbiased,4,4,4
+N0.HOG0003085,All unbiased,2,2,2
+N0.HOG0003088,All unbiased,3,3,3
+N0.HOG0003092,All unbiased,2,2,2
+N0.HOG0003094,All unbiased,2,2,2
+N0.HOG0003095,All unbiased,2,2,2
+N0.HOG0003097,All unbiased,2,2,2
+N0.HOG0003098,All unbiased,2,3,3
+N0.HOG0003101,All unbiased,4,4,4
+N0.HOG0003107,Male + Unbiased,2,2,2
+N0.HOG0003111,All male biased,2,2,2
+N0.HOG0003120,All unbiased,2,4,4
+N0.HOG0003122,Male + Unbiased,3,18,18
+N0.HOG0003123,All male biased,4,19,19
+N0.HOG0003142,All male biased,2,2,2
+N0.HOG0003147,All unbiased,2,2,2
+N0.HOG0003152,All unbiased,2,2,2
+N0.HOG0003154,All unbiased,2,2,2
+N0.HOG0003165,All unbiased,2,2,2
+N0.HOG0003167,All unbiased,2,2,2
+N0.HOG0003169,All unbiased,2,2,2
+N0.HOG0003176,All unbiased,2,2,2
+N0.HOG0003186,All unbiased,2,2,2
+N0.HOG0003198,All unbiased,2,2,2
+N0.HOG0003205,Male + Unbiased,2,2,2
+N0.HOG0003211,All female biased,2,2,2
+N0.HOG0003227,All male biased,2,2,2
+N0.HOG0003229,All female biased,2,2,2
+N0.HOG0003235,All unbiased,2,2,2
+N0.HOG0003241,All male biased,2,2,2
+N0.HOG0003245,All unbiased,2,2,2
+N0.HOG0003249,All female biased,2,2,2
+N0.HOG0003250,All unbiased,2,2,2
+N0.HOG0003251,Male + Unbiased,2,2,2
+N0.HOG0003257,All unbiased,2,2,2
+N0.HOG0003258,All unbiased,2,2,2
+N0.HOG0003261,All female biased,2,2,2
+N0.HOG0003263,All unbiased,2,16,15
+N0.HOG0003268,All unbiased,3,3,3
+N0.HOG0003269,All male biased,2,2,2
+N0.HOG0003276,All male biased,4,4,4
+N0.HOG0003282,All female biased,4,4,4
+N0.HOG0003283,All unbiased,2,2,2
+N0.HOG0003284,All unbiased,2,2,2
+N0.HOG0003287,All unbiased,2,2,2
+N0.HOG0003291,All male biased,2,2,2
+N0.HOG0003292,All male biased,2,2,2
+N0.HOG0003294,All unbiased,2,2,2
+N0.HOG0003295,All unbiased,2,2,2
+N0.HOG0003299,All unbiased,2,2,2
+N0.HOG0003301,All unbiased,2,2,2
+N0.HOG0003303,All male biased,2,2,2
+N0.HOG0003304,All unbiased,2,2,2
+N0.HOG0003307,All unbiased,3,3,3
+N0.HOG0003316,All male biased,2,2,2
+N0.HOG0003317,All unbiased,2,2,2
+N0.HOG0003318,All unbiased,2,2,2
+N0.HOG0003319,All unbiased,2,2,2
+N0.HOG0003325,All unbiased,2,2,2
+N0.HOG0003326,All male biased,2,2,2
+N0.HOG0003327,All unbiased,2,2,2
+N0.HOG0003338,All unbiased,2,2,2
+N0.HOG0003339,All unbiased,4,4,4
+N0.HOG0003341,All unbiased,2,2,2
+N0.HOG0003343,All male biased,3,3,3
+N0.HOG0003351,All male biased,3,4,4
+N0.HOG0003362,All unbiased,2,2,2
+N0.HOG0003366,All male biased,2,2,2
+N0.HOG0003381,All male biased,2,2,2
+N0.HOG0003382,All unbiased,2,2,2
+N0.HOG0003385,All unbiased,2,2,2
+N0.HOG0003386,All female biased,2,2,2
+N0.HOG0003387,All male biased,2,2,2
+N0.HOG0003389,All female biased,2,2,2
+N0.HOG0003390,All male biased,3,3,3
+N0.HOG0003391,All unbiased,2,2,2
+N0.HOG0003401,All unbiased,3,3,3
+N0.HOG0003402,All unbiased,2,2,2
+N0.HOG0003406,All unbiased,2,2,2
+N0.HOG0003414,All unbiased,2,2,2
+N0.HOG0003417,All unbiased,2,2,2
+N0.HOG0003425,All male biased,2,2,2
+N0.HOG0003428,All unbiased,2,2,2
+N0.HOG0003433,All male biased,2,2,2
+N0.HOG0003436,All unbiased,2,2,2
+N0.HOG0003437,All unbiased,2,2,2
+N0.HOG0003445,Male + Unbiased,2,2,2
+N0.HOG0003460,Male + Unbiased,3,3,3
+N0.HOG0003464,All male biased,2,3,3
+N0.HOG0003466,All unbiased,2,2,2
+N0.HOG0003467,All unbiased,3,3,3
+N0.HOG0003472,Male + Unbiased,3,3,3
+N0.HOG0003473,All unbiased,2,2,2
+N0.HOG0003474,All unbiased,2,2,2
+N0.HOG0003476,All unbiased,4,4,4
+N0.HOG0003477,All unbiased,2,2,2
+N0.HOG0003478,All male biased,2,2,2
+N0.HOG0003482,All female biased,3,3,3
+N0.HOG0003486,All unbiased,2,2,2
+N0.HOG0003489,All unbiased,2,2,2
+N0.HOG0003507,All unbiased,3,3,3
+N0.HOG0003508,All unbiased,3,3,3
+N0.HOG0003510,All female biased,2,2,2
+N0.HOG0003511,All unbiased,2,2,2
+N0.HOG0003514,All unbiased,2,2,2
+N0.HOG0003523,All male biased,2,2,2
+N0.HOG0003533,All unbiased,2,2,2
+N0.HOG0003544,All unbiased,2,2,2
+N0.HOG0003550,All female biased,2,2,2
+N0.HOG0003556,All male biased,2,2,2
+N0.HOG0003558,Female + Unbiased,2,2,2
+N0.HOG0003560,Male + Female,2,2,2
+N0.HOG0003562,All unbiased,2,2,2
+N0.HOG0003563,All unbiased,4,4,4
+N0.HOG0003566,All unbiased,3,3,3
+N0.HOG0003567,All unbiased,2,2,2
+N0.HOG0003577,All unbiased,2,2,2
+N0.HOG0003579,All female biased,3,3,3
+N0.HOG0003582,Male + Unbiased,4,4,4
+N0.HOG0003585,All male biased,3,3,3
+N0.HOG0003590,All unbiased,2,2,2
+N0.HOG0003591,Male + Unbiased,2,2,2
+N0.HOG0003592,All unbiased,2,2,2
+N0.HOG0003593,All unbiased,2,2,2
+N0.HOG0003594,All male biased,2,2,2
+N0.HOG0003595,All unbiased,2,2,2
+N0.HOG0003596,All unbiased,2,2,2
+N0.HOG0003597,Female + Unbiased,3,3,3
+N0.HOG0003599,Female + Unbiased,2,2,2
+N0.HOG0003600,All unbiased,2,2,2
+N0.HOG0003604,All unbiased,2,2,2
+N0.HOG0003606,All male biased,2,2,2
+N0.HOG0003609,All unbiased,2,2,2
+N0.HOG0003614,Male + Unbiased,3,3,3
+N0.HOG0003615,All unbiased,2,2,2
+N0.HOG0003617,Female + Unbiased,2,2,2
+N0.HOG0003618,All unbiased,2,2,2
+N0.HOG0003619,All female biased,2,2,2
+N0.HOG0003621,All unbiased,2,2,2
+N0.HOG0003631,All unbiased,2,2,2
+N0.HOG0003633,All unbiased,2,2,2
+N0.HOG0003636,All unbiased,3,3,3
+N0.HOG0003640,Female + Unbiased,2,2,2
+N0.HOG0003641,All male biased,2,2,2
+N0.HOG0003643,All female biased,3,3,3
+N0.HOG0003647,All unbiased,2,2,2
+N0.HOG0003649,All unbiased,2,2,2
+N0.HOG0003655,All male biased,5,5,5
+N0.HOG0003657,All unbiased,2,2,2
+N0.HOG0003662,Male + Unbiased,2,7,7
+N0.HOG0003670,Male + Unbiased,4,17,17
+N0.HOG0003672,Male + Unbiased,5,18,18
+N0.HOG0003693,All unbiased,2,2,2
+N0.HOG0003696,All male biased,3,3,3
+N0.HOG0003720,Male + Unbiased,2,2,2
+N0.HOG0003739,All unbiased,2,2,2
+N0.HOG0003743,All female biased,2,2,2
+N0.HOG0003752,Male + Unbiased,4,9,9
+N0.HOG0003753,All unbiased,2,2,2
+N0.HOG0003757,All male biased,3,3,3
+N0.HOG0003766,All unbiased,2,2,2
+N0.HOG0003778,All unbiased,2,2,2
+N0.HOG0003790,All unbiased,2,3,3
+N0.HOG0003794,All unbiased,2,2,2
+N0.HOG0003801,All unbiased,2,2,2
+N0.HOG0003806,Male + Unbiased,2,2,2
+N0.HOG0003817,All unbiased,3,3,3
+N0.HOG0003837,All unbiased,2,2,2
+N0.HOG0003840,All unbiased,3,3,3
+N0.HOG0003841,All male biased,2,2,2
+N0.HOG0003842,All unbiased,2,2,2
+N0.HOG0003844,All unbiased,2,2,2
+N0.HOG0003849,All male biased,2,2,2
+N0.HOG0003861,All male biased,2,2,2
+N0.HOG0003869,All unbiased,2,2,2
+N0.HOG0003875,All unbiased,2,2,2
+N0.HOG0003876,All female biased,4,4,4
+N0.HOG0003878,Male + Unbiased,5,14,14
+N0.HOG0003885,All unbiased,3,3,3
+N0.HOG0003894,All unbiased,2,2,2
+N0.HOG0003896,All unbiased,2,2,2
+N0.HOG0003897,All unbiased,3,3,3
+N0.HOG0003898,All female biased,3,3,3
+N0.HOG0003899,All unbiased,3,3,3
+N0.HOG0003902,Male + Unbiased,2,2,2
+N0.HOG0003916,All unbiased,2,2,2
+N0.HOG0003921,All unbiased,2,2,2
+N0.HOG0003929,All female biased,2,2,2
+N0.HOG0003937,All unbiased,2,2,2
+N0.HOG0003938,All male biased,2,2,2
+N0.HOG0003939,All unbiased,2,3,2
+N0.HOG0003942,All unbiased,2,2,2
+N0.HOG0003943,All unbiased,2,2,2
+N0.HOG0003945,All unbiased,2,2,2
+N0.HOG0003946,All male biased,2,2,2
+N0.HOG0003947,All unbiased,2,2,2
+N0.HOG0003952,All unbiased,2,2,2
+N0.HOG0003955,All male biased,2,2,2
+N0.HOG0003964,All male biased,2,2,2
+N0.HOG0003965,All unbiased,2,2,2
+N0.HOG0003967,All unbiased,2,3,3
+N0.HOG0003968,All unbiased,2,2,2
+N0.HOG0003969,All unbiased,2,2,2
+N0.HOG0003970,Female + Unbiased,2,2,2
+N0.HOG0003978,All male biased,2,2,2
+N0.HOG0003979,All unbiased,2,2,2
+N0.HOG0003983,All unbiased,2,2,2
+N0.HOG0003984,All unbiased,2,2,2
+N0.HOG0003986,All unbiased,3,3,3
+N0.HOG0003987,All unbiased,2,2,2
+N0.HOG0003988,All female biased,2,2,2
+N0.HOG0003989,All unbiased,2,2,2
+N0.HOG0003990,All unbiased,2,2,2
+N0.HOG0003992,All unbiased,3,3,3
+N0.HOG0003994,All male biased,2,2,2
+N0.HOG0003995,All unbiased,2,2,2
+N0.HOG0004000,All unbiased,2,2,2
+N0.HOG0004008,All unbiased,2,2,2
+N0.HOG0004010,All female biased,2,2,2
+N0.HOG0004014,All unbiased,2,2,2
+N0.HOG0004015,All unbiased,2,2,2
+N0.HOG0004016,All female biased,2,2,2
+N0.HOG0004019,All male biased,2,2,2
+N0.HOG0004028,Female + Unbiased,2,2,2
+N0.HOG0004029,All male biased,2,2,2
+N0.HOG0004030,All unbiased,2,2,2
+N0.HOG0004031,All female biased,2,2,2
+N0.HOG0004039,Male + Unbiased,2,3,3
+N0.HOG0004048,Male + Unbiased,2,2,2
+N0.HOG0004065,All male biased,2,11,11
+N0.HOG0004067,All female biased,2,2,2
+N0.HOG0004071,All unbiased,2,2,2
+N0.HOG0004073,All male biased,2,2,2
+N0.HOG0004079,All female biased,2,2,2
+N0.HOG0004080,Female + Unbiased,2,2,2
+N0.HOG0004081,All male biased,2,2,2
+N0.HOG0004089,Male + Unbiased,2,2,2
+N0.HOG0004093,All unbiased,2,2,2
+N0.HOG0004094,All female biased,2,2,2
+N0.HOG0004099,All unbiased,2,2,2
+N0.HOG0004100,All unbiased,2,2,2
+N0.HOG0004101,All unbiased,2,2,2
+N0.HOG0004104,All female biased,2,2,2
+N0.HOG0004108,Male + Unbiased,2,2,2
+N0.HOG0004112,All unbiased,2,2,2
+N0.HOG0004113,All unbiased,2,2,2
+N0.HOG0004115,All unbiased,2,2,2
+N0.HOG0004116,All unbiased,2,2,2
+N0.HOG0004120,All unbiased,2,2,2
+N0.HOG0004128,All unbiased,2,2,2
+N0.HOG0004140,All male biased,2,2,2
+N0.HOG0004141,All male biased,2,2,2
+N0.HOG0004146,All male biased,2,2,2
+N0.HOG0004151,All unbiased,2,2,2
+N0.HOG0004153,All female biased,2,2,2
+N0.HOG0004160,All male biased,2,5,5
+N0.HOG0004162,All male biased,2,2,2
+N0.HOG0004173,Male + Unbiased,2,2,2
+N0.HOG0004177,All unbiased,2,2,2
+N0.HOG0004183,Female + Unbiased,2,2,2
+N0.HOG0004184,All unbiased,2,2,2
+N0.HOG0004185,All female biased,2,2,2
+N0.HOG0004186,Male + Unbiased,5,5,5
+N0.HOG0004187,All male biased,3,3,3
+N0.HOG0004190,All unbiased,2,2,2
+N0.HOG0004196,All female biased,2,2,2
+N0.HOG0004198,All unbiased,2,2,2
+N0.HOG0004200,Male + Unbiased,3,4,4
+N0.HOG0004201,All male biased,2,2,2
+N0.HOG0004203,All unbiased,2,2,2
+N0.HOG0004209,All unbiased,2,2,2
+N0.HOG0004210,All female biased,2,2,2
+N0.HOG0004211,All unbiased,2,2,2
+N0.HOG0004212,All unbiased,2,2,2
+N0.HOG0004214,Male + Unbiased,8,10,10
+N0.HOG0004215,Male + Unbiased,2,3,3
+N0.HOG0004219,All unbiased,2,2,2
+N0.HOG0004223,All unbiased,2,2,2
+N0.HOG0004224,All unbiased,2,2,2
+N0.HOG0004226,Male + Unbiased,2,3,3
+N0.HOG0004227,All female biased,2,2,2
+N0.HOG0004241,All unbiased,2,2,2
+N0.HOG0004242,All male biased,2,2,2
+N0.HOG0004245,All unbiased,2,2,2
+N0.HOG0004250,All female biased,2,2,2
+N0.HOG0004262,All male biased,2,2,2
+N0.HOG0004264,All unbiased,3,3,3
+N0.HOG0004267,All male biased,2,2,2
+N0.HOG0004272,All unbiased,2,2,2
+N0.HOG0004279,All unbiased,2,2,2
+N0.HOG0004282,All unbiased,2,2,2
+N0.HOG0004284,All unbiased,2,2,2
+N0.HOG0004287,All unbiased,2,2,2
+N0.HOG0004290,All unbiased,2,2,2
+N0.HOG0004291,Female + Unbiased,2,2,2
+N0.HOG0004292,All male biased,2,2,2
+N0.HOG0004296,All female biased,2,2,2
+N0.HOG0004298,All unbiased,2,2,2
+N0.HOG0004308,All unbiased,2,2,2
+N0.HOG0004314,All unbiased,2,2,2
+N0.HOG0004315,Female + Unbiased,2,2,2
+N0.HOG0004316,All unbiased,3,3,3
+N0.HOG0004321,Female + Unbiased,2,2,2
+N0.HOG0004323,All male biased,2,2,2
+N0.HOG0004326,All female biased,2,2,2
+N0.HOG0004327,All unbiased,5,5,5
+N0.HOG0004328,All female biased,2,2,2
+N0.HOG0004329,All male biased,2,2,2
+N0.HOG0004330,Male + Unbiased,2,2,2
+N0.HOG0004334,All male biased,2,2,2
+N0.HOG0004339,All unbiased,2,2,2
+N0.HOG0004340,All female biased,3,3,3
+N0.HOG0004342,Male + Unbiased,2,2,2
+N0.HOG0004343,All unbiased,2,2,2
+N0.HOG0004344,Female + Unbiased,2,2,2
+N0.HOG0004347,All female biased,2,2,2
+N0.HOG0004348,All male biased,2,2,2
+N0.HOG0004349,All unbiased,2,2,2
+N0.HOG0004352,Male + Unbiased,5,5,5
+N0.HOG0004353,All unbiased,2,2,2
+N0.HOG0004354,All unbiased,2,2,2
+N0.HOG0004355,All unbiased,4,4,4
+N0.HOG0004362,All unbiased,2,2,2
+N0.HOG0004367,All unbiased,2,2,2
+N0.HOG0004371,All unbiased,3,3,3
+N0.HOG0004374,Male + Unbiased,2,2,2
+N0.HOG0004375,All male biased,2,2,2
+N0.HOG0004376,All unbiased,2,2,2
+N0.HOG0004383,All unbiased,2,2,2
+N0.HOG0004386,All unbiased,2,2,2
+N0.HOG0004387,All unbiased,2,2,2
+N0.HOG0004388,All unbiased,2,2,2
+N0.HOG0004394,All unbiased,2,2,2
+N0.HOG0004396,All unbiased,2,2,2
+N0.HOG0004397,All unbiased,2,2,2
+N0.HOG0004398,All unbiased,2,2,2
+N0.HOG0004407,All unbiased,2,2,2
+N0.HOG0004410,All unbiased,2,2,2
+N0.HOG0004414,All male biased,2,2,2
+N0.HOG0004417,All unbiased,2,11,2
+N0.HOG0004419,All unbiased,3,6,6
+N0.HOG0004421,All unbiased,5,16,16
+N0.HOG0004422,Male + Unbiased,9,16,16
+N0.HOG0004426,All male biased,2,14,13
+N0.HOG0004427,Male + Unbiased,5,17,17
+N0.HOG0004470,All female biased,2,2,2
+N0.HOG0004497,Female + Unbiased,2,2,2
+N0.HOG0004498,All unbiased,2,3,3
+N0.HOG0004502,All unbiased,2,2,2
+N0.HOG0004516,All female biased,2,2,2
+N0.HOG0004530,All unbiased,2,3,3
+N0.HOG0004539,Female + Unbiased,3,3,3
+N0.HOG0004540,All unbiased,2,2,2
+N0.HOG0004541,All unbiased,2,2,2
+N0.HOG0004547,All unbiased,2,2,2
+N0.HOG0004553,All unbiased,2,2,2
+N0.HOG0004555,All unbiased,2,2,2
+N0.HOG0004567,All unbiased,2,2,2
+N0.HOG0004579,All female biased,2,2,2
+N0.HOG0004581,Male + Unbiased,2,2,2
+N0.HOG0004582,All unbiased,2,2,2
+N0.HOG0004586,All unbiased,2,2,2
+N0.HOG0004590,All unbiased,2,2,2
+N0.HOG0004594,All male biased,2,2,2
+N0.HOG0004595,Female + Unbiased,2,2,2
+N0.HOG0004603,Male + Unbiased,3,3,3
+N0.HOG0004617,Female + Unbiased,2,2,2
+N0.HOG0004627,All male biased,2,2,2
+N0.HOG0004644,Male + Unbiased,3,3,3
+N0.HOG0004658,All unbiased,2,2,2
+N0.HOG0004664,All unbiased,2,2,2
+N0.HOG0004667,All unbiased,2,2,2
+N0.HOG0004682,All male biased,2,2,2
+N0.HOG0004685,All unbiased,2,2,2
+N0.HOG0004695,Female + Unbiased,3,4,3
+N0.HOG0004702,All male biased,2,2,2
+N0.HOG0004710,All unbiased,2,2,2
+N0.HOG0004711,All female biased,2,2,2
+N0.HOG0004718,All unbiased,2,2,2
+N0.HOG0004719,All unbiased,2,2,2
+N0.HOG0004723,All unbiased,3,3,3
+N0.HOG0004724,Male + Unbiased,2,2,2
+N0.HOG0004727,All female biased,2,2,2
+N0.HOG0004729,Male + Unbiased,5,6,6
+N0.HOG0004730,All male biased,2,2,2
+N0.HOG0004731,All unbiased,2,2,2
+N0.HOG0004732,All female biased,2,2,2
+N0.HOG0004733,All unbiased,2,2,2
+N0.HOG0004734,All unbiased,2,2,2
+N0.HOG0004735,All unbiased,3,3,3
+N0.HOG0004737,All female biased,2,2,2
+N0.HOG0004738,All unbiased,2,2,2
+N0.HOG0004743,All unbiased,2,2,2
+N0.HOG0004744,All female biased,4,4,4
+N0.HOG0004746,All unbiased,2,3,3
+N0.HOG0004752,All male biased,2,2,2
+N0.HOG0004770,All unbiased,2,2,2
+N0.HOG0004774,All male biased,2,2,2
+N0.HOG0004777,All male biased,2,2,2
+N0.HOG0004782,All male biased,2,2,2
+N0.HOG0004798,Male + Unbiased,2,2,2
+N0.HOG0004800,Male + Unbiased,3,10,10
+N0.HOG0004804,All unbiased,2,2,2
+N0.HOG0004805,All unbiased,2,2,2
+N0.HOG0004818,All unbiased,2,2,2
+N0.HOG0004828,All unbiased,2,2,2
+N0.HOG0004846,All unbiased,2,3,3
+N0.HOG0004847,All unbiased,2,2,2
+N0.HOG0004848,All unbiased,2,2,2
+N0.HOG0004855,All unbiased,2,2,2
+N0.HOG0004856,All unbiased,2,2,2
+N0.HOG0004859,Male + Unbiased,2,2,2
+N0.HOG0004867,All unbiased,2,2,2
+N0.HOG0004868,Female + Unbiased,2,2,2
+N0.HOG0004869,All male biased,2,2,2
+N0.HOG0004870,All female biased,2,2,2
+N0.HOG0004871,All unbiased,2,2,2
+N0.HOG0004872,All unbiased,2,2,2
+N0.HOG0004873,All unbiased,2,2,2
+N0.HOG0004874,Male + Unbiased,2,2,2
+N0.HOG0004875,Male + Unbiased,2,2,2
+N0.HOG0004893,All unbiased,3,3,3
+N0.HOG0004900,All male biased,2,2,2
+N0.HOG0004908,All unbiased,2,2,2
+N0.HOG0004914,All unbiased,2,2,2
+N0.HOG0004915,All unbiased,2,2,2
+N0.HOG0004923,All female biased,2,2,2
+N0.HOG0004924,All unbiased,2,2,2
+N0.HOG0004929,All unbiased,2,2,2
+N0.HOG0004931,All male biased,2,2,2
+N0.HOG0004932,All female biased,2,2,2
+N0.HOG0004939,All unbiased,2,2,2
+N0.HOG0004940,All male biased,2,2,2
+N0.HOG0004941,All unbiased,2,2,2
+N0.HOG0004972,All unbiased,3,3,3
+N0.HOG0004985,All unbiased,2,2,2
+N0.HOG0004986,All female biased,2,2,2
+N0.HOG0004990,All unbiased,2,2,2
+N0.HOG0004995,All male biased,2,2,2
+N0.HOG0004996,All unbiased,2,2,2
+N0.HOG0005007,All male biased,2,2,2
+N0.HOG0005008,All unbiased,2,2,2
+N0.HOG0005009,All unbiased,2,2,2
+N0.HOG0005024,All unbiased,2,2,2
+N0.HOG0005026,Male + Unbiased,2,2,2
+N0.HOG0005036,Female + Unbiased,3,3,3
+N0.HOG0005037,All unbiased,2,2,2
+N0.HOG0005038,All unbiased,3,3,3
+N0.HOG0005039,All unbiased,3,3,3
+N0.HOG0005042,All male biased,2,2,2
+N0.HOG0005046,All unbiased,2,2,2
+N0.HOG0005047,All unbiased,2,2,2
+N0.HOG0005058,Female + Unbiased,3,3,3
+N0.HOG0005074,Male + Unbiased,4,4,4
+N0.HOG0005091,All unbiased,2,2,2
+N0.HOG0005096,All female biased,2,2,2
+N0.HOG0005100,All unbiased,2,2,2
+N0.HOG0005106,All unbiased,2,2,2
+N0.HOG0005107,All unbiased,2,2,2
+N0.HOG0005108,All unbiased,2,2,2
+N0.HOG0005110,All unbiased,2,2,2
+N0.HOG0005111,All unbiased,2,2,2
+N0.HOG0005113,All unbiased,2,2,2
+N0.HOG0005114,All unbiased,2,2,2
+N0.HOG0005119,Male + Unbiased,2,2,2
+N0.HOG0005130,All male biased,2,2,2
+N0.HOG0005139,All unbiased,2,2,2
+N0.HOG0005140,All unbiased,2,2,2
+N0.HOG0005141,All unbiased,2,2,2
+N0.HOG0005145,All unbiased,2,2,2
+N0.HOG0005151,All male biased,2,2,2
+N0.HOG0005168,All unbiased,3,3,3
+N0.HOG0005169,All female biased,2,2,2
+N0.HOG0005170,All unbiased,2,2,2
+N0.HOG0005171,All female biased,2,2,2
+N0.HOG0005172,All unbiased,2,2,2
+N0.HOG0005173,All male biased,3,3,3
+N0.HOG0005177,All unbiased,2,2,2
+N0.HOG0005186,All unbiased,2,2,2
+N0.HOG0005187,Male + Unbiased,2,2,2
+N0.HOG0005192,All unbiased,2,2,2
+N0.HOG0005193,All unbiased,2,2,2
+N0.HOG0005194,All male biased,2,2,2
+N0.HOG0005195,Female + Unbiased,2,2,2
+N0.HOG0005197,All male biased,2,2,2
+N0.HOG0005205,All male biased,5,5,5
+N0.HOG0005212,Female + Unbiased,2,2,2
+N0.HOG0005213,All unbiased,3,3,3
+N0.HOG0005218,All unbiased,2,2,2
+N0.HOG0005222,Female + Unbiased,2,2,2
+N0.HOG0005224,All unbiased,2,2,2
+N0.HOG0005242,All male biased,2,2,2
+N0.HOG0005249,All unbiased,2,2,2
+N0.HOG0005256,All unbiased,2,2,2
+N0.HOG0005258,All unbiased,2,2,2
+N0.HOG0005291,Male + Unbiased,2,2,2
+N0.HOG0005296,All unbiased,2,2,2
+N0.HOG0005302,All unbiased,2,2,2
+N0.HOG0005306,All female biased,2,2,2
+N0.HOG0005307,All three,3,4,3
+N0.HOG0005308,All female biased,2,2,2
+N0.HOG0005309,All unbiased,2,3,3
+N0.HOG0005315,All female biased,2,2,2
+N0.HOG0005326,All unbiased,2,2,2
+N0.HOG0005329,All unbiased,2,2,2
+N0.HOG0005333,All unbiased,2,2,2
+N0.HOG0005339,All unbiased,2,3,3
+N0.HOG0005340,All unbiased,2,2,2
+N0.HOG0005349,All unbiased,2,2,2
+N0.HOG0005350,All unbiased,2,2,2
+N0.HOG0005351,All unbiased,2,2,2
+N0.HOG0005352,All unbiased,2,2,2
+N0.HOG0005364,All unbiased,3,3,3
+N0.HOG0005366,All unbiased,2,2,2
+N0.HOG0005368,All unbiased,2,2,2
+N0.HOG0005380,All female biased,2,2,2
+N0.HOG0005381,All unbiased,2,2,2
+N0.HOG0005384,All unbiased,2,2,2
+N0.HOG0005385,All unbiased,2,2,2
+N0.HOG0005386,All female biased,2,2,2
+N0.HOG0005390,Female + Unbiased,2,2,2
+N0.HOG0005391,All unbiased,2,2,2
+N0.HOG0005392,All male biased,3,3,3
+N0.HOG0005393,All unbiased,3,3,3
+N0.HOG0005394,All unbiased,2,2,2
+N0.HOG0005395,All unbiased,2,2,2
+N0.HOG0005396,All female biased,2,2,2
+N0.HOG0005397,All unbiased,2,2,2
+N0.HOG0005398,Male + Unbiased,3,3,3
+N0.HOG0005403,All unbiased,2,2,2
+N0.HOG0005404,All unbiased,2,2,2
+N0.HOG0005405,All unbiased,2,2,2
+N0.HOG0005407,All unbiased,2,2,2
+N0.HOG0005408,All male biased,2,2,2
+N0.HOG0005409,All unbiased,2,2,2
+N0.HOG0005410,All unbiased,2,2,2
+N0.HOG0005413,Male + Unbiased,4,4,4
+N0.HOG0005415,All unbiased,2,2,2
+N0.HOG0005416,All unbiased,2,2,2
+N0.HOG0005417,All unbiased,2,2,2
+N0.HOG0005418,All unbiased,3,3,3
+N0.HOG0005421,All unbiased,3,3,3
+N0.HOG0005425,Female + Unbiased,2,2,2
+N0.HOG0005428,Female + Unbiased,2,2,2
+N0.HOG0005430,Female + Unbiased,2,2,2
+N0.HOG0005436,All unbiased,2,2,2
+N0.HOG0005445,All unbiased,2,2,2
+N0.HOG0005446,All male biased,2,2,2
+N0.HOG0005448,All unbiased,3,3,3
+N0.HOG0005449,All unbiased,2,2,2
+N0.HOG0005450,All unbiased,3,3,3
+N0.HOG0005451,All unbiased,2,2,2
+N0.HOG0005453,All unbiased,3,3,3
+N0.HOG0005454,All unbiased,2,2,2
+N0.HOG0005455,All unbiased,2,2,2
+N0.HOG0005456,All female biased,2,2,2
+N0.HOG0005457,All unbiased,2,2,2
+N0.HOG0005458,All female biased,2,2,2
+N0.HOG0005459,All unbiased,2,2,2
+N0.HOG0005460,All unbiased,2,2,2
+N0.HOG0005461,All unbiased,2,2,2
+N0.HOG0005464,All unbiased,2,2,2
+N0.HOG0005468,All female biased,2,2,2
+N0.HOG0005469,All unbiased,2,2,2
+N0.HOG0005470,All male biased,2,2,2
+N0.HOG0005479,All unbiased,3,3,3
+N0.HOG0005480,All unbiased,2,2,2
+N0.HOG0005483,All unbiased,2,2,2
+N0.HOG0005491,All male biased,2,2,2
+N0.HOG0005497,Female + Unbiased,2,2,2
+N0.HOG0005498,Male + Unbiased,2,3,3
+N0.HOG0005499,All unbiased,2,2,2
+N0.HOG0005502,Male + Unbiased,2,2,2
+N0.HOG0005504,All male biased,2,2,2
+N0.HOG0005505,All male biased,2,2,2
+N0.HOG0005506,All unbiased,2,2,2
+N0.HOG0005509,All unbiased,2,2,2
+N0.HOG0005510,All unbiased,2,2,2
+N0.HOG0005527,All unbiased,3,3,3
+N0.HOG0005535,Male + Unbiased,2,2,2
+N0.HOG0005536,All male biased,2,3,2
+N0.HOG0005539,All male biased,3,3,3
+N0.HOG0005543,All unbiased,2,11,10
+N0.HOG0005544,Male + Unbiased,3,13,13
+N0.HOG0005545,Male + Unbiased,3,9,9
+N0.HOG0005550,Male + Unbiased,6,10,10
+N0.HOG0005553,Male + Unbiased,2,3,3
+N0.HOG0005554,Male + Unbiased,5,11,10
+N0.HOG0005555,All unbiased,5,16,15
+N0.HOG0005613,All male biased,2,2,2
+N0.HOG0005617,All unbiased,2,2,2
+N0.HOG0005651,Male + Unbiased,3,3,3
+N0.HOG0005655,All female biased,2,3,3
+N0.HOG0005667,All unbiased,2,2,2
+N0.HOG0005698,All unbiased,2,2,2
+N0.HOG0005700,All unbiased,2,2,2
+N0.HOG0005723,All unbiased,2,2,2
+N0.HOG0005726,All unbiased,2,2,2
+N0.HOG0005740,All unbiased,2,2,2
+N0.HOG0005748,Male + Unbiased,2,2,2
+N0.HOG0005774,All unbiased,2,2,2
+N0.HOG0005775,Male + Unbiased,2,2,2
+N0.HOG0005779,All unbiased,2,2,2
+N0.HOG0005789,All unbiased,2,2,2
+N0.HOG0005790,All unbiased,2,2,2
+N0.HOG0005805,All male biased,2,2,2
+N0.HOG0005806,Female + Unbiased,2,2,2
+N0.HOG0005809,All male biased,3,3,3
+N0.HOG0005826,Male + Female,2,2,2
+N0.HOG0005831,All unbiased,2,3,3
+N0.HOG0005845,All male biased,2,2,2
+N0.HOG0005850,All unbiased,2,2,2
+N0.HOG0005853,All unbiased,2,2,2
+N0.HOG0005868,All male biased,2,2,2
+N0.HOG0005880,All female biased,2,2,2
+N0.HOG0005888,All unbiased,2,2,2
+N0.HOG0005889,All unbiased,2,2,2
+N0.HOG0005897,All male biased,4,4,4
+N0.HOG0005920,All unbiased,2,2,2
+N0.HOG0005933,All unbiased,2,2,2
+N0.HOG0005934,All unbiased,2,2,2
+N0.HOG0005935,All unbiased,2,2,2
+N0.HOG0005936,All unbiased,2,2,2
+N0.HOG0005944,All unbiased,2,2,2
+N0.HOG0005946,All female biased,2,2,2
+N0.HOG0005947,All unbiased,2,2,2
+N0.HOG0005948,All unbiased,2,2,2
+N0.HOG0005952,All unbiased,2,2,2
+N0.HOG0005953,All unbiased,2,2,2
+N0.HOG0005955,Male + Unbiased,2,2,2
+N0.HOG0005956,All unbiased,2,2,2
+N0.HOG0005957,All unbiased,2,2,2
+N0.HOG0005958,All unbiased,2,2,2
+N0.HOG0005960,Male + Unbiased,2,12,12
+N0.HOG0005978,Female + Unbiased,2,2,2
+N0.HOG0005979,All unbiased,2,2,2
+N0.HOG0005981,All unbiased,2,2,2
+N0.HOG0005985,All unbiased,2,2,2
+N0.HOG0005993,Female + Unbiased,2,2,2
+N0.HOG0005994,All unbiased,2,2,2
+N0.HOG0006000,Male + Unbiased,3,4,4
+N0.HOG0006016,All unbiased,2,2,2
+N0.HOG0006017,All unbiased,2,2,2
+N0.HOG0006018,All female biased,2,2,2
+N0.HOG0006019,All unbiased,2,2,2
+N0.HOG0006020,All unbiased,2,2,2
+N0.HOG0006021,All unbiased,2,2,2
+N0.HOG0006024,All unbiased,2,2,2
+N0.HOG0006030,All unbiased,2,2,2
+N0.HOG0006032,Female + Unbiased,2,2,2
+N0.HOG0006034,All female biased,2,2,2
+N0.HOG0006041,All unbiased,2,2,2
+N0.HOG0006042,All unbiased,2,2,2
+N0.HOG0006062,All female biased,2,2,2
+N0.HOG0006074,All male biased,2,2,2
+N0.HOG0006076,All unbiased,2,2,2
+N0.HOG0006088,All unbiased,2,2,2
+N0.HOG0006091,Male + Unbiased,2,2,2
+N0.HOG0006095,Female + Unbiased,2,2,2
+N0.HOG0006103,All unbiased,2,2,2
+N0.HOG0006122,Male + Unbiased,2,2,2
+N0.HOG0006124,All female biased,2,2,2
+N0.HOG0006125,All unbiased,2,2,2
+N0.HOG0006126,All unbiased,2,2,2
+N0.HOG0006127,All unbiased,2,2,2
+N0.HOG0006133,All unbiased,2,2,2
+N0.HOG0006138,Female + Unbiased,2,2,2
+N0.HOG0006139,All unbiased,2,2,2
+N0.HOG0006141,All unbiased,2,2,2
+N0.HOG0006142,All unbiased,2,2,2
+N0.HOG0006148,All male biased,2,2,2
+N0.HOG0006159,All unbiased,2,2,2
+N0.HOG0006185,All unbiased,2,2,2
+N0.HOG0006187,All unbiased,2,2,2
+N0.HOG0006188,All unbiased,2,2,2
+N0.HOG0006189,All female biased,2,2,2
+N0.HOG0006190,All unbiased,2,2,2
+N0.HOG0006191,All male biased,2,2,2
+N0.HOG0006192,All unbiased,2,2,2
+N0.HOG0006206,All unbiased,2,2,2
+N0.HOG0006217,All male biased,2,2,2
+N0.HOG0006218,All unbiased,2,2,2
+N0.HOG0006219,All unbiased,2,2,2
+N0.HOG0006220,All unbiased,2,2,2
+N0.HOG0006221,All unbiased,2,2,2
+N0.HOG0006222,All unbiased,2,2,2
+N0.HOG0006223,All unbiased,2,2,2
+N0.HOG0006252,All male biased,2,2,2
+N0.HOG0006257,All unbiased,2,2,2
+N0.HOG0006271,All unbiased,2,2,2
+N0.HOG0006272,All unbiased,2,2,2
+N0.HOG0006273,Female + Unbiased,2,2,2
+N0.HOG0006277,All male biased,2,2,2
+N0.HOG0006285,Female + Unbiased,3,14,14
+N0.HOG0006295,All unbiased,2,2,2
+N0.HOG0006305,All unbiased,2,2,2
+N0.HOG0006306,All unbiased,2,2,2
+N0.HOG0006323,All unbiased,2,2,2
+N0.HOG0006331,All unbiased,2,2,2
+N0.HOG0006368,All unbiased,2,2,2
+N0.HOG0006384,All female biased,2,2,2
+N0.HOG0006400,All unbiased,2,2,2
+N0.HOG0006402,All unbiased,2,2,2
+N0.HOG0006403,All unbiased,2,2,2
+N0.HOG0006405,All unbiased,2,2,2
+N0.HOG0006415,All unbiased,2,2,2
+N0.HOG0006431,Male + Unbiased,2,2,2
+N0.HOG0006434,All male biased,2,2,2
+N0.HOG0006435,All male biased,2,2,2
+N0.HOG0006436,All unbiased,2,2,2
+N0.HOG0006453,Female + Unbiased,3,5,4
+N0.HOG0006457,All unbiased,2,2,2
+N0.HOG0006473,All unbiased,2,2,2
+N0.HOG0006486,Male + Unbiased,2,2,2
+N0.HOG0006494,All unbiased,2,2,2
+N0.HOG0006522,All unbiased,2,2,2
+N0.HOG0006551,All unbiased,2,2,2
+N0.HOG0006554,Female + Unbiased,2,2,2
+N0.HOG0006555,All unbiased,2,2,2
+N0.HOG0006559,All unbiased,2,2,2
+N0.HOG0006568,All unbiased,3,3,3
+N0.HOG0006591,All unbiased,2,2,2
+N0.HOG0006604,All unbiased,2,2,2
+N0.HOG0006605,All unbiased,2,2,2
+N0.HOG0006606,All unbiased,2,2,2
+N0.HOG0006607,All unbiased,2,2,2
+N0.HOG0006608,All unbiased,2,2,2
+N0.HOG0006609,All unbiased,2,2,2
+N0.HOG0006610,All male biased,3,3,3
+N0.HOG0006611,All unbiased,2,2,2
+N0.HOG0006612,Female + Unbiased,2,2,2
+N0.HOG0006614,All female biased,2,2,2
+N0.HOG0006615,Female + Unbiased,2,2,2
+N0.HOG0006616,Male + Unbiased,2,2,2
+N0.HOG0006617,All unbiased,2,2,2
+N0.HOG0006618,All female biased,2,2,2
+N0.HOG0006619,All unbiased,2,2,2
+N0.HOG0006620,All unbiased,2,2,2
+N0.HOG0006628,All female biased,2,2,2
+N0.HOG0006629,All female biased,2,2,2
+N0.HOG0006638,All unbiased,2,2,2
+N0.HOG0006644,All male biased,2,2,2
+N0.HOG0006651,All unbiased,2,2,2
+N0.HOG0006667,All unbiased,2,2,2
+N0.HOG0006672,All unbiased,2,2,2
+N0.HOG0006674,All unbiased,2,2,2
+N0.HOG0006686,All unbiased,2,2,2
+N0.HOG0006693,Female + Unbiased,2,2,2
+N0.HOG0006698,All unbiased,2,2,2
+N0.HOG0006699,All unbiased,2,2,2
+N0.HOG0006705,All unbiased,2,2,2
+N0.HOG0006706,All female biased,2,2,2
+N0.HOG0006707,All male biased,2,2,2
+N0.HOG0006713,All unbiased,2,2,2
+N0.HOG0006714,All unbiased,2,2,2
+N0.HOG0006734,All unbiased,2,2,2
+N0.HOG0006750,All unbiased,2,2,2
+N0.HOG0006753,All unbiased,2,2,2
+N0.HOG0006754,All unbiased,2,2,2
+N0.HOG0006755,All male biased,2,2,2
+N0.HOG0006756,All female biased,2,2,2
+N0.HOG0006757,All unbiased,2,2,2
+N0.HOG0006760,All female biased,2,2,2
+N0.HOG0006776,All unbiased,2,2,2
+N0.HOG0006777,All unbiased,2,2,2
+N0.HOG0006800,All unbiased,2,2,2
+N0.HOG0006820,All unbiased,2,2,2
+N0.HOG0006840,All unbiased,2,2,2
+N0.HOG0006841,All unbiased,2,2,2
+N0.HOG0006842,All unbiased,2,2,2
+N0.HOG0006872,Male + Unbiased,2,2,2
+N0.HOG0006898,All unbiased,2,2,2
+N0.HOG0006903,All unbiased,2,2,2
+N0.HOG0006910,All unbiased,2,2,2
+N0.HOG0006911,All unbiased,2,3,3
+N0.HOG0006912,All male biased,2,2,2
+N0.HOG0006913,All unbiased,2,2,2
+N0.HOG0006921,Male + Unbiased,4,13,12
+N0.HOG0006927,All unbiased,2,2,2
+N0.HOG0006928,All female biased,2,2,2
+N0.HOG0006929,All unbiased,2,2,2
+N0.HOG0006942,Female + Unbiased,2,2,2
+N0.HOG0006944,All unbiased,2,2,2
+N0.HOG0006945,All unbiased,2,2,2
+N0.HOG0006946,All male biased,2,2,2
+N0.HOG0006948,All male biased,2,2,2
+N0.HOG0006961,All female biased,2,2,2
+N0.HOG0006964,All unbiased,2,2,2
+N0.HOG0006975,Female + Unbiased,3,3,3
+N0.HOG0006979,All unbiased,2,2,2
+N0.HOG0006980,All unbiased,2,2,2
+N0.HOG0006988,All unbiased,2,2,2
+N0.HOG0006989,All unbiased,2,2,2
+N0.HOG0006990,All male biased,2,2,2
+N0.HOG0006991,Male + Unbiased,2,2,2
+N0.HOG0006992,All unbiased,2,2,2
+N0.HOG0006994,All unbiased,2,2,2
+N0.HOG0006995,Female + Unbiased,8,8,8
+N0.HOG0007004,Female + Unbiased,7,7,7
+N0.HOG0007005,All unbiased,2,2,2
+N0.HOG0007008,All unbiased,2,2,2
+N0.HOG0007014,All male biased,2,2,2
+N0.HOG0007015,All unbiased,2,2,2
+N0.HOG0007017,All female biased,2,2,2
+N0.HOG0007028,Female + Unbiased,3,3,3
+N0.HOG0007030,All unbiased,2,2,2
+N0.HOG0007043,All female biased,2,2,2
+N0.HOG0007056,All unbiased,2,2,2
+N0.HOG0007059,All male biased,3,3,3
+N0.HOG0007060,All unbiased,3,3,3
+N0.HOG0007061,All unbiased,4,4,4
+N0.HOG0007062,Female + Unbiased,2,2,2
+N0.HOG0007063,All unbiased,2,2,2
+N0.HOG0007065,All unbiased,2,2,2
+N0.HOG0007066,All unbiased,2,2,2
+N0.HOG0007067,All female biased,2,2,2
+N0.HOG0007068,All unbiased,2,2,2
+N0.HOG0007069,All male biased,2,2,2
+N0.HOG0007071,All unbiased,2,2,2
+N0.HOG0007072,All unbiased,2,2,2
+N0.HOG0007074,All unbiased,2,2,2
+N0.HOG0007079,All unbiased,2,2,2
+N0.HOG0007097,All female biased,2,2,2
+N0.HOG0007098,All unbiased,2,2,2
+N0.HOG0007100,All unbiased,2,2,2
+N0.HOG0007114,All unbiased,2,2,2
+N0.HOG0007125,All unbiased,2,2,2
+N0.HOG0007131,All unbiased,2,2,2
+N0.HOG0007132,All female biased,2,2,2
+N0.HOG0007133,All unbiased,2,2,2
+N0.HOG0007145,All female biased,2,2,2
+N0.HOG0007149,All unbiased,2,2,2
+N0.HOG0007161,All male biased,2,2,2
+N0.HOG0007163,All male biased,2,2,2
+N0.HOG0007173,All unbiased,3,3,3
+N0.HOG0007181,All unbiased,2,2,2
+N0.HOG0007188,Male + Unbiased,2,2,2
+N0.HOG0007292,All unbiased,2,2,2
+N0.HOG0007349,All unbiased,2,5,5
+N0.HOG0007355,All unbiased,3,3,3
+N0.HOG0007365,All unbiased,2,2,2
+N0.HOG0007395,All male biased,3,8,8
+N0.HOG0007405,All unbiased,2,2,2
+N0.HOG0007409,All male biased,2,2,2
+N0.HOG0007413,All male biased,2,2,2
+N0.HOG0007483,All unbiased,2,2,2
+N0.HOG0007539,Male + Unbiased,3,3,3
+N0.HOG0007556,All male biased,2,2,2
+N0.HOG0007575,All unbiased,2,2,2
+N0.HOG0007599,All male biased,2,2,2
+N0.HOG0007601,Female + Unbiased,2,2,2
+N0.HOG0007604,All female biased,2,2,2
+N0.HOG0007622,All unbiased,2,2,2
+N0.HOG0007655,All unbiased,2,2,2
+N0.HOG0007664,All female biased,2,2,2
+N0.HOG0007665,All unbiased,2,2,2
+N0.HOG0007697,All female biased,2,2,2
+N0.HOG0007700,Male + Unbiased,3,3,3
+N0.HOG0007701,Female + Unbiased,2,2,2
+N0.HOG0007720,All female biased,2,2,2
+N0.HOG0007743,All unbiased,2,2,2
+N0.HOG0007769,All unbiased,2,2,2
+N0.HOG0007772,All unbiased,2,2,2
+N0.HOG0007802,All unbiased,2,2,2
+N0.HOG0007805,All male biased,2,2,2
+N0.HOG0007829,All unbiased,2,2,2
+N0.HOG0007880,All unbiased,2,2,2
+N0.HOG0007881,All unbiased,2,2,2
+N0.HOG0007882,All male biased,2,2,2
+N0.HOG0007887,All unbiased,2,3,3
+N0.HOG0007904,All unbiased,2,2,2
+N0.HOG0007917,All unbiased,2,2,2
+N0.HOG0007925,Male + Unbiased,2,2,2
+N0.HOG0007975,All male biased,2,2,2
+N0.HOG0007995,All unbiased,2,2,2
+N0.HOG0007996,Male + Unbiased,2,2,2
+N0.HOG0007997,All male biased,2,2,2
+N0.HOG0008021,All male biased,2,2,2
+N0.HOG0008140,All unbiased,2,2,2
+N0.HOG0008160,All male biased,2,2,2
+N0.HOG0008161,All unbiased,2,2,2
+N0.HOG0008169,All unbiased,2,2,2
+N0.HOG0008215,All male biased,2,2,2
+N0.HOG0008228,All male biased,3,8,8
+N0.HOG0008229,All male biased,4,11,10
+N0.HOG0008303,All female biased,2,2,2
+N0.HOG0008309,All unbiased,2,2,2
+N0.HOG0008364,All unbiased,2,2,2
+N0.HOG0008370,All unbiased,2,2,2
+N0.HOG0008372,All unbiased,2,2,2
+N0.HOG0008373,All unbiased,2,2,2
+N0.HOG0008374,All unbiased,2,2,2
+N0.HOG0008376,All female biased,2,2,2
+N0.HOG0008377,All female biased,2,2,2
+N0.HOG0008380,All male biased,2,2,2
+N0.HOG0008423,Male + Unbiased,2,2,2
+N0.HOG0008443,All male biased,2,2,2
+N0.HOG0008445,All unbiased,2,2,2
+N0.HOG0008446,All male biased,2,2,2
+N0.HOG0008451,All unbiased,2,2,2
+N0.HOG0008469,All unbiased,2,2,2
+N0.HOG0008489,All female biased,2,2,2
+N0.HOG0008491,All unbiased,2,2,2
+N0.HOG0008498,All male biased,2,2,2
+N0.HOG0008538,All male biased,2,2,2
+N0.HOG0008550,All unbiased,2,2,2
+N0.HOG0008586,All unbiased,2,2,2
+N0.HOG0008615,All unbiased,2,2,2
+N0.HOG0008740,All unbiased,2,2,2
+N0.HOG0008754,All unbiased,2,2,2
+N0.HOG0008755,All female biased,2,2,2
+N0.HOG0008762,All male biased,2,3,3
+N0.HOG0008771,All male biased,2,2,2
+N0.HOG0008798,Female + Unbiased,6,6,6
+N0.HOG0008808,All male biased,2,2,2
+N0.HOG0008865,All unbiased,2,2,2
+N0.HOG0008866,All male biased,4,5,5
+N0.HOG0008917,Female + Unbiased,4,4,4
+N0.HOG0008920,All unbiased,2,2,2
+N0.HOG0008921,All female biased,2,2,2
+N0.HOG0008932,Male + Unbiased,2,2,2
+N0.HOG0008948,All female biased,2,2,2
+N0.HOG0008972,All male biased,7,7,7
+N0.HOG0008993,All female biased,2,2,2
+N0.HOG0009000,All female biased,2,6,6
+N0.HOG0009010,Male + Unbiased,4,7,7
+N0.HOG0009017,All unbiased,2,3,3
+N0.HOG0009018,All male biased,4,8,6
+N0.HOG0009019,All unbiased,4,14,11
+N0.HOG0009020,All unbiased,3,14,14
+N0.HOG0009021,All male biased,2,14,14
+N0.HOG0009022,Male + Unbiased,4,14,14
+N0.HOG0009023,All three,6,14,12
+N0.HOG0009026,All unbiased,2,7,6
+N0.HOG0009027,All unbiased,3,14,14
+N0.HOG0009028,All unbiased,5,9,9
+N0.HOG0009029,Male + Unbiased,2,2,2
+N0.HOG0009174,Male + Unbiased,2,3,3
+N0.HOG0009187,All male biased,2,2,2
+N0.HOG0009220,All female biased,2,2,2
+N0.HOG0009248,All male biased,4,6,5
+N0.HOG0009260,All female biased,3,3,3
+N0.HOG0009262,All unbiased,2,2,2
+N0.HOG0009274,All male biased,2,2,2
+N0.HOG0009294,All unbiased,2,2,2
+N0.HOG0009300,All unbiased,2,2,2
+N0.HOG0009301,All unbiased,2,2,2
+N0.HOG0009319,All female biased,2,2,2
+N0.HOG0009326,All female biased,2,2,2
+N0.HOG0009331,All unbiased,2,2,2
+N0.HOG0009366,All male biased,2,2,2
+N0.HOG0009371,All male biased,2,2,2
+N0.HOG0009372,All female biased,2,2,2
+N0.HOG0009391,All unbiased,2,2,2
+N0.HOG0009392,All male biased,2,2,2
+N0.HOG0009424,All male biased,3,3,3
+N0.HOG0009426,All female biased,3,3,3
+N0.HOG0009441,Male + Female,2,3,3
+N0.HOG0009459,Male + Unbiased,2,2,2
+N0.HOG0009460,All unbiased,2,2,2
+N0.HOG0009471,All male biased,2,2,2
+N0.HOG0009489,Male + Unbiased,2,2,2
+N0.HOG0009494,Female + Unbiased,2,2,2
+N0.HOG0009501,Male + Unbiased,2,2,2
+N0.HOG0009505,All unbiased,2,2,2
+N0.HOG0009511,All male biased,2,4,4
+N0.HOG0009513,All unbiased,2,2,2
+N0.HOG0009583,All unbiased,2,2,2
+N0.HOG0009613,All male biased,2,2,2
+N0.HOG0009614,Male + Unbiased,4,4,4
+N0.HOG0009620,Male + Female,4,4,4
+N0.HOG0009650,All male biased,2,2,2
+N0.HOG0009692,All unbiased,2,2,2
+N0.HOG0009693,All unbiased,2,2,2
+N0.HOG0009725,All male biased,2,2,2
+N0.HOG0009743,All unbiased,2,2,2
+N0.HOG0009744,All male biased,2,2,2
+N0.HOG0009750,Male + Unbiased,3,9,9
+N0.HOG0009771,All female biased,2,2,2
+N0.HOG0009777,All female biased,2,2,2
+N0.HOG0009810,All unbiased,2,2,2
+N0.HOG0009828,All male biased,2,2,2
+N0.HOG0009866,All male biased,2,2,2
+N0.HOG0009935,All male biased,3,3,3
+N0.HOG0009943,All unbiased,2,2,2
+N0.HOG0009946,All male biased,2,2,2
+N0.HOG0009949,All unbiased,3,3,3
+N0.HOG0009951,All unbiased,2,2,2
+N0.HOG0009955,All unbiased,2,2,2
+N0.HOG0009956,All male biased,2,2,2
+N0.HOG0009977,All male biased,2,2,2
+N0.HOG0009983,All unbiased,2,2,2
+N0.HOG0009984,All female biased,2,2,2
+N0.HOG0009985,All unbiased,2,2,2
+N0.HOG0010000,Female + Unbiased,2,2,2
+N0.HOG0010001,All female biased,2,2,2
+N0.HOG0010003,All unbiased,2,2,2
+N0.HOG0010007,All male biased,2,2,2
+N0.HOG0010024,All unbiased,2,2,2
+N0.HOG0010049,Female + Unbiased,2,2,2
+N0.HOG0010055,All unbiased,2,2,2
+N0.HOG0010069,Female + Unbiased,2,2,2
+N0.HOG0010078,All unbiased,2,3,3
+N0.HOG0010094,All unbiased,4,5,5
+N0.HOG0010098,All unbiased,2,2,2
+N0.HOG0010103,Male + Unbiased,6,10,10
+N0.HOG0010105,Male + Unbiased,4,10,10
+N0.HOG0010110,Male + Unbiased,2,7,7
+N0.HOG0010111,Male + Unbiased,5,12,12
+N0.HOG0010119,All unbiased,2,4,4
+N0.HOG0010120,All unbiased,9,13,13
+N0.HOG0010122,All male biased,3,7,7
+N0.HOG0010125,Male + Unbiased,3,8,8
+N0.HOG0010126,Male + Unbiased,8,13,13
+N0.HOG0010203,Male + Unbiased,3,9,9
+N0.HOG0010231,All unbiased,2,2,2
+N0.HOG0010266,All unbiased,2,2,2
+N0.HOG0010272,All unbiased,2,2,2
+N0.HOG0010276,All male biased,2,2,2
+N0.HOG0010288,All unbiased,2,2,2
+N0.HOG0010308,Male + Unbiased,2,5,5
+N0.HOG0010309,All unbiased,3,3,3
+N0.HOG0010322,All unbiased,2,10,10
+N0.HOG0010346,All unbiased,2,2,2
+N0.HOG0010365,All male biased,2,2,2
+N0.HOG0010373,All unbiased,2,2,2
+N0.HOG0010384,All male biased,2,3,3
+N0.HOG0010411,All unbiased,2,8,8
+N0.HOG0010412,Male + Unbiased,2,2,2
+N0.HOG0010449,Female + Unbiased,2,2,2
+N0.HOG0010451,All unbiased,2,2,2
+N0.HOG0010460,All male biased,2,2,2
+N0.HOG0010485,All male biased,2,2,2
+N0.HOG0010501,All male biased,3,8,8
+N0.HOG0010516,All unbiased,2,2,2
+N0.HOG0010525,Male + Unbiased,5,11,11
+N0.HOG0010528,All female biased,2,2,2
+N0.HOG0010533,All male biased,2,2,2
+N0.HOG0010582,All unbiased,2,2,2
+N0.HOG0010597,All unbiased,2,2,2
+N0.HOG0010603,All unbiased,2,2,2
+N0.HOG0010613,All unbiased,2,2,2
+N0.HOG0010617,All male biased,2,2,2
+N0.HOG0010618,All male biased,2,2,2
+N0.HOG0010622,All unbiased,2,2,2
+N0.HOG0010624,All unbiased,2,2,2
+N0.HOG0010637,All unbiased,2,2,2
+N0.HOG0010649,All unbiased,2,2,2
+N0.HOG0010655,All unbiased,2,2,2
+N0.HOG0010660,All unbiased,2,2,2
+N0.HOG0010769,Female + Unbiased,2,2,2
+N0.HOG0010773,All male biased,2,4,4
+N0.HOG0010777,All unbiased,5,5,5
+N0.HOG0010782,All male biased,2,3,3
+N0.HOG0010788,Female + Unbiased,11,11,11
+N0.HOG0010789,All male biased,4,11,11
+N0.HOG0010790,All unbiased,3,12,11
+N0.HOG0010792,All unbiased,5,9,9
+N0.HOG0010794,All unbiased,3,12,12
+N0.HOG0010795,Male + Unbiased,7,12,12
+N0.HOG0010796,All male biased,2,7,7
+N0.HOG0010798,Male + Unbiased,4,11,11
+N0.HOG0010800,All male biased,2,3,3
+N0.HOG0010801,Male + Unbiased,6,8,8
+N0.HOG0010905,Male + Unbiased,2,3,3
+N0.HOG0010957,All unbiased,2,2,2
+N0.HOG0011005,All unbiased,2,2,2
+N0.HOG0011017,All male biased,3,4,4
+N0.HOG0011018,All male biased,2,2,2
+N0.HOG0011030,All female biased,2,2,2
+N0.HOG0011086,Female + Unbiased,9,9,9
+N0.HOG0011092,All unbiased,2,2,2
+N0.HOG0011100,Female + Unbiased,2,2,2
+N0.HOG0011105,Male + Unbiased,5,5,5
+N0.HOG0011108,Male + Unbiased,2,2,2
+N0.HOG0011113,All unbiased,2,2,2
+N0.HOG0011115,All male biased,2,3,3
+N0.HOG0011123,All male biased,2,2,2
+N0.HOG0011140,All three,4,4,4
+N0.HOG0011151,All unbiased,2,2,2
+N0.HOG0011154,All unbiased,2,2,2
+N0.HOG0011160,All male biased,3,3,3
+N0.HOG0011173,All unbiased,2,2,2
+N0.HOG0011178,All female biased,2,2,2
+N0.HOG0011180,All unbiased,2,10,10
+N0.HOG0011261,All male biased,2,2,2
+N0.HOG0011305,All unbiased,2,2,2
+N0.HOG0011311,All unbiased,2,2,2
+N0.HOG0011314,Male + Unbiased,3,3,3
+N0.HOG0011315,All unbiased,2,7,5
+N0.HOG0011335,Male + Unbiased,2,8,8
+N0.HOG0011338,Male + Unbiased,7,10,9
+N0.HOG0011340,Male + Female,2,11,11
+N0.HOG0011342,Female + Unbiased,2,11,11
+N0.HOG0011343,Male + Unbiased,5,10,10
+N0.HOG0011344,Male + Unbiased,3,11,11
+N0.HOG0011447,All male biased,2,2,2
+N0.HOG0011462,All male biased,2,2,2
+N0.HOG0011464,All unbiased,2,2,2
+N0.HOG0011466,All male biased,2,3,3
+N0.HOG0011483,All unbiased,2,2,2
+N0.HOG0011493,Male + Unbiased,2,2,2
+N0.HOG0011497,All unbiased,4,4,4
+N0.HOG0011499,Male + Unbiased,2,9,9
+N0.HOG0011511,All unbiased,2,2,2
+N0.HOG0011541,Male + Unbiased,2,7,7
+N0.HOG0011546,All female biased,2,2,2
+N0.HOG0011554,All male biased,2,2,2
+N0.HOG0011557,All male biased,2,3,3
+N0.HOG0011561,Male + Unbiased,3,9,9
+N0.HOG0011565,All unbiased,2,2,2
+N0.HOG0011580,All female biased,2,3,3
+N0.HOG0011597,Male + Unbiased,3,3,3
+N0.HOG0011599,Male + Unbiased,2,2,2
+N0.HOG0011609,All unbiased,2,2,2
+N0.HOG0011619,All male biased,2,8,8
+N0.HOG0011629,All male biased,2,2,2
+N0.HOG0011633,All female biased,2,2,2
+N0.HOG0011652,All male biased,2,2,2
+N0.HOG0011655,Male + Unbiased,2,8,7
+N0.HOG0011785,Male + Unbiased,3,3,3
+N0.HOG0011808,Male + Unbiased,2,2,2
+N0.HOG0011818,All male biased,3,4,4
+N0.HOG0011821,Male + Unbiased,4,8,8
+N0.HOG0011824,Male + Unbiased,4,8,7
+N0.HOG0011832,All unbiased,2,5,5
+N0.HOG0011838,Male + Unbiased,3,4,4
+N0.HOG0011852,All unbiased,3,10,10
+N0.HOG0011855,All unbiased,2,10,10
+N0.HOG0011859,All male biased,2,7,7
+N0.HOG0011861,All unbiased,2,4,4
+N0.HOG0011862,Male + Unbiased,2,9,9
+N0.HOG0011863,Male + Unbiased,2,10,10
+N0.HOG0011864,All unbiased,2,10,9
+N0.HOG0011865,All unbiased,2,9,9
+N0.HOG0011867,Male + Unbiased,5,10,10
+N0.HOG0011868,Male + Unbiased,5,9,8
+N0.HOG0011869,All male biased,2,3,3
+N0.HOG0011870,All unbiased,2,10,7
+N0.HOG0011872,Female + Unbiased,6,10,9
+N0.HOG0011873,All unbiased,2,10,9
+N0.HOG0011875,Male + Unbiased,3,9,8
+N0.HOG0011876,All unbiased,2,10,10
+N0.HOG0011882,Male + Unbiased,5,8,8
+N0.HOG0011886,All male biased,9,10,9
+N0.HOG0012017,All male biased,2,2,2
+N0.HOG0012025,All unbiased,3,6,4
+N0.HOG0012036,All male biased,2,2,2
+N0.HOG0012037,All unbiased,2,3,3
+N0.HOG0012057,All unbiased,2,2,2
+N0.HOG0012059,All unbiased,2,2,2
+N0.HOG0012066,All unbiased,2,2,2
+N0.HOG0012069,All unbiased,2,2,2
+N0.HOG0012080,All unbiased,2,4,4
+N0.HOG0012095,All male biased,2,2,2
+N0.HOG0012101,All three,3,7,7
+N0.HOG0012103,Female + Unbiased,2,2,2
+N0.HOG0012104,All male biased,3,5,5
+N0.HOG0012126,Male + Female,4,4,4
+N0.HOG0012133,All three,3,3,3
+N0.HOG0012137,All male biased,2,2,2
+N0.HOG0012149,Male + Unbiased,6,6,6
+N0.HOG0012151,All male biased,2,2,2
+N0.HOG0012173,Female + Unbiased,2,2,2
+N0.HOG0012178,All unbiased,2,8,8
+N0.HOG0012182,All female biased,2,2,2
+N0.HOG0012188,Female + Unbiased,2,2,2
+N0.HOG0012194,All male biased,3,3,3
+N0.HOG0012198,Male + Unbiased,2,5,5
+N0.HOG0012301,All unbiased,2,2,2
+N0.HOG0012360,All female biased,2,2,2
+N0.HOG0012376,All female biased,2,2,2
+N0.HOG0012395,All unbiased,3,3,3
+N0.HOG0012431,Male + Unbiased,3,9,9
+N0.HOG0012432,Male + Unbiased,3,8,8
+N0.HOG0012435,Male + Unbiased,4,6,6
+N0.HOG0012436,All unbiased,2,9,9
+N0.HOG0012437,Male + Unbiased,4,6,4
+N0.HOG0012438,Male + Unbiased,2,9,9
+N0.HOG0012439,Male + Unbiased,2,9,9
+N0.HOG0012444,All unbiased,2,8,8
+N0.HOG0012595,All male biased,2,2,2
+N0.HOG0012640,All unbiased,2,2,2
+N0.HOG0012653,All three,4,4,4
+N0.HOG0012657,All unbiased,2,2,2
+N0.HOG0012665,All male biased,2,2,2
+N0.HOG0012705,All male biased,2,2,2
+N0.HOG0012712,All unbiased,2,2,2
+N0.HOG0012722,All male biased,2,2,2
+N0.HOG0012725,All male biased,3,3,3
+N0.HOG0012726,All male biased,2,2,2
+N0.HOG0012731,All unbiased,2,2,2
+N0.HOG0012744,All male biased,2,2,2
+N0.HOG0012752,All male biased,2,2,2
+N0.HOG0012753,All unbiased,2,2,2
+N0.HOG0012757,All male biased,2,2,2
+N0.HOG0012769,All male biased,2,2,2
+N0.HOG0012770,Male + Unbiased,3,3,3
+N0.HOG0012774,All female biased,3,3,3
+N0.HOG0012786,All male biased,2,2,2
+N0.HOG0012871,Male + Female,4,4,4
+N0.HOG0012875,All unbiased,2,2,2
+N0.HOG0012943,Male + Unbiased,3,4,4
+N0.HOG0012949,All female biased,2,2,2
+N0.HOG0012951,Female + Unbiased,2,2,2
+N0.HOG0012955,All male biased,5,6,6
+N0.HOG0012957,Male + Unbiased,2,6,6
+N0.HOG0012972,Male + Unbiased,2,7,7
+N0.HOG0012979,Male + Unbiased,4,4,4
+N0.HOG0012989,All male biased,2,3,2
+N0.HOG0013012,All unbiased,2,8,8
+N0.HOG0013016,Male + Female,2,7,6
+N0.HOG0013021,Female + Unbiased,7,8,8
+N0.HOG0013022,Male + Unbiased,4,8,8
+N0.HOG0013023,All unbiased,2,8,8
+N0.HOG0013024,Male + Unbiased,2,2,2
+N0.HOG0013028,Male + Unbiased,2,7,7
+N0.HOG0013259,All male biased,2,2,2
+N0.HOG0013278,Female + Unbiased,3,4,4
+N0.HOG0013281,All male biased,2,2,2
+N0.HOG0013283,Male + Unbiased,2,2,2
+N0.HOG0013288,Male + Unbiased,3,6,6
+N0.HOG0013294,Male + Unbiased,2,2,2
+N0.HOG0013318,All male biased,2,4,4
+N0.HOG0013320,All unbiased,2,2,2
+N0.HOG0013321,All unbiased,2,2,2
+N0.HOG0013329,All female biased,2,2,2
+N0.HOG0013337,All male biased,2,2,2
+N0.HOG0013338,All male biased,2,2,2
+N0.HOG0013351,Male + Female,2,2,2
+N0.HOG0013352,All male biased,2,2,2
+N0.HOG0013359,Male + Unbiased,3,3,3
+N0.HOG0013365,All unbiased,2,2,2
+N0.HOG0013370,All unbiased,4,4,4
+N0.HOG0013380,All female biased,2,2,2
+N0.HOG0013394,All male biased,2,2,2
+N0.HOG0013404,All unbiased,2,2,2
+N0.HOG0013405,All unbiased,2,2,2
+N0.HOG0013407,All female biased,2,2,2
+N0.HOG0013414,All male biased,2,2,2
+N0.HOG0013422,All male biased,2,3,3
+N0.HOG0013423,All unbiased,2,2,2
+N0.HOG0013431,All female biased,3,3,3
+N0.HOG0013621,All unbiased,2,2,2
+N0.HOG0013622,All female biased,2,2,2
+N0.HOG0013633,Male + Unbiased,3,3,3
+N0.HOG0013638,All male biased,4,5,5
+N0.HOG0013648,All male biased,2,2,2
+N0.HOG0013649,Male + Unbiased,2,6,6
+N0.HOG0013663,All unbiased,2,2,2
+N0.HOG0013665,All male biased,4,6,6
+N0.HOG0013668,Male + Unbiased,2,5,5
+N0.HOG0013674,All unbiased,2,2,2
+N0.HOG0013675,All male biased,2,3,3
+N0.HOG0013706,Male + Unbiased,2,6,6
+N0.HOG0013708,Male + Unbiased,6,7,7
+N0.HOG0013713,Male + Unbiased,2,7,6
+N0.HOG0013716,All male biased,6,7,7
+N0.HOG0013717,All male biased,2,6,6
+N0.HOG0013718,Male + Unbiased,5,7,7
+N0.HOG0013720,All unbiased,3,6,6
+N0.HOG0013733,All male biased,3,7,7
+N0.HOG0013734,All male biased,4,6,6
+N0.HOG0013735,All male biased,3,5,5
+N0.HOG0014027,All male biased,4,4,4
+N0.HOG0014040,All male biased,2,3,3
+N0.HOG0014058,All male biased,2,2,2
+N0.HOG0014059,All unbiased,2,2,2
+N0.HOG0014060,All female biased,2,2,2
+N0.HOG0014066,All male biased,2,2,2
+N0.HOG0014070,Female + Unbiased,2,2,2
+N0.HOG0014071,All male biased,2,3,3
+N0.HOG0014132,All male biased,2,2,2
+N0.HOG0014157,All male biased,2,2,2
+N0.HOG0014175,All male biased,2,2,2
+N0.HOG0014177,Male + Unbiased,2,2,2
+N0.HOG0014191,Male + Unbiased,2,2,2
+N0.HOG0014192,All male biased,2,2,2
+N0.HOG0014202,All male biased,2,3,3
+N0.HOG0014203,All male biased,2,2,2
+N0.HOG0014212,All male biased,2,2,2
+N0.HOG0014217,All female biased,2,2,2
+N0.HOG0014227,All male biased,2,2,2
+N0.HOG0014240,Female + Unbiased,2,2,2
+N0.HOG0014241,All female biased,2,2,2
+N0.HOG0014242,Female + Unbiased,2,2,2
+N0.HOG0014243,All unbiased,2,2,2
+N0.HOG0014249,All unbiased,2,2,2
+N0.HOG0014254,Female + Unbiased,2,2,2
+N0.HOG0014260,Male + Unbiased,2,2,2
+N0.HOG0014266,Female + Unbiased,2,2,2
+N0.HOG0014268,All male biased,2,2,2
+N0.HOG0014269,All male biased,2,2,2
+N0.HOG0014272,All unbiased,2,2,2
+N0.HOG0014276,All male biased,2,2,2
+N0.HOG0014282,All unbiased,2,4,4
+N0.HOG0014337,All male biased,2,2,2
+N0.HOG0014448,All male biased,2,2,2
+N0.HOG0014506,All unbiased,3,4,4
+N0.HOG0014511,All male biased,2,2,2
+N0.HOG0014517,All male biased,2,3,2
+N0.HOG0014526,All unbiased,4,4,4
+N0.HOG0014535,Female + Unbiased,5,5,5
+N0.HOG0014536,All unbiased,3,3,3
+N0.HOG0014543,Male + Unbiased,3,5,5
+N0.HOG0014546,All unbiased,2,2,2
+N0.HOG0014580,All male biased,2,6,6
+N0.HOG0014582,Male + Unbiased,4,5,5
+N0.HOG0014586,All unbiased,2,5,5
+N0.HOG0014589,Female + Unbiased,2,6,6
+N0.HOG0014592,Male + Unbiased,2,6,6
+N0.HOG0014594,Male + Unbiased,3,6,6
+N0.HOG0014599,All unbiased,3,6,6
+N0.HOG0014601,All unbiased,2,4,4
+N0.HOG0014602,Male + Unbiased,4,6,6
+N0.HOG0014604,Male + Unbiased,4,6,5
+N0.HOG0014606,All unbiased,3,4,4
+N0.HOG0014608,All unbiased,3,6,6
+N0.HOG0014609,Male + Unbiased,3,6,6
+N0.HOG0014616,Male + Unbiased,3,6,6
+N0.HOG0014621,Male + Unbiased,4,5,5
+N0.HOG0014625,All unbiased,2,5,5
+N0.HOG0014640,All male biased,4,6,6
+N0.HOG0014641,All male biased,3,6,6
+N0.HOG0014646,Male + Unbiased,6,6,6
+N0.HOG0015014,All female biased,2,2,2
+N0.HOG0015076,Female + Unbiased,3,3,3
+N0.HOG0015079,Male + Female,2,2,2
+N0.HOG0015087,All unbiased,2,2,2
+N0.HOG0015092,All male biased,2,2,2
+N0.HOG0015096,All male biased,2,2,2
+N0.HOG0015097,Male + Unbiased,2,2,2
+N0.HOG0015098,Female + Unbiased,2,2,2
+N0.HOG0015100,All male biased,2,2,2
+N0.HOG0015101,Male + Unbiased,2,2,2
+N0.HOG0015124,All male biased,2,2,2
+N0.HOG0015148,All male biased,2,2,2
+N0.HOG0015174,All male biased,2,4,4
+N0.HOG0015181,All unbiased,2,2,2
+N0.HOG0015182,All male biased,2,2,2
+N0.HOG0015190,All male biased,2,2,2
+N0.HOG0015192,Female + Unbiased,2,2,2
+N0.HOG0015193,All male biased,2,2,2
+N0.HOG0015197,All unbiased,2,2,2
+N0.HOG0015208,All unbiased,2,2,2
+N0.HOG0015214,All unbiased,2,2,2
+N0.HOG0015223,All unbiased,2,2,2
+N0.HOG0015242,All unbiased,2,2,2
+N0.HOG0015261,All unbiased,2,2,2
+N0.HOG0015264,All female biased,2,3,3
+N0.HOG0015273,All male biased,2,2,2
+N0.HOG0015274,All male biased,2,2,2
+N0.HOG0015275,All male biased,2,2,2
+N0.HOG0015277,All unbiased,2,2,2
+N0.HOG0015278,All male biased,2,2,2
+N0.HOG0015279,All male biased,2,2,2
+N0.HOG0015280,All male biased,2,2,2
+N0.HOG0015281,Male + Unbiased,2,2,2
+N0.HOG0015283,All male biased,2,2,2
+N0.HOG0015297,Female + Unbiased,2,2,2
+N0.HOG0015300,Female + Unbiased,2,2,2
+N0.HOG0015301,Male + Unbiased,2,2,2
+N0.HOG0015303,All female biased,2,2,2
+N0.HOG0015315,All female biased,2,2,2
+N0.HOG0015330,All unbiased,2,2,2
+N0.HOG0015331,All unbiased,2,2,2
+N0.HOG0015332,All unbiased,2,2,2
+N0.HOG0015333,All unbiased,2,2,2
+N0.HOG0015334,All female biased,2,2,2
+N0.HOG0015339,All female biased,2,2,2
+N0.HOG0015345,All unbiased,2,2,2
+N0.HOG0015354,All male biased,2,2,2
+N0.HOG0015364,All unbiased,2,2,2
+N0.HOG0015365,All unbiased,3,3,3
+N0.HOG0015366,All female biased,2,2,2
+N0.HOG0015367,All unbiased,2,2,2
+N0.HOG0015369,All female biased,2,2,2
+N0.HOG0015374,All male biased,2,2,2
+N0.HOG0015375,All male biased,2,2,2
+N0.HOG0015382,All male biased,2,2,2
+N0.HOG0015383,Male + Unbiased,2,2,2
+N0.HOG0015386,All unbiased,2,2,2
+N0.HOG0015387,All male biased,2,2,2
+N0.HOG0015397,All male biased,2,2,2
+N0.HOG0015629,All male biased,3,3,3
+N0.HOG0015646,All male biased,2,2,2
+N0.HOG0015647,All male biased,2,2,2
+N0.HOG0015659,All unbiased,2,2,2
+N0.HOG0015660,All female biased,2,2,2
+N0.HOG0015673,All male biased,2,2,2
+N0.HOG0015674,Male + Unbiased,3,3,3
+N0.HOG0015677,Male + Unbiased,3,3,3
+N0.HOG0015685,All female biased,3,3,3
+N0.HOG0015698,Female + Unbiased,2,2,2
+N0.HOG0015760,Female + Unbiased,4,5,5
+N0.HOG0015762,All unbiased,5,5,5
+N0.HOG0015764,Female + Unbiased,2,5,4
+N0.HOG0015766,All male biased,3,5,4
+N0.HOG0015767,All male biased,3,5,5
+N0.HOG0015769,Male + Unbiased,2,5,5
+N0.HOG0015771,All unbiased,2,5,5
+N0.HOG0015789,Male + Unbiased,3,4,4
+N0.HOG0015793,Male + Unbiased,2,3,3
+N0.HOG0015799,Male + Unbiased,3,4,4
+N0.HOG0015813,Male + Unbiased,4,5,5
+N0.HOG0015814,Male + Unbiased,2,5,5
+N0.HOG0015816,All unbiased,3,5,5
+N0.HOG0015817,All male biased,2,5,5
+N0.HOG0015821,Male + Unbiased,3,5,5
+N0.HOG0015830,All unbiased,4,5,5
+N0.HOG0015831,All unbiased,4,4,4
+N0.HOG0015841,All unbiased,4,5,5
+N0.HOG0016390,All male biased,2,3,3
+N0.HOG0016491,All unbiased,3,3,3
+N0.HOG0016503,All male biased,2,2,2
+N0.HOG0016529,All male biased,2,2,2
+N0.HOG0016562,All male biased,2,2,2
+N0.HOG0016587,All male biased,3,3,3
+N0.HOG0016662,All male biased,3,3,3
+N0.HOG0016717,All male biased,2,2,2
+N0.HOG0016740,All female biased,2,2,2
+N0.HOG0016778,All unbiased,2,2,2
+N0.HOG0016790,All female biased,2,2,2
+N0.HOG0016868,Male + Unbiased,3,3,3
+N0.HOG0017183,Male + Unbiased,2,2,2
+N0.HOG0017185,All male biased,2,2,2
+N0.HOG0017191,All male biased,2,2,2
+N0.HOG0017193,All male biased,2,2,2
+N0.HOG0017210,All male biased,2,2,2
+N0.HOG0017233,All male biased,2,2,2
+N0.HOG0017238,All male biased,2,2,2
+N0.HOG0017249,Male + Unbiased,2,2,2
+N0.HOG0017281,Male + Unbiased,3,3,3
+N0.HOG0017303,All male biased,2,2,2
+N0.HOG0017332,All female biased,2,2,2
+N0.HOG0017407,All male biased,3,4,4
+N0.HOG0017408,All unbiased,2,4,4
+N0.HOG0017417,All male biased,2,2,2
+N0.HOG0017418,Male + Unbiased,2,4,4
+N0.HOG0017423,All male biased,2,4,4
+N0.HOG0017424,Female + Unbiased,4,4,4
+N0.HOG0017429,All male biased,2,4,4
+N0.HOG0017442,Male + Unbiased,2,4,4
+N0.HOG0017445,All female biased,3,4,4
+N0.HOG0017451,All male biased,2,4,4
+N0.HOG0017457,Male + Unbiased,2,2,2
+N0.HOG0017459,Male + Unbiased,3,4,4
+N0.HOG0017460,All male biased,2,4,4
+N0.HOG0017467,Female + Unbiased,2,4,4
+N0.HOG0017473,All unbiased,2,4,4
+N0.HOG0017490,All unbiased,3,4,4
+N0.HOG0017491,Female + Unbiased,4,4,4
+N0.HOG0017498,All male biased,4,4,4

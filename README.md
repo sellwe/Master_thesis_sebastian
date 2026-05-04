@@ -103,16 +103,23 @@ eggNOG-mapper was run on the BRAKER protein sequences to assign functional annot
 ### Orthology Inference:    
 The structural annotation, eggNOG results and OrthoFinder output (N0.tsv) were merged in R to produce the full annotation table (**create_full_annotation_fixed.R**). 
 
-Gene age ranks were assigned by traversing the OrthoFinder resolved gene trees on UPPMAX (**parse_gene_trees_birth_nodes.py**, run via **run_parse_gene_trees.sh**). The script runs on the full OrthoFinder dataset and assigns a birth node to every gene across all species, which can be used for future studies of this phylogeny. 
+Gene age ranks were assigned by traversing the OrthoFinder resolved gene trees on UPPMAX (**parse_gene_trees_birth_nodes_2.py**, run via **run_parse_gene_trees_2.sh**). The script runs on the full OrthoFinder dataset and assigns a birth node to every gene across all species, which can be used for future studies of this phylogeny. Uses three different files:   
+- Species Tree Node: Contains the entire phylogeny, species tree nodes (ex. N2), and branch lenghts. 
+- Duplications.tsv: Contains all duplication events in the phylogeny. Translates each orthogroups gene nodes (ex. n3) to the corresponding Species Tree nodes (ex. N2), positioning the families events in evolutionary history.  
+-  Revolved Gene Tree Files (one per orthogroup): For each gene in the tree, move one step from the leaf node and count the gene duplication node (ex. n3).   
+
+If no duplication event is found for a gene, but it belongs to an orthogroup and has orthologs in other species, it gets the age rank of the MRCA of all species that share this orthogroup, which is the oldest documented existence of this gene. Note that intermediate gene loss can make a gene appear older than it is, but still more valuable than assigning everything to rank 1.  
+
+If a gene belongs to an orthogroup but has no orthologs in other species its assigned age rank = NA. This should be 0, but could happen through gene loss in other lineages. 
 
 Each gene gets one of three birth types:  
 | Birth type        | Description                                                                 |
 |------------------|-----------------------------------------------------------------------------|
 | duplication      | Birth node from gene tree traversal. Most reliable.                         |
 | mrca_inferred    | Gene never duplicated; age is the MRCA of all species in the orthogroup. Upper bound. |
-| species_specific | No orthologs detected in any other species. Age unknown (NA).              |
+| species_specific | Belongs to an Orthogroup but no orthologs detected in other species. Age unknown (NA).              |
 
-Age ranks were mapped to nodes along the C_maculatus lineage in the species tree, from root (rank 1, oldest) to the C_maculatus tip (rank 9, most recent). 
+Age ranks were mapped to nodes along the C_maculatus lineage in SpeciesTree from root (rank 1, oldest) to the C_maculatus tip (rank 9, most recent). 
 | SpeciesTreeNode        | node_depth_from_root | branch_length | age_rank |
 |------------------------|----------------------|---------------|----------|
 | N0                     | 0.000                | 0.000         | 1        |
@@ -130,9 +137,9 @@ Age ranks were mapped to nodes along the C_maculatus lineage in the species tree
 
 **All duplication events in the C.mac lineage:**  
 ![alt text](image-1.png)
-All recorded events, transcripts here can appear many times. Already indicates that most duplication evens occurr in C. mac after the split with C. chinensis. 
+All recorded events from the DUplications.tsv file, transcripts here can appear many times. Already indicates that most duplication evens occurr in C. mac after the split with C. chinensis. 
 
-**Isoforms**  
+**Note on Isoforms**  
 OrthoFinder was run on an isoform-filtered proteome, keeping the longest isoform per gene as a representative. This is most often the .t1 transcript but can be .t2 or higher. Only the representiative isoform per gene recieves an Orthogroup, Hierarchical Orthogroup (HOG) and age rank data. All other isoforms retain NA for these column and are excluded from paralog analyses by the HOG and age rank filters.  
 
 To confirm that combining the structural non-isoform filtered and isoformiltered OrthoFinder data does not introduce any non-independencies in later analyses, three checks was run: 
@@ -143,35 +150,35 @@ To confirm that combining the structural non-isoform filtered and isoformiltered
 | Genes with multiple age-rank-assigned isoforms | 0 |
 | Genes with multiple isoforms in full structural annotation | 2,224 |
 
-This confirms that only one isoform per gene as been assigned age rank and OrthoFinder-related data. No gene contributes two independent data points to any paralog analysis.
+2,224 genes have have than one isoform, resulting in 2,499 extra rows in the data. But none of these exra isoforms were assigned into a gene family or got an age rank. No gene contributes two independent data points to any paralog analysis.
 
-**Birth type distribution**  
+**Birth type distribution in C.mac**  
 | Birth type | Transcripts |
 |---|---|
-| duplication | 20,026 |
-| mrca_inferred | 6,733 |
-| species_specific | 559 |
-| NA (non-representative isoform or absent from OrthoFinder) | 10,670 | 
+| duplication | 20,976 |
+| mrca_inferred | 6,342 |
+| species_specific | 0 |
+| NA (non-representative isoform or absent from OrthoFinder) | 10,670 |
 
 **Total:** 37,988
 
-The 10,670 transcripts without a birth type consist of the non-representative isoforms and genes fully absent from OrthoFinder. All isoforms are retained in the full annotation for completeness, but they will not have any age ranks or gene family data.
+The 10,670 transcripts without a birth type consist of the non-representative isoforms (2,499) and genes fully absent from OrthoFinder. All isoforms are retained in the full annotation for completeness, but they will not have any age ranks or gene family data.
 
-**Age rank distribution (duplicates 20,026 + mrca_inferred 6,733):**
+**Age rank distribution (duplicates 20,976 + mrca_inferred 6,733):**
 
 | Age rank | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | NA |
 |---|---|---|---|---|---|---|---|---|---|---|
-| Transcripts | 4,447 | 3,382 | 561 | 624 | 280 | 1,511 | 282 | 667 | 15,005 | 11,229 |
+| Transcripts | 4,447 | 3,382 | 561 | 624 | 280 | 1,511 | 282 | 667 | 15,5564 | 10,670 |
 
-(10,670 with no birth rank + 559 species specific = 11,229 NA)
+(NA = 10,670 with no birth rank)
 
-**Age rank distribution (duplication only (n = 20,026)):**
-
+NEW:  
+**Age rank distribution (duplication only (n = 20,976)):**
 | Age rank | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
 |---|---|---|---|---|---|---|---|---|---|
-| Transcripts | 191 | 1,813 | 421 | 450 | 200 | 1,089 | 260 | 597 | 15,005 |
+| Transcripts | 389 | 1,925 | 427 | 462 | 204 | 1,119 | 267 | 619 | 15,564 |
 
-Note the drop in rank 1 and 2 after filtering for duplication only. Most ancient transcripts are single-copy genes present across many species, including drosophila, with no duplication events recorded (mrca_inferred). Only 191 transcripts have a recorded duplication event at rank 1. Paralog expansions in C. maculatus are overwhelmingly recent, concentrated at rank 9, consistent with TE-driven gene family expansion.
+Note the drop in rank 1 and 2 after filtering for duplication only. Most ancient transcripts are single-copy genes present across many species, including drosophila, with no duplication events recorded (mrca_inferred). Only 389 transcripts have a recorded duplication event at rank 1. Paralog expansions in C. maculatus are overwhelmingly recent, concentrated at rank 9, consistent with TE-driven gene family expansion.
 
 Since this project focuses on paralogs and duplications only, age rank analyses are restricted to transcripts with birth_type = duplication.
 
@@ -505,15 +512,27 @@ Three size definitions are used throughout:
 - mapped (all transcripts detected by Salmon before expression filtering)
 - expressed (transcripts passing the ≥5 counts in ≥5 samples filter).   
 
-| Level      | Total transcripts | With gene family | Without gene family | Gene families | Families ≥ 2 | Max size | Median size |
-|------------|------------------|------------------|----------------------|----------------|---------------|-----------|--------------|
-| Genome     | 20,026           | 20,004           | 22                   | 5,567          | 4,205         | 92        | 2            |
-| Mapped     | 19,063           | 19,042           | 21                   | 5,567          | 4,101         | 78        | 2            |
-| Expressed  | 8,998            | 8,989            | 9                    | 4,359          | 2,554         | 28        | 2            |
+**Transcript-level counts of duplicates:**  
+| Level     | Total duplicates | Duplicates with family | Duplicates without family (removed) |
+| --------- | ---------------- | ---------------------- | ----------------------------------- |
+| Genome    | 20,976           | 20,953                 | 23                                  |
+| Mapped    | 19,965           | 19,943                 | 22                                  |
+| Expressed | 9,329            | 9,319                  | 10                                  |
+
+**Gene family statistics:**  
+
+| Level     | Gene families | Families ≥ 2 members | Families 1 member | Max size | Median size |
+| --------- | ------------- | -------------------- | ----------------- | -------- | ----------- |
+| Genome    | 5,838         | 4,247                | 1,591             | 92       | 2           |
+| Mapped    | 5,838         | 4,153                | 1,685             | 78       | 2           |
+| Expressed | 4,603         | 2,588                | 2,015             | 28       | 2           |
 
 The genome-level size reflects the true family size. Using only expressed sizes would underestimate family
 size. The largest expressed family has 28 members, while the largest genome-level family has 92. In reality those 28 expressed transcripts belong to a larger family. 
-Since all transcripts here are confirmed duplications, the median family size is 2 at all levels. The 22 duplicated transcripts without a gene family assignment are genes OrthoFinder could not place into any orthogroup and are excluded from gene family analyses (they might be present in the resolved gene trees, but are not in N0.tsv, and can be found in Orthogroups_UnassignedGenes.tsv)
+Since all transcripts here are confirmed duplications, the median family size is 2 at all levels (would probably be 1 if mrca_inferred was still included). The 23 duplicated transcripts without a gene family assignment are genes OrthoFinder placed in an orthogroup but might have been flagged as phylogenetically misplaced during reconciliation. They are excluded from this analysis and can be found in Phylogenetically_Misplaced_Genes in the OrthoFinder results directory.
+
+Data used: 
+9,319 transcripts with family, genome sizes defined on the 5,838 total gene families in the full annotation
 
 ### Density plot of size distributions 
 Gene families that have 2 or more members, linear and log scale:  
@@ -579,29 +598,31 @@ Age ranks were assigned as described in the Annotation section using gene tree t
 
 | Dataset              | Transcripts (duplication only) | Age rank coverage |
 |----------------------|--------------------------------|-------------------|
-| Full annotation      | 20,026                         | 100%              |
-| Mapped (pre-filter)  | 19,063                         | 100%              |
-| Expressed            | 8,998                          | 100%              |
-| Significantly DE     | 4,003                          | 100%              |
+| Full annotation      | 20,976                         | 100%              |
+| Mapped (pre-filter)  | 19,965                         | 100%              |
+| Expressed            | 9,329                          | 100%              |
+| Significantly DE     | 4,144                          | 100%              |
+
+
 
 ### Age rank distribution of duplicates across dataset levels
 ![alt text](image-19.png)
 
-Most duplicated transcripts are C. mac specific and originated after the split with C. chinensis, consistent with a large and highly repetitive genome or a result of recent gene family expansion. A majority of paralogs were mapped by salmon, at least once. A majority of the young rank 9 duplicates did not pass the expression filter, suggesting they might be non-functional, TE-derived or maybe tissue-specific.  
+Most duplicated transcripts are C. mac specific and originated after the split with C. chinensis, consistent with a large and highly repetitive genome or a result of recent gene family expansion. A majority of paralogs were mapped by salmon, at least once. A majority of the young rank 9 duplicates did not pass the expression filter, suggesting they might be non-functional, TE-derived or maybe tissue-specific. Across age ranks, almost half of the expressed transcripts are differentially expressed between the sexes.    
 
 ---
 
 ## Age rank and sex bias
 
 ### Proportion sex-bias in age ranks  
-8,998 expressed duplicated transcipts with age plotted.  
-![alt text](image-20.png)  
+9,329 expressed duplicated transcipts with age plotted.  
+![alt text](image-20.png)
 
 A majority in each rank are unbiased, but ranks 5, 6 and 7 show a big proportional increase in male biased transcripts, while female-bias stays the same. These nodes correspond to bruchid+weevil nodes and bruchid-specific nodes in the phylogeny.
 
 ### Sex bias magnitude per age rank - significantly DE transcripts
-2,927 male biased and 1,076 female-biased transcripts with age rank plotted side by side for each age rank (padj < 0.05, |log2FC| > 1). 
-![alt text](image-22.png)
+3,043 male biased and 1,101 female-biased transcripts with age rank plotted side by side for each age rank (padj < 0.05, |log2FC| > 1). 
+![alt text](image-22.png) 
 
 Male-bias is generally more common than female bias, but ranks 5, 6, and 7 again stand out with elevated levels of male-bias. 
 
@@ -658,7 +679,7 @@ The 10 shared terms with observed and expected counts from both categories:
 Plot 1: 
 ![alt text](image-27.png)
 
-The mating term (GO:0007618) and the prostaglandin and fatty acid signalling cluster are the most biologically interpretable. Finding mating-related functions enriched in both candidate categories independently is the most direct support for the conflict resolution hypothesis. The metabolic process term (GO:0008152) is too broad of a term and is not interpreted directly.
+The mating term (GO:0007618) and the prostaglandin (GO:0032310) and fatty acid signalling cluster (GO:1901571) are the most biologically interpretable. Finding mating-related functions enriched in both candidate categories independently is the most direct support for the conflict resolution hypothesis. The metabolic process term (GO:0008152) is too broad of a term and is not interpreted directly.
 
 Plot 3b overview (top 8 BP terms per comparison within Male+Female families,
 ordered by p-value; includes shared and unique terms):
@@ -685,7 +706,7 @@ Top unique BP terms for Male+Female families (50 unique terms total):
 | GO:0060271 | cilium assembly                                   | 12  | 2.30 | 2.9e-05   |
 | GO:0006719 | juvenile hormone catabolic process                | 3   | 0.11 | 1.3e-04   |
 
-The top two terms (GO:0007171 and GO:0050965) are driven by 10 transcripts across three HOGs: a carboxylesterase family (N0.HOG0009620), a fibrinogen-domain family (N0.HOG0000377) and a TRP channel family (N0.HOG0012871). This confirms that the signal is not HOG-specific. Cilium assembly can connect to sperm flagella function in beetles. Juvenile hormone catabolism connects to reproductive maturation timing.
+The top two terms (GO:0007171 and GO:0050965) are driven by 10 transcripts across three HOGs: a carboxylesterase family (N0.HOG0009620), a fibrinogen-domain family (N0.HOG0000377) and a TRP channel family (N0.HOG0012871). This confirms that the signal is not specific to one gene fmaily. Cilium assembly could possibly connect to sperm flagella function in beetles. Juvenile hormone catabolism connects to reproductive maturation timing.
 
 **Unique terms for All three:**  
 Top unique BP terms for All three families (124 unique terms total, excluding the
@@ -702,7 +723,7 @@ single-HOG detoxification signal):
 | GO:0046693 | sperm storage                                     | 9   | 0.40 | 2.3e-11   |
 | GO:0046008 | regulation of female receptivity, post-mating     | 9   | 0.40 | 2.3e-11   |
 
-Pheromone biosynthesis, sperm storage and regulation of female post-mating receptivity are three terms representing two sides of the same post-mating conflict. Finding them enriched in families where paralogs split into male-biased, female-biased and unbiased copies is consistent with duplication resolving antagonism over reproductive gene expression.
+Pheromone biosynthesis, sperm storage and regulation of female post-mating receptivity are three terms representing two sides of the same post-mating conflict. Finding them enriched in families where paralogs split into male-biased, female-biased and unbiased copies could be consistent with duplication resolving antagonism over reproductive gene expression.
 
 ### MF (Molecular Function) results:
 
