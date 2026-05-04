@@ -172,7 +172,6 @@ The 10,670 transcripts without a birth type consist of the non-representative is
 
 (NA = 10,670 with no birth rank)
 
-NEW:  
 **Age rank distribution (duplication only (n = 20,976)):**
 | Age rank | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
 |---|---|---|---|---|---|---|---|---|---|
@@ -502,56 +501,74 @@ All three methods show strong expression correlation across shared transcripts, 
 
 OrthoFinder assigns genes to two levels of homology groups. An Orthogroup (OG) clusters all genes across all species in the analysis that descend from a single ancestral gene at the root of the phylogeny. A Hierarchical Orthogroup (HOG) breaks each OG down at every node of the species tree, creating nested subfamilies that reflect when lineages diverged. A single OG can contain several HOGs depending on speciation history.
 
-Since all analyses here focus exclusively on C. maculatus, a HOG is equivalent to a gene family: it contains all paralogs in C. maculatus that share a common ancestor at a given node in the phylogeny. Gene family and HOG are used interchangeably throughout, but gene family is preferred for clarity. 
+The HOGs used here come from N0.tsv, which defines HOGs at the root node of the species tree. Root-level HOGs are functionally equivalent to OGs: both group genes sharing a common ancestor at the deepest node in the analysis, but that does mean we are not taking advantage of the nested structure of HOGs. But, since all analyses here focus exclusively on C. maculatus the most relevant unit is the full set of C. maculatus paralogs within a family, regardless of which other species share it.   
+Here, gene family and HOG are used interchangeably throughout, but gene family is preferred for clarity.
+
 
 # Gene family size and sex bias (**HOG_size_sex_bias.ipynb**)
 
-All analyses are restricted to transcripts with birth_type = duplication.   
-Three size definitions are used throughout:  
-- genome (all annotated transcripts),  
-- mapped (all transcripts detected by Salmon before expression filtering)
-- expressed (transcripts passing the ≥5 counts in ≥5 samples filter).   
+### Filtering strategy
 
-**Transcript-level counts of duplicates:**  
-| Level     | Total duplicates | Duplicates with family | Duplicates without family (removed) |
-| --------- | ---------------- | ---------------------- | ----------------------------------- |
-| Genome    | 20,976           | 20,953                 | 23                                  |
-| Mapped    | 19,965           | 19,943                 | 22                                  |
-| Expressed | 9,329            | 9,319                  | 10                                  |
+Two parallel filtering strategies are applied before the analyses.
 
-**Gene family statistics:**  
+Gene family sizes are computed from transcripts with birth_type of duplication or mrca_inferred. Both are genuine family members. mrca_inferred genes are conserved single-copy genes with no detected duplication event; excluding them would undercount the true number of genes in a family. Transcripts with birth_type = species_specific have no detectable orthologs in any other species and no meaningful family context, so they are excluded from size computation.
 
-| Level     | Gene families | Families ≥ 2 members | Families 1 member | Max size | Median size |
-| --------- | ------------- | -------------------- | ----------------- | -------- | ----------- |
-| Genome    | 5,838         | 4,247                | 1,591             | 92       | 2           |
-| Mapped    | 5,838         | 4,153                | 1,685             | 78       | 2           |
-| Expressed | 4,603         | 2,588                | 2,015             | 28       | 2           |
+All sex-bias analyses are restricted to birth_type = duplication only. mrca_inferred genes are conserved single copies with no paralogs within the family, so they offer no basis for comparing expression divergence among paralogs.
+ 
+ ### Three size definitions are used throughout
 
-The genome-level size reflects the true family size. Using only expressed sizes would underestimate family
-size. The largest expressed family has 28 members, while the largest genome-level family has 92. In reality those 28 expressed transcripts belong to a larger family. 
-Since all transcripts here are confirmed duplications, the median family size is 2 at all levels (would probably be 1 if mrca_inferred was still included). The 23 duplicated transcripts without a gene family assignment are genes OrthoFinder placed in an orthogroup but might have been flagged as phylogenetically misplaced during reconciliation. They are excluded from this analysis and can be found in Phylogenetically_Misplaced_Genes in the OrthoFinder results directory.
+- genome: all annotated C. maculatus transcripts (duplication + mrca_inferred) per HOG
+- mapped: transcripts with Salmon read evidence before expression filtering
+- expressed: transcripts passing the ≥5 counts in ≥5 samples filter
 
-Data used: 
-9,319 transcripts with family, genome sizes defined on the 5,838 total gene families in the full annotation
+The genome-level size reflects the true family size and is used as the primary size variable in most analyses. Using expressed size alone would underestimate family context: the largest expressed family has 28 members, but in reality those are only the expressed genes of a much larger family. 
+
+### Transcript-level counts (duplicated transcripts for analysis)
+
+| Level     | Total duplicates | With HOG assignment | Without HOG (excluded) |
+| --------- | ---------------- | ------------------- | ---------------------- |
+| Genome    | 20,976           | 20,953              | 23                     |
+| Mapped    | 19,965           | 19,943              | 22                     |
+| Expressed | 9,329            | 9,319               | 10                     |
+
+The excluded transcripts have a valid OG but no HOG assignment. These are genes OrthoFinder placed in an orthogroup but flagged as phylogenetically misplaced during gene tree reconciliation. They are excluded from all family-level analyses and can be found in Phylogenetically_Misplaced_Genes in the OrthoFinder results directory in UPPMAX.
+
+### Gene family statistics (duplication + mrca_inferred)
+
+| Level     | Total families | Families ≥ 2 members | Families with 1 member | Max size | Median size |
+| --------- | -------------- | -------------------- | ---------------------- | -------- | ----------- |
+| Genome    | 12,173         | 4,247                | 7,926                  | 92       | 1           |
+| Mapped    | 12,173         | 4,153                | 8,020                  | 78       | 1           |
+| Expressed | 10,352         | 2,588                | 7,764                  | 28       | 1           |
+
+The median family size is 1 at all levels. This reflects that most HOGs in C. maculatus contain a single gene, either one conserved copy or one duplicated copy with no surviving paralogs. Multi-member families (size ≥ 2) are the biologically informative subset and the focus of all downstream analyses.
+
+Data used for analysis: 9,319 duplicated transcripts with HOG assignment. Genome-level family sizes defined on 12,173 total HOGs from the full annotation.
 
 ### Density plot of size distributions 
-Gene families that have 2 or more members, linear and log scale:  
+Gene families that have 2 or more members, shown linear and log scale. Family sizes include duplication + mrca_inferred transcripts per HOG, so a families size reflects all its annotated members, not just confirmed duplicates.  
 ![alt text](image-23.png)
 
 Most families are really small (less than 5 members) at all levels. The sizes of mapped and full annotation are largely similar, indicating that salmon mapped a majority of annotated transcripts, but that they did not pass the expression filter. 
 
 ### Proportion of mapped and expressed transcripts by genome family size 
-Consistently, most transcripts are mapped but not expressed. On average ~24% transcripts of a given size are expressed.
-![alt text](image-24.png)
+Bars show all transcripts per family (duplication + mrca_inferred) classified by expression level. The x-axis uses genome-level family size as the reference, so each bar reflects the true genomic context of that size class.
 
-### Transcript-level sex-bias as a function of gene family size 
-Sex-biased expression decreases as families increase in size. Male-bias is more common than female bias, and female bias becomes more rare in larger families. 
+![alt text](image-24.png)
+Most transcripts are mapped but not expressed across all family sizes. On average 24.1% of transcripts in a given size class are expressed. The proportion is highest in the smallest families which also has the most amount of transcripts within them. After size 15 there is much fewer transcripts in total making the estimates more noisy. 
+
+### Transcript-level sex-bias by gene family size 
+Each point is one duplicated transcript colored by its sex bias classification. Family size on the x-axis is genome-level and includes all family members (duplication + mrca_inferred). Only families with at least 2 genome-level members are included. The y-axis shows log2FoldChange from the DESeq2 sex-bias analysis, where positive values indicate higher expression in males.
 
 ![alt text](image-25.png)
+Sex-biased expression decreases as families increase in size. Male-bias is more common than female bias, and female bias becomes more rare in larger families. 
 
 ### Within-family variance
-Size 1 filtered out:
+For each gene family with at least 2 genome-level members, variance in log2FoldChange is computed
+across all duplicated expressed transcripts in that family.
+
 ![alt text](image-15.png)
+
 Variance goes down as families increase in size. The larger the family becomes up to a point, the more copies agree on the strength of sex-bias. Maybe larger families face stronger selective constraint, or maybe they share regulatory architecture that limits divergence? Or this is a consequence of multi-mapping, where assigning reads to the correct copy becomes ahrder in larger families, even probabalistically.   
 
 **Outlier:**
@@ -563,10 +580,12 @@ The outlier in red is N0.HOG0000646, a gene family within OG0000445 with 3 out o
 | g16714.t1 | 29.99 | 5.53e-24 | RNA polymerase II regulatory region DNA binding | DUF659, Dimer_Tnp_hAT, zf-BED | 3 | 10 |
 | g19428.t1 | 0.03 | 0.97 | RNA polymerase II regulatory region DNA binding | DUF659, Dimer_Tnp_hAT, zf-BED | 3 | 10 |
 
-The high variance is driven by g16714.t1 (log2FC ≈ 30), which seems very unlikely. It might have to be removed for statistical analyses. 
+The high variance is driven by g16714.t1 (log2FC ≈ 30), which seems very unlikely and might be a  mapping or quantification artifact. It might have to be removed for statistical analyses. 
 
 ### Within gene family directional bias  
-Gene families were classified by the combination of bias directions their transcripts contain: all unbiased, all male-biased, all female-biased, or mixed categories.
+Gene families with at least 2 expressed duplicated transcripts are classified by the combination of sex bias directions present across their paralogs. The filter requires 2 confirmed duplicated expressed transcripts, not just 2 expressed transcripts, to make sure category assignments reflect true paralog divergence.
+
+
 | Category            | Families | Transcripts | Male % | Female % | Unbiased % |
 |---------------------|----------|-------------|--------|-----------|-------------|
 | All unbiased        | 1,074    | 2,452       | 0.0%   | 0.0%      | 100.0%      |
@@ -577,18 +596,21 @@ Gene families were classified by the combination of bias directions their transc
 | Male + Female       | 36       | 111         | 55.0%  | 45.0%     | 0.0%        |
 | All three           | 55       | 364         | 34.9%  | 24.2%     | 40.9%       |
 
-Most families are All Unbiased, followed by Male-bias and Male + Unbiased. Its very rare to have both Male and Female bias in the same family. There are 34 Male + Female and 53 All three families. These will later be investigated with GO-term enrichement as they are potential candidates for intralocus sexual conflict resolution. 
+Most families are All Unbiased, followed by All Male Biased and Male + Unbiased. Male-biased categories consistently outnumber their female counterparts. Mixed families where both male and female bias coexist in the same family are rare: 36 Male + Female and 55 All Three families. These two categories are used in downstream GO-term enrichment analysis as candidates for intralocus sexual conflict resolution.
 
 ![alt text](image-16.png)
 
 ### Sizes of the families in each category: 
-![alt text](image-17.png)
+![alt text](image-28.png)
 
-Generally families that are Male + Unbiased has the largest families. 
-(Diamond shapes for sizes=2 since the "All three" category cant have less than 3 members)
+Male + Unbiased families tend to be the largest across all categories. Most categories are
+dominated by size-2 families, visible as the dense cluster of diamonds at the bottom of each
+group. The All Three category has no size-2 families by definition, since it requires at least
+3 expressed duplicates to contain all three bias directions simultaneously.
 
 ### Gene family size sex-bias category proportions 
-Proportionally, smaller families are more likely to be unbiased. And with increasing size Male + Unbiased becomes more frequent. Smaller families are unbiased, and they have the highest number, which explains why Unbiased is the most common category. 
+At size 2, All Unbiased families dominate. Proportionally, smaller families are more likely to be unbiased. And with increasing size Male + Unbiased becomes more frequent. This explains why All Unbiased is the most common category overall: small families are the most abundant in the genome, and small families are disproportionately unbiased. The pattern suggests that larger families are more likely to contain at least one male-biased paralog, while female-biased categories remain consistently rare across all sizes.
+ 
 ![alt text](image-26.png)
 
 ---
