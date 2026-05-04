@@ -559,9 +559,9 @@ The outlier in red is N0.HOG0000646, a gene family within OG0000445 with 3 out o
 
 | transcript_id | log2FoldChange | padj | Description | PFAMs | hog_size_expressed | hog_size_genome |
 |---|---|---|---|---|---|---|
-| g14699.t1 | -2.35 | 1.51e-07 | RNA polymerase II regulatory region DNA binding | DUF659, Dimer_Tnp_hAT, zf-BED | 3 | 9 |
-| g16714.t1 | 29.99 | 5.53e-24 | RNA polymerase II regulatory region DNA binding | DUF659, Dimer_Tnp_hAT, zf-BED | 3 | 9 |
-| g19428.t1 | 0.03 | 0.97 | RNA polymerase II regulatory region DNA binding | DUF659, Dimer_Tnp_hAT, zf-BED | 3 | 9 |
+| g14699.t1 | -2.35 | 1.51e-07 | RNA polymerase II regulatory region DNA binding | DUF659, Dimer_Tnp_hAT, zf-BED | 3 | 10 |
+| g16714.t1 | 29.99 | 5.53e-24 | RNA polymerase II regulatory region DNA binding | DUF659, Dimer_Tnp_hAT, zf-BED | 3 | 10 |
+| g19428.t1 | 0.03 | 0.97 | RNA polymerase II regulatory region DNA binding | DUF659, Dimer_Tnp_hAT, zf-BED | 3 | 10 |
 
 The high variance is driven by g16714.t1 (log2FC ≈ 30), which seems very unlikely. It might have to be removed for statistical analyses. 
 
@@ -569,20 +569,20 @@ The high variance is driven by g16714.t1 (log2FC ≈ 30), which seems very unlik
 Gene families were classified by the combination of bias directions their transcripts contain: all unbiased, all male-biased, all female-biased, or mixed categories.
 | Category            | Families | Transcripts | Male % | Female % | Unbiased % |
 |---------------------|----------|-------------|--------|-----------|-------------|
-| All unbiased        | 1,066    | 2,429       | 0.0%   | 0.0%      | 100.0%      |
-| All male biased     | 511      | 1,250       | 100.0% | 0.0%      | 0.0%        |
-| Male + Unbiased     | 515      | 2,021       | 50.1%  | 0.0%      | 49.9%       |
-| Female + Unbiased   | 175      | 588         | 0.0%   | 47.3%     | 52.7%       |
-| All female biased   | 200      | 434         | 0.0%   | 100.0%    | 0.0%        |
-| Male + Female       | 34       | 106         | 54.7%  | 45.3%     | 0.0%        |
-| All three           | 53       | 356         | 35.1%  | 24.2%     | 40.7%       |
+| All unbiased        | 1,074    | 2,452       | 0.0%   | 0.0%      | 100.0%      |
+| All male biased     | 517      | 1,273       | 100.0% | 0.0%      | 0.0%        |
+| Male + Unbiased     | 530      | 2,071       | 50.2%  | 0.0%      | 49.8%       |
+| Female + Unbiased   | 179      | 606         | 0.0%   | 47.5%     | 52.5%       |
+| All female biased   | 197      | 427         | 0.0%   | 100.0%    | 0.0%        |
+| Male + Female       | 36       | 111         | 55.0%  | 45.0%     | 0.0%        |
+| All three           | 55       | 364         | 34.9%  | 24.2%     | 40.9%       |
 
-Most families are all Unbiased, followed by Male-bias and Male + Unbiased. Its very rare to have both Male and Female bias in the same family. There are 34 Male + Female and 53 All three families. These will later be investigated with GO-term enrichement as they are potential candidates for intralocus sexual conflict resolution. 
+Most families are All Unbiased, followed by Male-bias and Male + Unbiased. Its very rare to have both Male and Female bias in the same family. There are 34 Male + Female and 53 All three families. These will later be investigated with GO-term enrichement as they are potential candidates for intralocus sexual conflict resolution. 
 
 ![alt text](image-16.png)
 
 ### Sizes of the families in each category: 
-![alt text](image-17.png)  
+![alt text](image-17.png)
 
 Generally families that are Male + Unbiased has the largest families. 
 (Diamond shapes for sizes=2 since the "All three" category cant have less than 3 members)
@@ -602,7 +602,6 @@ Age ranks were assigned as described in the Annotation section using gene tree t
 | Mapped (pre-filter)  | 19,965                         | 100%              |
 | Expressed            | 9,329                          | 100%              |
 | Significantly DE     | 4,144                          | 100%              |
-
 
 
 ### Age rank distribution of duplicates across dataset levels
