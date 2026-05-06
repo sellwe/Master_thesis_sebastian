@@ -814,10 +814,10 @@ Relative age is then only biologically meaningful in those 472 gene families tha
 
 OrthoFinder was run on an isoform-filtered proteome (one protein per gene) so eaachtranscript maps to only one gene and one HOG. There is no isofrm nesting to wory about, so (1 | HOG) should be sufficient for the random  effects. 
 
-The analyses are divided into two parts. 
-Script 1: **mm_00_data_prep.R**  
-Script 2: **mm_01_absolute_age.R** (raw utputs saved as mixed_model_part_1_results_fixed_2.txt)
-Script 3: **mm_02_relative_age.R** (raw outputs saved as mixed_model_part2_within_family_results_fixed_2.txt)
+The analyses are divided into two parts.   
+Script 1: **mm_00_data_prep.R**   
+Script 2: **mm_01_absolute_age.R** (raw utputs saved as mixed_model_part_1_results_fixed_2.txt)  
+Script 3: **mm_02_relative_age.R** (raw outputs saved as mixed_model_part2_within_family_results_fixed_2.txt)  
 
 ---
 
