@@ -90,7 +90,7 @@ def clean_transcript_id(gene_id):
     """
     C_maculatus_filtered_proteinfasta_TE_filtered_C_maculatus_g6090.t1_1
     -> g6090.t1
-    Mirrors what was done in the R annotation scripts.
+    Same as the R annotation script.
     """
     idx = gene_id.find(SEP)
     if idx < 0:
@@ -189,7 +189,7 @@ print(f"  Loaded duplication events for {len(og_dup_lookup):,} orthogroups.",
 
 
 # -- Process gene trees --------------------------------------------------------
-# For each orthogroup we:
+# For each orthogroup:
 # 1. Parse the resolved gene tree (Newick file, one per OG)
 # 2. For each gene (leaf) in the tree, find its birth node
 # 3. Record results
