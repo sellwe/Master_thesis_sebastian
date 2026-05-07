@@ -158,11 +158,11 @@ To confirm that combining the structural non-isoform filtered and isoformiltered
 | duplication | 20,976 |
 | mrca_inferred | 6,342 |
 | species_specific | 0 |
-| NA (non-representative isoform or absent from OrthoFinder) | 10,670 |
+| NA        | 10,670 |
 
 **Total:** 37,988
 
-The 10,670 transcripts without a birth type consist of three goups: 
+The 10,670 transcripts without a birth type consist of three groups: 
 - Non-representative isoforms (2,499)   
 - 4,120 representative isoforms from 2,229 orthogroups that have recieved HOG assignment from N0.tsv, but does not have a resolved gene tree in UPPMAX (orthogroup too small?)  
 - 4,051 genes fully abscent from OrthoFinder. and genes fully absent from OrthoFinder.   
@@ -514,9 +514,9 @@ Here, gene family and HOG are used interchangeably throughout, but gene family i
 
 Two parallel filtering strategies are applied before the analyses.
 
-Gene family sizes are computed from transcripts with birth_type of duplication or mrca_inferred. Both are genuine family members. mrca_inferred genes are conserved single-copy genes with no detected duplication event; excluding them would undercount the true number of genes in a family. Transcripts with birth_type = species_specific have no detectable orthologs in any other species and no meaningful family context, so they are excluded from size computation.
+Gene family sizes are computed from transcripts with birth_type of duplication or mrca_inferred. Both are genuine family members. Transcripts with no birth_type (non-representative isoforms, genes absent from OrthoFinder, and genes from orthogroups without a resolved gene tree) are excluded from size computation and all analyses.
 
-All sex-bias analyses are restricted to birth_type = duplication only. mrca_inferred genes are conserved single copies with no paralogs within the family, so they offer no basis for comparing expression divergence among paralogs.
+All sex-bias analyses are restricted to birth_type = duplication only. All mrca_inferred transcripts belong to families of size 1, they have orthologs in other species but there are no duplication events recorded anywhere in the phylogeny, so by definition they are lone copies in C.mac families. Therefore in practise, they are also removed when we filter for family size larger than 1.  
  
  ### Three size definitions are used throughout
 
@@ -547,6 +547,8 @@ The excluded transcripts have a valid OG but no HOG assignment. These are genes 
 The median family size is 1 at all levels. This reflects that most HOGs in C. maculatus contain a single gene, either one conserved copy or one duplicated copy with no surviving paralogs. Multi-member families (size ≥ 2) are the biologically informative subset and the focus of all downstream analyses.
 
 Data used for analysis: 9,319 duplicated transcripts with HOG assignment. Genome-level family sizes defined on 12,173 total HOGs from the full annotation.
+
+
 
 ### Density plot of size distributions 
 Gene families that have 2 or more members, shown linear and log scale. Family sizes include duplication + mrca_inferred transcripts per HOG, so a families size reflects all its annotated members, not just confirmed duplicates.  
