@@ -162,13 +162,16 @@ To confirm that combining the structural non-isoform filtered and isoformiltered
 
 **Total:** 37,988
 
-The 10,670 transcripts without a birth type consist of the non-representative isoforms (2,499) and genes fully absent from OrthoFinder. All isoforms are retained in the full annotation for completeness, but they will not have any age ranks or gene family data.
+The 10,670 transcripts without a birth type consist of three goups: 
+- Non-representative isoforms (2,499)   
+- 4,120 representative isoforms from 2,229 orthogroups that have recieved HOG assignment from N0.tsv, but does not have a resolved gene tree in UPPMAX (orthogroup too small?)  
+- 4,051 genes fully abscent from OrthoFinder. and genes fully absent from OrthoFinder.   
 
 **Age rank distribution (duplicates 20,976 + mrca_inferred 6,733):**
 
 | Age rank | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | NA |
 |---|---|---|---|---|---|---|---|---|---|---|
-| Transcripts | 4,447 | 3,382 | 561 | 624 | 280 | 1,511 | 282 | 667 | 15,5564 | 10,670 |
+| Transcripts | 4,447 | 3,382 | 561 | 624 | 280 | 1,511 | 282 | 667 | 15,564 | 10,670 |
 
 (NA = 10,670 with no birth rank)
 
@@ -393,7 +396,7 @@ Flags used:
 
 **Step 4: Visualization in Python** (**salmon_align_plotting_new_filtering.ipynb**)
 
-# Mapping software comparison  
+# Mapping software comparison (mapping_software_comparison.R) 
 
 The three methods were compared on DE signal, expression agreement and mapping statistics. All results are filtered on (≥5 counts in ≥5 samples) and use the DESeq2 design `~ Genotype + Sex`. Log file summaries were computed by parsing the output logs from each software across all 70 samples (**mapping_software_comparison.R**).
 
@@ -616,7 +619,7 @@ At size 2, All Unbiased families dominate. Proportionally, smaller families are 
 ---
 
 # Paralog Age Rank Analyses (**age_rank_analysis.ipynb**)  
-Age ranks were assigned as described in the Annotation section using gene tree traversal in **parse_gene_trees_birth_nodes.py**. All analyses here are restricted to birth_type = duplication. Age ranks run from 1 (root, oldest) to 9 (C. maculatus tip, most recent). All duplicated transcripts have an age rank assigned by definition. Transcripts with no age rank are either species-specific singletons or genes absent from OrthoFinder entirely.
+Age ranks were assigned as described in the Annotation section using gene tree traversal in **parse_gene_trees_birth_nodes.py**. All analyses here are restricted to birth_type = duplication. Age ranks run from 1 (root, oldest) to 9 (C. maculatus tip, most recent). 
 
 | Dataset              | Transcripts (duplication only) | Age rank coverage |
 |----------------------|--------------------------------|-------------------|
