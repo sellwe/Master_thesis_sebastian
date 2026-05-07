@@ -153,34 +153,38 @@ To confirm that combining the structural non-isoform filtered and isoformiltered
 2,224 genes have have than one isoform, resulting in 2,499 extra rows in the data. But none of these exra isoforms were assigned into a gene family or got an age rank. No gene contributes two independent data points to any paralog analysis.
 
 **Birth type distribution in C.mac**  
-| Birth type | Transcripts |
-|---|---|
-| duplication | 20,976 |
-| mrca_inferred | 6,342 |
-| species_specific | 0 |
-| NA        | 10,670 |
+| Birth type                                      | With HOG | Without HOG | Total  |
+|------------------------------------------------|---------:|------------:|--------:|
+| duplication                                    | 20,953   | 23          | 20,976  |
+| mrca_inferred                                  | 6,335    | 7           | 6,342   |
+| species_specific                               | 0        | 0           | 0       |
+| NA: no resolved gene tree                      | 4,120    | 0           | 4,120   |
+| NA: non-representative isoform                 | 0        | 2,499       | 2,499   |
+| NA: absent from OrthoFinder                    | 0        | 4,051       | 4,051   |
+
+| **Total**                                      | **31,408** | **6,580** | **37,988** |
 
 **Total:** 37,988
 
 The 10,670 transcripts without a birth type consist of three groups: 
 - Non-representative isoforms (2,499)   
 - 4,120 representative isoforms from 2,229 orthogroups that have recieved HOG assignment from N0.tsv, but does not have a resolved gene tree in UPPMAX (orthogroup too small?)  
-- 4,051 genes fully abscent from OrthoFinder. and genes fully absent from OrthoFinder.   
+- 4,051 genes fully abscent from OrthoFinder.
+- The 23 duplicates without a HOG are 
 
-**Age rank distribution (duplicates 20,976 + mrca_inferred 6,733):**
+**Age rank distribution (duplicates + mrca_inferred, HOG membership, n = 27,288):**
 
-| Age rank | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | NA |
-|---|---|---|---|---|---|---|---|---|---|---|
-| Transcripts | 4,447 | 3,382 | 561 | 624 | 280 | 1,511 | 282 | 667 | 15,564 | 10,670 |
+| Age rank   | 1     | 2     | 3   | 4   | 5   | 6     | 7   | 8   | 9      |
+|-------------|-------|-------|-----|-----|------|-------|-----|-----|--------|
+| Transcripts | 4,440 | 3,371 | 559 | 621 | 280  | 1,511 | 282 | 667 | 15,557 |
 
-(NA = 10,670 with no birth rank)
+**Age rank distribution (duplication only, HOG membership, (n = 20,953)):**
+| Age rank   | 1   | 2     | 3   | 4   | 5   | 6     | 7   | 8   | 9      |
+|-------------|-----|-------|-----|-----|-----|-------|-----|-----|--------|
+| Transcripts | 388 | 1,915 | 425 | 459 | 204 | 1,119 | 267 | 619 | 15,557 |
 
-**Age rank distribution (duplication only (n = 20,976)):**
-| Age rank | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
-|---|---|---|---|---|---|---|---|---|---|
-| Transcripts | 389 | 1,925 | 427 | 462 | 204 | 1,119 | 267 | 619 | 15,564 |
 
-Note the drop in rank 1 and 2 after filtering for duplication only. Most ancient transcripts are single-copy genes present across many species, including drosophila, with no duplication events recorded (mrca_inferred). Only 389 transcripts have a recorded duplication event at rank 1. Paralog expansions in C. maculatus are overwhelmingly recent, concentrated at rank 9, consistent with TE-driven gene family expansion.
+Note the drop in rank 1 and 2 after filtering for duplication only. Most ancient transcripts are single-copy genes present across many species, including drosophila, with no duplication events recorded (mrca_inferred). Only 388 transcripts have a recorded duplication event at rank 1. Paralog expansions in C. maculatus are overwhelmingly recent, concentrated at rank 9, consistent with TE-driven gene family expansion.
 
 Since this project focuses on paralogs and duplications only, age rank analyses are restricted to transcripts with birth_type = duplication.
 
@@ -548,8 +552,6 @@ The median family size is 1 at all levels. This reflects that most HOGs in C. ma
 
 Data used for analysis: 9,319 duplicated transcripts with HOG assignment. Genome-level family sizes defined on 12,173 total HOGs from the full annotation.
 
-
-
 ### Density plot of size distributions 
 Gene families that have 2 or more members, shown linear and log scale. Family sizes include duplication + mrca_inferred transcripts per HOG, so a families size reflects all its annotated members, not just confirmed duplicates.  
 ![alt text](image-23.png)
@@ -621,14 +623,14 @@ At size 2, All Unbiased families dominate. Proportionally, smaller families are 
 ---
 
 # Paralog Age Rank Analyses (**age_rank_analysis.ipynb**)  
-Age ranks were assigned as described in the Annotation section using gene tree traversal in **parse_gene_trees_birth_nodes.py**. All analyses here are restricted to birth_type = duplication. Age ranks run from 1 (root, oldest) to 9 (C. maculatus tip, most recent). 
+Age ranks were assigned as described in the Annotation section using gene tree traversal in **parse_gene_trees_birth_nodes.py**. All analyses here are restricted to birth_type = duplication and HOG membership. Age ranks run from 1 (root, oldest) to 9 (C. maculatus tip, most recent). 
 
 | Dataset              | Transcripts (duplication only) | Age rank coverage |
 |----------------------|--------------------------------|-------------------|
-| Full annotation      | 20,976                         | 100%              |
-| Mapped (pre-filter)  | 19,965                         | 100%              |
-| Expressed            | 9,329                          | 100%              |
-| Significantly DE     | 4,144                          | 100%              |
+| Full annotation      | 20,953                         | 100%              |
+| Mapped (pre-filter)  | 19,943                         | 100%              |
+| Expressed            | 9,319                          | 100%              |
+| Significantly DE     | 4,142                          | 100%              |
 
 
 ### Age rank distribution of duplicates across dataset levels
@@ -641,14 +643,14 @@ Most duplicated transcripts are C. mac specific and originated after the split w
 ## Age rank and sex bias
 
 ### Proportion sex-bias in age ranks  
-9,329 expressed duplicated transcipts with age plotted.  
+9,319 expressed duplicated transcipts with age plotted.  
 ![alt text](image-20.png)
 
 A majority in each rank are unbiased, but ranks 5, 6 and 7 show a big proportional increase in male biased transcripts, while female-bias stays the same. These nodes correspond to bruchid+weevil nodes and bruchid-specific nodes in the phylogeny.
 
 ### Sex bias magnitude per age rank - significantly DE transcripts
-3,043 male biased and 1,101 female-biased transcripts with age rank plotted side by side for each age rank (padj < 0.05, |log2FC| > 1). 
-![alt text](image-22.png) 
+3,041 male biased and 1,101 female-biased transcripts with age rank plotted side by side for each age rank (padj < 0.05, |log2FC| > 1). 
+![alt text](image-21.png) 
 
 Male-bias is generally more common than female bias, but ranks 5, 6, and 7 again stand out with elevated levels of male-bias. 
 
