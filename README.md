@@ -161,30 +161,27 @@ To confirm that combining the structural non-isoform filtered and isoformiltered
 | NA: no resolved gene tree                      | 4,120    | 0           | 4,120   |
 | NA: non-representative isoform                 | 0        | 2,499       | 2,499   |
 | NA: absent from OrthoFinder                    | 0        | 4,051       | 4,051   |
-
 | **Total**                                      | **31,408** | **6,580** | **37,988** |
 
 **Total:** 37,988
+**Total used: 27,288 with age rank and HOG membership**
 
 The 10,670 transcripts without a birth type consist of three groups: 
 - Non-representative isoforms (2,499)   
 - 4,120 representative isoforms from 2,229 orthogroups that have recieved HOG assignment from N0.tsv, but does not have a resolved gene tree in UPPMAX (orthogroup too small?)  
 - 4,051 genes fully abscent from OrthoFinder.
-- The 23 duplicates without a HOG are 
+- The 23 duplicates without a HOG are assigned an OG but no HOG assignment. These are genes OrthoFinder placed in an orthogroup but flagged as phylogenetically misplaced during gene tree reconciliation. They can be found in Phylogenetically_Misplaced_Genes in the OrthoFinder results directory in UPPMAX.
 
-**Age rank distribution (duplicates + mrca_inferred, HOG membership, n = 27,288):**
+**Age rank distributions by birth type (HOG membership)**
 
-| Age rank   | 1     | 2     | 3   | 4   | 5   | 6     | 7   | 8   | 9      |
-|-------------|-------|-------|-----|-----|------|-------|-----|-----|--------|
-| Transcripts | 4,440 | 3,371 | 559 | 621 | 280  | 1,511 | 282 | 667 | 15,557 |
-
-**Age rank distribution (duplication only, HOG membership, (n = 20,953)):**
-| Age rank   | 1   | 2     | 3   | 4   | 5   | 6     | 7   | 8   | 9      |
-|-------------|-----|-------|-----|-----|-----|-------|-----|-----|--------|
-| Transcripts | 388 | 1,915 | 425 | 459 | 204 | 1,119 | 267 | 619 | 15,557 |
+| Category                                      | 1     | 2     | 3   | 4   | 5   | 6     | 7   | 8   | 9      | Total   |
+|----------------------------------------------|-------|-------|-----|-----|-----|-------|-----|-----|--------|---------|
+| Duplicates + mrca_inferred                   | 4,440 | 3,371 | 559 | 621 | 280 | 1,511 | 282 | 667 | 15,557 | 27,288  |
+| Duplication only                             | 388   | 1,915 | 425 | 459 | 204 | 1,119 | 267 | 619 | 15,557 | 20,953  |
+| mrca_inferred only                           | 4,052 | 1,456 | 134 | 162 | 76  | 392   | 15  | 48  | 0      | 6,335   |
 
 
-Note the drop in rank 1 and 2 after filtering for duplication only. Most ancient transcripts are single-copy genes present across many species, including drosophila, with no duplication events recorded (mrca_inferred). Only 388 transcripts have a recorded duplication event at rank 1. Paralog expansions in C. maculatus are overwhelmingly recent, concentrated at rank 9, consistent with TE-driven gene family expansion.
+Note the drop in rank 1 and 2 after filtering for duplication only shows where most mrca_inferred transcripts are concentrated. These are conserved single-copy genes present across many species, including drosophila, making ancient nodes their most common ones. Only 388 transcripts have a recorded duplication event at rank 1. Rank 9 is 0 for mrca_inferred since a gene with no orthologs would be assigned to species_specific. But that is 0 since all C_mac genes in OrthoFinder share their orthogroup with at elast one other species (also why species specific = 0). Genes with no detectable homologs would be found with the other 4051 transcripts absent from OrthoFinder. Paralog expansions in C. maculatus are overwhelmingly recent, concentrated at rank 9, consistent with TE-driven gene family expansion.
 
 Since this project focuses on paralogs and duplications only, age rank analyses are restricted to transcripts with birth_type = duplication.
 
