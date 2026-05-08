@@ -847,38 +847,43 @@ AIC is used to compare the three parameterisations within the same weighting sch
 
 ### AIC Comparison - Unweighted:
 
-| Model                | Parameterisation  | df | AIC   |
-| -------------------- | ----------------- | -- | ----- |
-| m_abs_dir_cont_all   | Continuous rank   | 4  | 39932 |
-| m_abs_dir_factor_all | Factor (9 levels) | 11 | 39900 |
-| m_abs_dir_depth_all  | Node depth        | 4  | 39932 |
+### Model comparison (m_abs_dir)
 
-m_abs_dir_factor_all wins by ΔAIC = 32. The non-linear node-specific pattern is real.
+| Model                      | Parameterisation     | df  | AIC   |
+|---------------------------|---------------------|-----:|------:|
+| m_abs_dir_cont_all        | Continuous rank     | 4    | 40248 |
+| m_abs_dir_factor_all      | Factor (9 levels)   | 11   | 40217 |
+| m_abs_dir_depth_all       | Node depth          | 4    | 40248 |
+
+m_abs_dir_factor_all wins by ΔAIC = 31. The non-linear node-specific pattern is real.
 
 ### AIC Comparison - Weighted:  
 
-| Model                     | Parameterisation     | df | AIC   |
-|---------------------------|----------------------|----|-------|
-| m_abs_dir_cont_all_w      | Continuous rank      | 4  | 37366 |
-| m_abs_dir_factor_all_w    | Factor (9 levels)    | 11 | 37369 |
-| m_abs_dir_depth_all_w     | Branch depth         | 4  | 37367 |
+### Model comparison (m_abs_dir_w)
+
+| Model                    | Parameterisation     | df  | AIC   |
+|-------------------------|---------------------|-----:|------:|
+| m_abs_dir_cont_all_w   | Continuous rank     | 4    | 37376 |
+| m_abs_dir_factor_all_w | Factor (9 levels)   | 11   | 37379 |
+| m_abs_dir_depth_all_w  | Branch depth        | 4    | 37377 |
 
 When the weights are accounted for, the simpler continous models are now slightly better ΔAIC = 3.
 
 ### m_abs_dir_factor_all results (Unweighted, main model)
 Each coefficient shows the estimated log2FC at that rank relative to rank 1 (N0).
 
-| Age rank | Node            | Estimate vs rank 1 | p-value  | Sig. |
-|----------|-----------------|--------------------|----------|------|
-| 1        | N0 (ref)        | +0.622 (intercept) | 1.69e-06 | ***  |
-| 2        | N1              | -0.094             | 0.517    |      |
-| 3        | N3              | -0.076             | 0.678    |      |
-| 4        | N4              | -0.429             | 0.019    | *    |
-| 5        | N6              | +0.567             | 0.010    | *    |
-| 6        | N8              | +0.433             | 0.004    | **   |
-| 7        | N11             | +0.832             | 5.4e-05  | ***  |
-| 8        | N12             | -0.034             | 0.841    |      |
-| 9        | C_mac           | +0.269             | 0.049    | *    |
+
+| Rank   | Estimate vs rank 1 | p-value      | Significance |
+|--------|--------------------:|-------------:|--------------|
+| 1 (ref) | +0.621 (intercept) | 2.13e-06     | ***          |
+| 2      | -0.108              | 0.461        |              |
+| 3      | -0.073              | 0.693        |              |
+| 4      | -0.425              | 0.021        | *            |
+| 5      | +0.572              | 0.011        | *            |
+| 6      | +0.442              | 0.004        | **           |
+| 7     | +0.829               | 7.25e-05     | ***          |
+| 8     | -0.035               | 0.839        |              |
+| 9 (C_mac)   | +0.283         | 0.041        | *            |
 
 Rank 4 is significantly less male biased than rank 1. Rank 5, 6, 7 and 9 are significantly more male biased than rank 1. Rank 7 shows the strongest elevation. 
 These are bruchid-specific nodes (similar to what we have seen in earlier plots). The weighted models indicate show that rank 2, 4 and 8 are significantly less male biased than rank 1. This indicates that the intermediate-rank evlevation is partly driven by the lowly expressed genes with noisy log2FC estimates. 
@@ -890,23 +895,23 @@ These are bruchid-specific nodes (similar to what we have seen in earlier plots)
 **Response:** Binary (1 = sex-biased by DESeq2 thresholds |logFC| > 1 and padj < 0.05, 0 = unbiased).
 
 As a complement to the directional model, asking wheter genes are biased at all, rather than how biased they are at each node. drop1 tests wheter the factor as a whole significantly improves the fit. EMMs give the predicted probability of sex bias at each node (using type = "response").  
-The age factor significantly improved the model fit (LRT chi2(8) = 62.8, p = 1.3e-10).
+The age factor significantly improved the model fit (LRT chi2(8) = 62.9, p = 1.23e-10).
 
-| Age rank | P(sex-biased) | 95% CI        |
-|----------|----------------|---------------|
-| 1        | 0.285          | 0.215 - 0.366 |
-| 2        | 0.316          | 0.276 - 0.359 |
-| 3        | 0.251          | 0.186 - 0.330 |
-| 4        | 0.210          | 0.154 - 0.280 |
-| 5        | 0.416          | 0.298 - 0.544 |
-| 6        | 0.453          | 0.396 - 0.511 |
-| 7        | 0.573          | 0.452 - 0.686 |
-| 8        | 0.369          | 0.297 - 0.448 |
-| 9        | 0.401          | 0.373 - 0.430 |
+| Age rank | P(sex-biased) | 95% CI            |
+|----------|--------------:|------------------|
+| 1        | 0.285         | 0.215 – 0.366    |
+| 2        | 0.316         | 0.276 – 0.359    |
+| 3        | 0.251         | 0.186 – 0.330    |
+| 4        | 0.210         | 0.153 – 0.280    |
+| 5        | 0.415         | 0.298 – 0.544    |
+| 6        | 0.453         | 0.396 – 0.511    |
+| 7        | 0.573         | 0.452 – 0.686    |
+| 8        | 0.369         | 0.297 – 0.448    |
+| 9        | 0.401         | 0.373 – 0.430    |
 
 Plotted: 
 
-![alt text](image-30.png)
+![alt text](image-22.png)
 
 The plot indicates that genes at the bruchid-specific nodes, are not only more male-biased in direction but also significantly more likely to be classified as sex-biased generally. Ranks 3-4 drops below rank 1 followed by a elevation in 5-7, peaking at rank 7. Ranks 8-9 are closer to baseline. This shows that the elevated sex bias is tied to the 5-7 nodes, not a continous increase with younger age. 
 
@@ -921,31 +926,30 @@ Ranks 5-7 corresponds to the Curculionidae and Brucidae nodes.
 Predicted node magnitude EMMs from m_abs_mag_factor_all:
 
 EMMs from m_abs_mag_factor_all:  
-| Age rank | Predicted \|log2FC\| | 95% CI        |
-|----------|----------------------|---------------|
-| 1        | 1.18                 | 0.962 - 1.39  |
-| 2        | 1.28                 | 1.168 - 1.38  |
-| 3        | 1.08                 | 0.863 - 1.29  |
-| 4        | 1.05                 | 0.838 - 1.26  |
-| 5        | 1.93                 | 1.630 - 2.22  |
-| 6        | 1.85                 | 1.723 - 1.98  |
-| 7        | 1.92                 | 1.658 - 2.19  |
-| 8        | 1.53                 | 1.350 - 1.72  |
-| 9        | 1.62                 | 1.552 - 1.70  |
+| Age rank | Predicted |log2FC| | 95% CI |
+|----------|----------------|----------------|
+| 1        | 1.17           | 0.959 – 1.392  |
+| 2        | 1.26           | 1.151 – 1.373  |
+| 3        | 1.09           | 0.866 – 1.304  |
+| 4        | 1.05           | 0.833 – 1.265  |
+| 5        | 1.93           | 1.630 – 2.236  |
+| 6        | 1.86           | 1.728 – 1.997  |
+| 7        | 1.93           | 1.655 – 2.208  |
+| 8        | 1.53           | 1.346 – 1.729  |
+| 9        | 1.64           | 1.563 – 1.710  |
 
-Predicted magnitude show a similar pattern. Its lowest at rank 3-4, peaksa at ranks 5-7 and then declines. Again the intermediate nodes show highest magnitude. Age ranks as factors are confirmed significant by drop1: F(8, 8699) = 14.8, p < 2.2e-16.
+Predicted magnitude show a similar pattern. Its lowest at rank 3-4, peaksa at ranks 5-7 and then declines. Again the intermediate nodes show highest magnitude. Age ranks as factors are confirmed significant by drop1: F(8, 8689) = 15.1, p < 2.2e-16.
 
-
-Plotted:  
-![alt text](image-32.png)  
+EMMs Plotted:  
+ ![alt text](image-30.png)
 
 **Supplementary model - continous slope (m_abs_mag_cont_all, m_abs_mag_cont_hog2)**   
 Two continous models run to determine the overall direction before node-specific analyses, both run with the continous age rank, but one is run on only gene families with 2 or more members: 
 
-| Model                  | Dataset   | Slope (age_rank_scaled) | p-value  |
-|------------------------|-----------|--------------------------|----------|
-| m_abs_mag_cont_all     | Full      | +0.157                   | 9.3e-13  |
-| m_abs_mag_cont_hog2    | HOG >= 2  | +0.095                   | 0.002    |
+| Model                    | Dataset | Slope (age_rank_scaled) | p-value     |
+|-------------------------|----------|--------------------------|-------------|
+| m_abs_mag_cont_all      | Full     | +0.166                   | 1.14e-13    |
+| m_abs_mag_cont_hog2     | HOG ≥ 2  | +0.109                   | 4.24e-04    |
 
 Younger genes show significantly higher sex bias magnitude in both datasets. The effect is smaller in HOG>=2, suggesting that the younger singleton families might inflate the signal somewhat. 
 
@@ -955,12 +959,12 @@ Younger genes show significantly higher sex bias magnitude in both datasets. The
 To rule out that covariates explains the data, and not the age effects, gene length, expression level and family size are used as covariates. 
 drop1:  
 
-| Term                    | Sum Sq | Mean Sq | NumDF | DenDF  | F value | Pr(>F)    | Sig. |
-|-------------------------|--------|---------|-------|--------|---------|-----------|------|
-| age_rank_factor         | 171.659| 21.457  | 8     | 8767.3 | 14.399  | <2.2e-16  | ***  |
-| log_gene_length_scaled  | 54.568 | 54.568  | 1     | 9253.2 | 36.618  | 1.492e-09 | ***  |
-| log_baseMean_scaled     | 55.598 | 55.598  | 1     | 9293.2 | 37.310  | 1.048e-09 | ***  |
-| hog_size_genome_scaled  | 0.778  | 0.778   | 1     | 3703.5 | 0.522   | 0.47      |      |
+| Term                      | Sum Sq | Mean Sq | NumDF | DenDF | F value | Pr(>F)      | Sig |
+|--------------------------|--------|---------|-------|-------|--------|------------|-----|
+| age_rank_factor          | 186.12 | 23.26   | 6     | 8875  | 3.11   | 4.56e-16   | *** |
+| log_gene_length_scaled   | 59.53  | 59.53   | 1     | 9285  | 37.27  | 1.07e-09   | *** |
+| log_baseMean_scaled      | 59.81  | 59.81   | 1     | 9305  | 37.44  | 9.80e-10   | *** |
+| hog_size_genome_scaled   | 0.80   | 0.80    | 1     | 3631  | 0.50   | 0.479      |     |
 
 Age is highly significant and the node profile is unchanged. Gene length and expression level are themselves predictors of magnitude. Family size is not significant after controlling for age 
 
@@ -976,23 +980,23 @@ Three model versions used for this analysis:
 
 LRT comparison, m_abs_mag_cont_hog3 vs m_abs_mag_cont_slope_hog3_ml: 
 
-chi2(2) = 79.95, p < 2.2e-16. The random slope model fits significantly better, meaning within-family age  magnitude slope/trajectory vary a lot between families.  
+chi2(2) = 83.27, p < 2.2e-16. The random slope model fits significantly better, meaning within-family age  magnitude slope/trajectory vary a lot between families.  
 
-| Model                          | npar | AIC  | BIC  | logLik | -2*log(L) | Chisq | Df | Pr(>Chisq) |
-|-------------------------------|------|------|------|--------|-----------|-------|----|-------------|
-| m_abs_mag_cont_hog3           | 4    | 14508| 14533| -7250  | 14500     |       |    |             |
-| m_abs_mag_cont_slope_hog3_ml  | 6    | 14432| 14469| -7210  | 14420     | 79.954| 2  | < 2.2e-16 *** |
+| Model                           | npar | AIC   | BIC   | logLik  | -2*log(L) | Chisq  | Df | Pr(>Chisq)   |
+|--------------------------------|-----:|------:|------:|--------:|----------:|-------:|---:|-------------|
+| m_abs_mag_cont_hog3           | 4    | 14830 | 14855 | -7410.9 | 14822     |        |    |             |
+| m_abs_mag_cont_slope_hog3_ml  | 6    | 14751 | 14788 | -7369.3 | 14739     | 83.274 | 2  | < 2.2e-16 *** |
 
 Variance components from m_abs_mag_cont_slope_hog3 (REML):
 
-| Term                  | Variance | Std.Dev. |
-| --------------------- | -------- | -------- |
-| HOG intercept         | 3.113    | 1.764    |
-| HOG slope (age)       | 0.668    | 0.817    |
-| Intercept-slope cor   | +0.10    |          |
-| Residual              | 1.599    | 1.265    |
+| Term                | Variance | Std.Dev. |
+|--------------------|----------|----------|
+| HOG intercept      | 3.102    | 1.761    |
+| HOG slope (age)    | 0.622    | 0.789    |
+| Intercept-slope cor| +0.21    |          |
+| Residual           | 1.781    | 1.335    |
 
-The average fixed slope is not significant however (slope = 0.045, p = 0.438). Between family differences in sex-bias (intercept variance = 3.113) is a lot larger than between family differences in the age magnitude slope (slope variance = 0.668). So families differ much more in how sex biased they are overall, rather than how that bias changes with age. This between family variation absorbs the population level trend in m_abs_mag_cont_all that younger genes are more sex biased. The intercept-slope cor is +0.10, a weak positive trend suggesting that families with higher baseline sex-bias  show slightly steeper age gradient within themselves, but this trend is too weak to draw conclusions from. 
+The average fixed slope is not significant however (slope = 0.064, p = 0.259). Between family differences in sex-bias (intercept variance = 3.102) is a lot larger than between family differences in the age magnitude slope (slope variance = 0.622). So families differ much more in how sex biased they are overall, rather than how that bias changes with age. This between family variation absorbs the population level trend in m_abs_mag_cont_all that younger genes are more sex biased. The intercept-slope cor is +0.21, a weak positive trend suggesting that families with higher baseline sex-bias  show slightly steeper age gradient within themselves, but this trend is too weak to draw conclusions from. 
 
 ### Interaction with sex-bias classes. Main model m_abs_int_factor_all  
 **Formula:** `lmer(abs_logFC ~ sex_bias * age_rank_factor + (1 | HOG)`
@@ -1005,35 +1009,35 @@ drop1 table for m_abs_int_factor_all**
 
 | Term                     | F value | p-value     |
 |-------------------------|--------:|------------|
-| sex_bias:age_rank_factor| 7.30    | < 2.2e-16  |
+| sex_bias:age_rank_factor| 6.67    | 2.343e-15 |
 
 EMMs for all 9 nodes: 
 
-| Age rank | Unbiased abslog2FC | Male abslog2FC | Female abslog2FC |
-|----------|---------------------|------------------|--------------------|
-| 1        | 0.51                | 2.27             | 2.17               |
-| 2        | 0.55                | 2.58             | 1.96               |
-| 3        | 0.55                | 2.50             | 1.34               |
-| 4        | 0.48                | 2.35             | 2.21               |
-| 5        | 0.56                | 4.30             | 1.89               |
-| 6        | 0.72                | 3.23             | 2.84               |
-| 7        | 0.66                | 3.12             | 2.19               |
-| 8        | 0.61                | 2.77             | 2.83               |
-| 9        | 0.87                | 2.75             | 2.15               |
+| Age rank | Unbiased abs |log2FC| | Male abs |log2FC| | Female abs |log2FC| |
+|----------|----------------|----------------|------------------|
+| 1        | 0.51           | 2.27           | 2.17             |
+| 2        | 0.54           | 2.58           | 1.87             |
+| 3        | 0.55           | 2.52           | 1.37             |
+| 4        | 0.48           | 2.35           | 2.18             |
+| 5        | 0.56           | 4.32           | 1.89             |
+| 6        | 0.72           | 3.26           | 2.82             |
+| 7        | 0.65           | 3.15           | 2.18             |
+| 8        | 0.61           | 2.78           | 2.81             |
+| 9        | 0.86           | 2.80           | 2.15             |
 
 The unbiased class shows gradient increase in sex-bias, could indicate that more younger unbiased genes are on their way to become biased. Male magnitude spikes at rank 5, and sexbiasmale:age_rank_factor interaction is only significant at ranks 5, 6 and 7. These are the same nodes elevated in m_abs_dir_factor_all and m_abs_prob_factor_all. At rank 8 male anf female are more or less the same. 
 
 EMMs plotted:  
-![alt text](image-33.png)
+![alt text](image-32.png)
 
 **Supplementary - HOG >= 2 sensitivity check (m_abs_int_factor_hog2)**
 
-Restricted to families that have two expressed duplicates transcript confirm the overall pattern. The interaction F value is almost unchanged (7.25) and the rank 5 male spike is replicated. Several ranks, especially younger ranks, have wider CI since these have fewer data points. Ranks 1, 4 and 8 now predict higher female bias, but non-significant. Now only sex_biasmale:age_rank_factor5 is significant.   
+Restricted to families that have two expressed duplicates transcript confirm the overall pattern. The interaction F value is almost unchanged (6.52) and the rank 5 male spike is replicated. Several ranks, especially younger ranks, have wider CI since these have fewer data points. Ranks 1, 4 and 8 now predict higher female bias, but non-significant. Now only sex_biasmale:age_rank_factor5 is significant.   
 
-![alt text](image-34.png)
+![alt text](image-33.png)
 
 **Supplementary - covariate control (m_abs_int_factor_all_cov)**  
-Adding gene length, expression level and family size as covariates confirm that sex bias x age interaction is not confounded. The interation remains highly significant (F = 7.63, p < 2.2e-16) and the node profile from m_abs_int_factor_all is unchanged. 
+Adding gene length, expression level and family size as covariates confirm that sex bias x age interaction is not confounded. The interation of sex-bias and age rank remains highly significant (F = 6.92, p = 4.238e-16) and the node profile from m_abs_int_factor_all is unchanged. 
 
 ---
 
