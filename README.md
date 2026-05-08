@@ -801,7 +801,7 @@ emmeans (estimated marginal means) computes the predicted value of the response 
 |-----------------------------------------------------|--------------------------------|
 | Total transcripts loaded from DESeq2                | 17,574                         |
 | After birth_type == duplication filter              | 9,329                          |
-| Model data (age rank + HOG + logFC)                 | 9,318 transcripts / 4,603 HOGs |
+| Model data (age rank + HOG + logFC)                 | 9,319 transcripts / 4,603 HOGs |
 | Model_data_hog2: families with 2 expressed members  | 7,303 transcripts / 2,588 HOGs |
 | Model_data_hog3: families with 3 expressed members  | 3,729 transcripts / 801 HOGs   |
 | Singletons (one expressed member)                   | 2,015 (43.8%)                  |
@@ -810,13 +810,11 @@ emmeans (estimated marginal means) computes the predicted value of the response 
 | Same age rank (HOG ≥ 2, genome)                     | 3,451 families (81.3%)         |
 | Mixed age rank (HOG ≥ 2, genome)                    | 796 families                   |
 
-11 transcripts are fropped between duplication filter and model_data since they are confirmed duplications that OrthoFinder assigned an age rank to but could not place in any orthogroup. They have no HOG and are excluded from all gene family analyses. The outlier transcript g16714.t1: log2FC = 29.99 in HOG N0.HOG0000646 was also removed as it is biologically implausible and would impact the statistics 
-
 Of the 4,603 HOGs in model_data, 2,588 have more than one expressed member, and 2,015 have only one expressed member (43.8%). These are not only biological singletons, but include families where only one member passed the expression filtering. These are excluded from within-family analyses because there are no other expressed paralogs to compare against.   
 And among the 2,588 families with at least 2 expressed members, 81.8% have all expressed members at the same age rank, meaning most family expansions happened as a single burst event at the same phylogenetic node. At the genome-level this still holds, meaning its not an artifact due to the expression filtering.  
 Relative age is then only biologically meaningful in those 472 gene families that have expressed transcripts at different age ranks.  
 
-OrthoFinder was run on an isoform-filtered proteome (one protein per gene) so eaachtranscript maps to only one gene and one HOG. There is no isofrm nesting to wory about, so (1 | HOG) should be sufficient for the random  effects. 
+(1 | HOG) as a random intercept was used as random  effects for all models, reflecting that all are 
 
 The analyses are divided into two parts.   
 Script 1: **mm_00_data_prep.R**   
@@ -926,7 +924,7 @@ Ranks 5-7 corresponds to the Curculionidae and Brucidae nodes.
 Predicted node magnitude EMMs from m_abs_mag_factor_all:
 
 EMMs from m_abs_mag_factor_all:  
-| Age rank | Predicted |log2FC| | 95% CI |
+| Age rank | Predicted abslog2FC | 95% CI |
 |----------|----------------|----------------|
 | 1        | 1.17           | 0.959 – 1.392  |
 | 2        | 1.26           | 1.151 – 1.373  |
@@ -1013,7 +1011,7 @@ drop1 table for m_abs_int_factor_all**
 
 EMMs for all 9 nodes: 
 
-| Age rank | Unbiased abs |log2FC| | Male abs |log2FC| | Female abs |log2FC| |
+| Age rank | Unbiased abslog2FC | Male abs log2FC | Female abs log2FC |
 |----------|----------------|----------------|------------------|
 | 1        | 0.51           | 2.27           | 2.17             |
 | 2        | 0.54           | 2.58           | 1.87             |
