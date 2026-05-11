@@ -273,8 +273,9 @@ https://salmon.readthedocs.io/en/latest/salmon.html#
 
 ## Salmon-mapping based mode (Quasi-mapping) 
 
-Salmon maps directly to the transcriptome, on the fragment level (one fragment = read pairs = one RNA-molecule). Quasi-mapping uses a k-mer index rather than full base-by-base alignment. Salmon runs a sliding window across each read and identifies candidate transcript matches based on consistent k-mer hits. Reads compatible withthe same set of transcripts are grouped into equivalence classes, and a probabilistic EM algorithm resolves which transcript each fragment most likely originated from. This makes it well suited for paralog studies since ambiguous reads are modelled
-rather than discarded.
+Salmon maps directly to the transcriptome, on the fragment level (one fragment = read pairs = one RNA-molecule). Quasi-mapping uses a k-mer index rather than full base-by-base alignment. Salmon runs a sliding window across each read and identifies candidate transcript matches based on consistent k-mer hits. Reads compatible withthe same set of transcripts are grouped into equivalence classes, and a probabilistic EM algorithm resolves which transcript each fragment most likely originated from. This makes it well suited for paralog studies since ambiguous reads are modelled rather than discarded.
+
+During index construction, Salmon excludes transcripts shorter than the k-mer length (default k=31). The transcriptome contains 37,989 sequences, but the resulting Salmon index contains 36,382 transcripts after this filtering step.
 
 **Step 1: Build transcriptome**    
 A transcriptome was created from `C_maculatus_assembly.fna` and
@@ -360,7 +361,7 @@ and gene age ranks.
 
 ## Salmon-alingment based mode 
 
-In this mode, STAR first aligns reads to the genome and outputs transcript-coordinate BAM files. Salmon then quantifies from those alignments using the same transcriptome as salmon-map. This is the most conservative of the three methods: reads that are too ambiguous for STAR alignment are discarded before Salmon ever sees them.
+In this mode, STAR first aligns reads to the genome and outputs transcript-coordinate BAM files. Salmon then quantifies from those alignments using the same transcriptome as salmon-map (37,989 transcripts). Unlike Salmon-map, no k-mer index is built so all sequences are available for quantification. This is the most conservative of the three methods: reads that are too ambiguous for STAR alignment are discarded before Salmon ever sees them, and reads that map to the genome but fall outside of annotated transcript coordinates are never passed to Salmon. 
 
 **Step 1: STAR alignment to transcriptome coordinates**
 
@@ -450,7 +451,7 @@ Pearson, Spearman and R² values are high across all three pairs, indicating str
 |---|---|---|---|---|---|---|---|---|---|
 | Salmon-map | 70 | 43,044,599 | 15,698,474 | 24,226,429 | 9,643,825 | 6,633,015 | 36.2 | 37,320 | 938 |
 
-The mapping rate of 36% is low. Out of 43M fragments, 9.6M failed alignment scoring, 6.6M mapped best to a genome decoy and were discarded, and 15.7M were assigned to equivalence classes for probabilistic quantification. The low rate could  reflects the fragmented and repetitive nature of the C. maculatus genome rather than a methodological issue, since featureCounts also discards a large fraction of reads.  
+The mapping rate of 36% is low, likely reflecting the 72% repeats in the genome. Out of 43M fragments, 9.6M failed alignment scoring, 6.6M mapped best to a genome decoy and were discarded, and 15.7M were assigned to equivalence classes for probabilistic quantification. The low rate could  reflects the fragmented and repetitive nature of the C. maculatus genome rather than a methodological issue, since featureCounts also discards a large fraction of reads.  
 Mappings discarded due to alignment score = represents individual alignments that fail the scoring threshold.  
 Fragments discarded due to alignment score = fragments that failed all their mappings.  
 Fragments discarded due to decoy matching = they mapped best to a decoy.   
@@ -461,7 +462,7 @@ Fragments discarded due to decoy matching = they mapped best to a decoy.  
 |---|---|---|---|---|---|---|---|---|
 | STAR | 70 | 43,044,599 | 26,447,066 | 4,964,529 | 61.1 | 11.6 | 7,722,021 | 18.2 |
 
-61.1% of reads mapped uniquely. 11.6% mapped to multiple loci and are reported in the BAM. 18.2% mapped to too many loci and were discarded. 
+STAR reports "input reads" but for paired-end data all STAR log statistics refer to read pairs (fragments) not individual reads. 61.1% of reads mapped uniquely. 11.6% mapped to multiple loci and are reported in the BAM. 18.2% mapped to too many loci and were discarded. 
 
 ### FeatureCounts Log files 
 
@@ -469,7 +470,7 @@ Fragments discarded due to decoy matching = they mapped best to a decoy.  
 |---|---|---|---|
 | featureCounts | 22,497,598 | 42,087,519 | 17,832,473 |
 
-22.5M reads assigned, 42.1M discarded as they did not overlap an annotated exon, and 17.8M overlapping multiple features resolved fractionally.
+featureCount summary statistics count BAM records, not fragments. STAR writes each read in a pair as a separate BAM record, and outputs all alignments for multimapped fragments individually, so the BAM contains ~82.4M records from the 31,4M retained fragmetns. Of those BAM records, 22.5M reads assigned to annotated exons, 42.1M discarded as they did not overlap an annotated exon, and 17.8M overlapping multiple features resolved fractionally.The large nofeature is consistent with an incomplete annotation built on a fragmented or highly repetitive assembly. 
 
 ### STAR (transcriptome BAM for Salmon-align)
 
@@ -477,7 +478,9 @@ Fragments discarded due to decoy matching = they mapped best to a decoy.  
 |---|---|---|---|---|---|---|---|---|
 | STAR transcriptBAM | 70 | 43,044,599 | 23,277,654 | 4,459,149 | 53.8 | 10.5 | 7,606,532 | 17.9 |
 
-53.8% mapped uniquely, 17.9% discarded as too multi-mapped. The 10.5% that multi-mapped were passed to Salmon for probabilistic assignment.
+23,3M mapped uniquely, 7,6M discarded as too multi-mapped. Of te 27,7M total mapped fragments, only 11,7M were projected to transcript coordinates and passed to salmon via --quantmode TranscriptomeSAM. The remaining ~16M fragments mapped to intronic or intergenic regions and were not projected. This reflects the same data as the featureCounts nofeature category.
+
+The 4,4M that multi-mapped were passed to Salmon for probabilistic assignment.
 
 ### Salmon-Align
 
@@ -485,15 +488,15 @@ Fragments discarded due to decoy matching = they mapped best to a decoy.  
 |---|---|---|---|---|---|---|---|
 | Salmon-align | 70 | 11,685,928 | 10,533,184 | 1,152,744 | 89.9 | 10.1 | 11,558,587 |
 
-Of the reads passed by STAR, 89.9% were assigned uniquely by Salmon and 10.1% were ambiguous and modelled probabilistically.
+Note: Salmons BAM logs uses reads instead of fragments but the unit is the same. Within the same log file both terms are used for the same number in the same run. Of the 11,7M fragments recieved from STAR, 10.5M were assigned uniquely, and 1.2M  were ambigous and modelled probabilistically.
 
 ## Method Selection
 
 After also accounting for Genotypes in DESEq2, Salmon-map retained the most transcripts (17,574) and produced the highest number of significant DE transcripts (7,270), despite having the lowest mapping rate at the fragment level (36%). The low mapping rate seem to reflect the fragmented and repetitive C. maculatus genome. Fragments that do map are probabilistically assigned to transcripts via equivalence classes, and the whole-genome decoy approach ensures fragments that match the genome better than any transcript are discarded cleanly.
 
-STAR + featureCounts retained a similar number of transcripts (17,566) with a slightly lower DE count (6,964) but the highest PC1 variance (69.1%). The fractional counting of multimappers does risk inflating counts for paralogous transcripts, which is a concern here.
+STAR + featureCounts retained a similar number of transcripts (17,566) with a slightly lower DE count (6,964) but the highest PC1 variance (69.1%). featureCOunts log files report on the BAM record level rather than fragment level making the comparison difficult.  The fractional counting of multimappers does risk inflating counts for paralogous transcripts, which is a concern here.
 
-Salmon-align is the most conservative across all metrics: fewest transcripts retained (16,563), lowest DE count (6,382) and lower PC1 variance (66.0%). This follows from its two-stage filtering: STAR discards 17.9% of reads as too ambiguous before Salmon ever sees them, leaving only 11.7M fragments for probabilistic assignment compared to 43M for salmon-map. The STAR run for this method also used slightly more stringent settings at the alignment stage compared to the featureCounts STAR run. All of this could contribute  to salmon-align being the strictest of the three methods, though it may also produce the most trustworthy results because of this. 
+Salmon-align is the most conservative across all metrics: fewest transcripts retained (16,563), lowest DE count (6,382) and lower PC1 variance (66.0%). This follows from its two-stage filtering: STAR discards 17.9% of fragments as too ambiguous before Salmon ever sees them. Second, of the 27.7M fragments STAR maps to the genome, only 11.7M overlap with transcripts coordinates and are passed to salmon. The EndTOEnd alignment setting adds another layer by discarding soft-clipped reads.
 
 All three methods show strong expression correlation across shared transcripts, indicating the biological signal is consistent regardless of method. Salmon-map was selected for the main analysis as it combines the highest transcript retention and DE signal with principled handling of ambiguous reads, which is preferable to fractional counting when paralog identity is central to the downstream analysis.
 
@@ -654,101 +657,110 @@ Male-bias is generally more common than female bias, but ranks 5, 6, and 7 again
 ---
 
 # GO-term Enrichement (**GO-term_enrichement.R**) 
-Here i looked at two subsets of conflict-candidate gene families: the 34 Male + Female families (106 transcripts) and 53 All-three families (356 transcripts). These are the families where paralogs within the same gene family have different direction in their sex-bias, making them candidates for intralocus sexual conflict resolution through gene duplications.
+Here i looked at two subsets of conflict-candidate gene families: the 36 Male + Female (M+F) families (111 transcripts) and 55 All-three (AT) families (364 transcripts). These are the families where paralogs within the same gene family have different direction in their sex-bias, making them candidates for intralocus sexual conflict resolution through gene duplications.
 
-| Category                         | Transcript Count |
-|----------------------------------|------------------|
-| Male + Female (all)              | 106              |
-| Male + Female (male-biased)      | 58               |
-| Male + Female (female-biased)    | 48               |
-| All three (all)                  | 356              |
-| All three (male-biased)          | 125              |
-| All three (female-biased)        | 86               |
+As a background i used the 9,319 expressed duplicated transcripts that belong to a gene family. 5,209 (~56%) transcripts in this set has at least one GO term, which is expected for a non-model organism annotated with BRAKER and eggNOG-mapper. All enrichment results can only be concluded based on this set of annotated transcripts. 
 
-As a background i used the 8,989 expressed duplicated transcripts that belong to a gene family. 5,012 (~55%) transcripts in this set has at least one GO term, which is expected for a non-model organism annotated with BRAKER and eggNOG-mapper. All enrichment results can only be concluded based on this set of annotated transcripts. 
+One BP cluster (response to DDT, insecticide metabolic process) was almost driven completely by one detoxification family (N0.HOG0000027, 12 of 15 transcripts), with a second family ocntributing the rmeining 3 duplciates. These terms are retained but interpreted with caution as its nto a broad pattern across all conflict candidate families.  
 
-Noteably the Go annotation coverage is lower in the conflict-candidate categories than the rest of the backgorund, so the enrichment results will be convervative rather than inflated. 
+Go-term coverage fore ach category (How many duplicates in each category has at least one Go-term):
 
-| Category         | Transcripts | GO- term Annotated | Go-term Coverage |
-|------------------|-------------|-----------|----------|
-| All unbiased     | 2,429       | 1,735     | 71.4%    |
-| All female biased| 434         | 283       | 65.2%    |
-| All male biased  | 1,250       | 588       | 47.0%    |
-| Male + Female    | 106         | 51        | 48.1%    |
-| Female + Unbiased| 588         | 274       | 46.6%    |
-| All three        | 356         | 148       | 41.6%    |
-| Male + Unbiased  | 2,021       | 708       | 35.0%    |
+| Category            | Transcripts | Go-term annotated | Go-term coverage |
+|--------------------|--------------:|------------:|---------------:|
+| All unbiased       | 2452          | 1744        | 71.1%           |
+| All female biased  | 427           | 280         | 65.6%           |
+| Male + Female      | 111           | 53          | 47.7%           |
+| All male biased    | 1273          | 591         | 46.4%           |
+| Female + Unbiased  | 606           | 278         | 45.9%           |
+| All three          | 364           | 151         | 41.5%           |
+| Male + Unbiased    | 2071          | 717         | 34.6%           |
 
-I used the topGO package with the weight01 algorithm and Fisher test. Weight01  accounts for the non-independence of GO terms by propagating signal through the GO  graph, which reduces redundancy compared to a standalone Fisher test. I ran both  Biological Process (BP) and Molecular Function (MF) ontologies. Each category was tested three ways: all transcripts in the family, male-biased copies only, and female-biased copies only. 
+Test set summary. topGO will only be able to use the go-term annotated duplicates, which is a limited dataset. To combat this I used the topGO package with the weight01 algorithm and Fisher test. Weight01  accounts for the non-independence of GO terms by propagating signal through the GO  graph, which reduces redundancy compared to a standalone Fisher test.
 
-One BP term cluster (response to DDT, insecticide metabolic process) was excluded from interpretation after checking that all 12 transcripts driving the signal came from a single expanded detoxification family (N0.HOG0000027). This could be a gene family expansion artifact rather than a general pattern across conflict-candidate families.
+| Category                         | Transcript Count | GO- term Annotated | Percent Annotated |
+|----------------------------------|-----------------:|-----------:|------------------:|
+| Male + Female (all)              | 111              | 53         | 47.7              |
+| Male + Female (male-biased)      | 61               | 29         | 47.5              |
+| Male + Female (female-biased)    | 50               | 24         | 48.0              |
+| All three (all)                  | 364              | 151        | 41.5              |
+| All three (male-biased)          | 127              | 56         | 44.1              |
+| All three (female-biased)        | 88               | 41         | 46.6              |
+
+ I ran both  Biological Process (BP) and Molecular Function (MF) ontologies. Each category was tested three ways: all transcripts in the family, male-biased copies only, and female-biased copies only. 
 
 ### BP (Biological Process) results:  
-10 BP terms were significant in both candidate categories independently. The enrichment signal is spread across families rather than being HOG-specific: 20 out of 34 Male+Female HOGs and 19 out of 53 All three HOGs carry at least one significant GO term.
+10 BP terms were significant in both candidate categories independently. The enrichment signal is spread across families rather than being HOG-specific: 20 out of 55 All three HOGs and 21 out of 36 Male + Female HOGs carry at least one significant GO term.
 
 **Shared terms:**  
 The 10 shared terms with observed and expected counts from both categories:  
-| GO ID      | Term                                  | M + F sig | M + F exp | M + F p     | AT sig | AT exp | AT p      |
-|------------|---------------------------------------|--------|--------|----------|--------|--------|-----------|
-| GO:0032310 | prostaglandin secretion               | 3      | 0.31   | 3.4e-03  | 6      | 0.77   | 9.2e-05   |
-| GO:0018094 | protein polyglycylation               | 2      | 0.15   | 9.3e-03  | 4      | 0.37   | 3.9e-04   |
-| GO:1901571 | fatty acid derivative transport       | 3      | 0.45   | 9.7e-03  | 6      | 1.12   | 7.6e-04   |
-| GO:0002576 | platelet degranulation                | 3      | 0.48   | 1.2e-02  | 6      | 1.20   | 1.1e-03   |
-| GO:0008152 | metabolic process                     | 40     | 36.9   | 1.3e-02  | 108    | 92.6   | 2.3e-09   |
-| GO:0098656 | monoatomic anion transmembrane transp.| 5      | 1.68   | 2.5e-02  | 10     | 4.22   | 9.1e-03   |
-| GO:0040040 | thermosensory behavior                | 2      | 0.26   | 2.6e-02  | 12     | 0.64   | 1.6e-13   |
-| GO:0036270 | response to diuretic                  | 2      | 0.27   | 2.8e-02  | 12     | 0.67   | 3.0e-13   |
-| GO:0007618 | mating                                | 4      | 1.26   | 3.7e-02  | 10     | 3.17   | 1.2e-03   |
-| GO:0046717 | acid secretion                        | 3      | 0.77   | 4.0e-02  | 6      | 1.92   | 1.2e-02   |
+
+| GO ID      | Term                                  | M + F sig | M + F exp | M + F p  | AT sig | AT exp | AT p      |
+|------------|---------------------------------------|-----------|------------|-----------|---------|---------|------------|
+| GO:0032310 | prostaglandin secretion               | 3         | 0.31       | 3.4e-03   | 6       | 0.76    | 8.4e-05    |
+| GO:1901571 | fatty acid derivative transport       | 3         | 0.45       | 9.71e-03  | 6       | 1.10    | 7.1e-04    |
+| GO:0018094 | protein polyglycylation               | 2         | 0.16       | 1.06e-02  | 4       | 0.39    | 4.9e-04    |
+| GO:0002576 | platelet degranulation                | 3         | 0.48       | 1.17e-02  | 6       | 1.18    | 1.03e-03   |
+| GO:0008152 | metabolic process                     | 40        | 38.3       | 1.80e-02  | 111     | 94.7    | 1.9e-09    |
+| GO:0040040 | thermosensory behavior                | 2         | 0.27       | 2.84e-02  | 12      | 0.66    | 2.5e-13    |
+| GO:0036270 | response to diuretic                  | 2         | 0.27       | 2.84e-02  | 12      | 0.66    | 2.5e-13    |
+| GO:0098656 | monoatomic anion transmembrane transport | 5      | 1.81       | 3.33e-02  | 10      | 4.46    | 1.33e-02   |
+| GO:0046717 | acid secretion                        | 3         | 0.78       | 4.18e-02  | 6       | 1.92    | 1.18e-02   |
+| GO:0007618 | mating                                | 4         | 1.34       | 4.39e-02  | 10      | 3.31    | 1.6e-03    |
+
+
 
 Plot 1: 
 ![alt text](image-27.png)
 
 The mating term (GO:0007618) and the prostaglandin (GO:0032310) and fatty acid signalling cluster (GO:1901571) are the most biologically interpretable. Finding mating-related functions enriched in both candidate categories independently is the most direct support for the conflict resolution hypothesis. The metabolic process term (GO:0008152) is too broad of a term and is not interpreted directly.
 
-Plot 3b overview (top 8 BP terms per comparison within Male+Female families,
-ordered by p-value; includes shared and unique terms):
+Plot 3b overview (top 8 BP terms per comparison within Male+Female families, ordered by p-value; includes shared and unique terms):
 ![alt text](go_plot3b_BP_overview_MaleFemale.png)
 
-Plot 3a overview (top 8 BP terms per comparison within All three families,
-ordered by p-value; includes shared and unique terms):  
+Plot 3a overview (top 8 BP terms per comparison within All three families, ordered by p-value; includes shared and unique terms):  
 ![alt text](go_plot3a_BP_overview_AllThree.png)
 
-The tables below show terms unique to each category only (not found in the other
-category). The overview plots show the top 8 terms per comparison by p-value
-and include both shared and unique terms.
+The tables below show terms unique to each category only (not found in the other category). The overview plots show the top 8 terms per comparison by p-value and include both shared and unique terms.
 
 **Unique terms for Male + Female:** 
 
-Top unique BP terms for Male+Female families (50 unique terms total):
+Top 10 unique BP terms for Male+Female families (51 unique terms total):
 
 | GO ID      | Term                                              | Sig | Exp  | p         |
 |------------|---------------------------------------------------|-----|------|-----------|
-| GO:0007171 | activation of transmembrane receptor prot. TK     | 5   | 0.12 | 4.9e-08   |
-| GO:0050965 | detection of temperature stimulus (pain)          | 5   | 0.13 | 8.3e-08   |
-| GO:2000273 | positive regulation of signaling receptor act.    | 5   | 0.23 | 2.6e-06   |
-| GO:0061098 | positive regulation of protein tyrosine kinase    | 5   | 0.34 | 1.8e-05   |
-| GO:0060271 | cilium assembly                                   | 12  | 2.30 | 2.9e-05   |
-| GO:0006719 | juvenile hormone catabolic process                | 3   | 0.11 | 1.3e-04   |
+| GO:0007171 | activation of transmembrane receptor protein TK   | 5   | 0.12 | 4.9e-08  |
+| GO:0050965 | detection of temperature stimulus involving pain  | 5   | 0.14 | 1.3e-07  |
+| GO:2000273 | positive regulation of signaling receptor activity| 5   | 0.23 | 2.6e-06  |
+| GO:0061098 | positive regulation of protein tyrosine kinase    | 5   | 0.35 | 2.1e-05  |
+| GO:0060271 | cilium assembly                                   | 12  | 2.35 | 3.2e-05  |
+| GO:0006719 | juvenile hormone catabolic process                | 3   | 0.11 | 1.3e-04  |
+| GO:0009065 | glutamine family amino acid catabolic process     | 3   | 0.23 | 1.51e-03 |
+| GO:0018095 | protein polyglutamylation                         | 2   | 0.06 | 1.62e-03 |
+| GO:0071313 | cellular response to caffeine                     | 2   | 0.06 | 1.62e-03 |
+| GO:0018410 | C-terminal protein amino acid modification        | 2   | 0.06 | 1.62e-03 |
 
-The top two terms (GO:0007171 and GO:0050965) are driven by 10 transcripts across three HOGs: a carboxylesterase family (N0.HOG0009620), a fibrinogen-domain family (N0.HOG0000377) and a TRP channel family (N0.HOG0012871). This confirms that the signal is not specific to one gene fmaily. Cilium assembly could possibly connect to sperm flagella function in beetles. Juvenile hormone catabolism connects to reproductive maturation timing.
+The top two terms (GO:0007171 and GO:0050965) are driven by 10 transcripts across three HOGs: a carboxylesterase family (N0.HOG0009620), a fibrinogen-domain family (N0.HOG0000377) and a TRP cation channel family (N0.HOG0012871). This confirms that the signal is not specific to one gene fmaily.   
+Cilium assembly could possibly connect to sperm flagella function in beetles. Juvenile hormone catabolism connects to reproductive maturation timing.
 
 **Unique terms for All three:**  
-Top unique BP terms for All three families (124 unique terms total, excluding the
-single-HOG detoxification signal):
+Top 10 unique BP terms for All three families (126 unique terms total):
 
-| GO ID      | Term                                              | Sig | Exp  | p         |
-|------------|---------------------------------------------------|-----|------|-----------|
-| GO:0048252 | lauric acid metabolic process                     | 12  | 0.32 | 7.7e-20   |
-| GO:0006012 | galactose metabolic process                       | 13  | 0.75 | 5.0e-14   |
-| GO:0042811 | pheromone biosynthetic process                    | 9   | 0.27 | 5.1e-14   |
-| GO:0031000 | response to caffeine                              | 12  | 0.67 | 3.0e-13   |
-| GO:0002118 | aggressive behavior                               | 12  | 0.69 | 5.4e-13   |
-| GO:0033227 | dsRNA transport                                   | 11  | 0.67 | 1.0e-11   |
-| GO:0046693 | sperm storage                                     | 9   | 0.40 | 2.3e-11   |
-| GO:0046008 | regulation of female receptivity, post-mating     | 9   | 0.40 | 2.3e-11   |
+| GO ID      | Term                              | Sig | Exp  | p         |
+|------------|-----------------------------------|-----|------|-----------|
+| GO:0017143 | insecticide metabolic process     | 15  | 0.58 | 5.0e-20  |
+| GO:0048252 | lauric acid metabolic process     | 12  | 0.32 | 6.5e-20  |
+| GO:0046680 | response to DDT                   | 15  | 0.58 | 1.3e-19  |
+| GO:0006012 | galactose metabolic process       | 13  | 0.74 | 4.2e-14  |
+| GO:0045455 | ecdysteroid metabolic process     | 13  | 0.87 | 8.3e-14  |
+| GO:0042811 | pheromone biosynthetic process    | 9   | 0.29 | 2.4e-13  |
+| GO:0031000 | response to caffeine              | 12  | 0.66 | 2.5e-13  |
+| GO:0002118 | aggressive behavior               | 12  | 0.74 | 1.4e-12  |
+| GO:0033227 | dsRNA transport                   | 11  | 0.66 | 8.8e-12  |
+| GO:0046693 | sperm storage                     | 9   | 0.39 | 2.0e-11  |
 
 Pheromone biosynthesis, sperm storage and regulation of female post-mating receptivity are three terms representing two sides of the same post-mating conflict. Finding them enriched in families where paralogs split into male-biased, female-biased and unbiased copies could be consistent with duplication resolving antagonism over reproductive gene expression.
+
+Significant BP GO-terms were supported by transcripts from 20/55 AT HOGs and 21/36 M+F HOGs, indicating the enrichment signal is distributed across independent gene families. 
 
 ### MF (Molecular Function) results:
 
@@ -761,7 +773,7 @@ Plot 2a: Male terms:
 ![alt text](go_plot2a_MF_AllThree_maleCopies.png)  
 
 Male-biased copies were uniquely enriched for odorant binding (GO:0005549, 4 obs vs 0.12 exp), electron transfer
-activity (GO:0009055, 9 obs vs 0.73 exp) and lipid metabolism activities including triacylglycerol lipase and acylcarnitine hydrolase, connecting to pheromone production and male-specific metabolic functions. 
+activity (GO:0009055, 9 obs vs 0.76 exp) and lipid metabolism activities including triacylglycerol lipase and acylcarnitine hydrolase, connecting to pheromone production and male-specific metabolic functions. 
 
 Plot 2b: Female terms: 
 ![alt text](go_plot2b_MF_AllThree_femaleCopies.png)  
@@ -769,7 +781,7 @@ Plot 2b: Female terms:
 Female-biased copies were uniquely enriched for cytoskeletal organisation (actin binding, microtubule binding, myosin binding), protein folding chaperone activity (GO:0044183, 4 obs vs 0.13 exp), protein kinase C inhibitor activity (GO:0008426, 4 obs vs 0.06 exp) and juvenile hormone esterase activity (GO:0004453), pointing to roles in oocyte development and post-mating female regulatory control.
 
 **MF for Male + Female:**   
-Directional MF analysis was also run for Male + Female families which has smaller subsets (58 male, 48 female transcripts) which makes this more unreliable. Male biased copies only had 2 unique terms: voltage-gated (GO:0005245) and intracellularly gated (GO:0015278) calcium channel activity, consistent with roles in sperm motility and neuromuscular signalling. Female-biased copies returned 5 unique terms, 4 of whichare the same prostaglandin dehydrogenase and ATPase ion transporter cluster foundin the All three female directional analysis. Female-biased copies in conflict families converge on the same molecular functions regardless of whether their family also contains unbiased copies. Male-biased copies show no such overlap across the two categories.
+Directional MF analysis was also run for Male + Female families which has smaller subsets (61 male, 50 female transcripts) which makes this more exploratory. Male biased copies only had 3 unique terms: voltage-gated (GO:0005245) and intracellularly gated (GO:0015278) calcium channel activity, and monoatomic ion-gated channel activity (GO:0022839), consistent with roles in sperm motility and neuromuscular signalling. Female-biased copies returned 5 unique terms, 3 of which are the same prostaglandin dehydrogenase and ATPase ion transporter cluster foundin the All three female directional analysis. Female-biased copies in conflict families converge on the same molecular functions regardless of whether their family also contains unbiased copies. Male-biased copies show no such overlap across the two categories.
 
 **Conclusion:**   
 Taken together, conflict-candidate families are enriched for mating, pheromone and reproductive signalling functions at both the process and molecular activity level. Within these families, male and female copies diverged toward distinct molecular
