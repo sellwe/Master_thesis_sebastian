@@ -707,8 +707,6 @@ The 10 shared terms with observed and expected counts from both categories:
 | GO:0046717 | acid secretion                        | 3         | 0.78       | 4.18e-02  | 6       | 1.92    | 1.18e-02   |
 | GO:0007618 | mating                                | 4         | 1.34       | 4.39e-02  | 10      | 3.31    | 1.6e-03    |
 
-
-
 Plot 1: 
 ![alt text](image-27.png)
 
@@ -760,7 +758,17 @@ Top 10 unique BP terms for All three families (126 unique terms total):
 
 Pheromone biosynthesis, sperm storage and regulation of female post-mating receptivity are three terms representing two sides of the same post-mating conflict. Finding them enriched in families where paralogs split into male-biased, female-biased and unbiased copies could be consistent with duplication resolving antagonism over reproductive gene expression.
 
-Significant BP GO-terms were supported by transcripts from 20/55 AT HOGs and 21/36 M+F HOGs, indicating the enrichment signal is distributed across independent gene families. 
+| transcript_id | baseMean | log2FC | padj         | sex-bias | age rank |
+|----------------|----------:|--------:|-------------:|-----------|----------:|
+| g19630.t2 | 138.8602  | 0.6202   | 5.781303e-02  | Unbiased  | 2 |
+| g15933.t1 | 1269.5409 | 1.1206   | 1.867702e-40  | Male | 6 |
+| g20940.t1 | 2397.1350 | 1.0849   | 9.294577e-56  | Male | 6 |
+| g22070.t1 | 3007.0653 | 1.0521   | 2.612793e-50  | Male | 6 |
+| g6684.t1  | 4823.5996 | 1.3072   | 1.032407e-49  | Male | 8 |
+| g6685.t1  | 1281.0497 | 1.7221   | 3.325443e-33  | Male | 8 |
+| g20941.t1 | 462.0525  | -5.2934  | 6.450252e-102 | Female | 9 |
+| g20942.t1 | 1358.5225 | -1.9586  | 1.118447e-100 | Female | 9 |
+| g26020.t1 | 853.2762  | -1.8160  | 7.188168e-33  | Female | 9 |
 
 ### MF (Molecular Function) results:
 
