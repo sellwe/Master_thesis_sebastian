@@ -525,7 +525,7 @@ All sex-bias analyses are restricted to birth_type = duplication only. All mrca_
  ### Three size definitions are used throughout
 
 - genome: all annotated C. maculatus transcripts (duplication + mrca_inferred) per HOG
-- mapped: transcripts with Salmon read evidence before expression filtering
+- mapped: transcripts with Salmon read evidence with least 1 read in at least 1 sample
 - expressed: transcripts passing the ≥5 counts in ≥5 samples filter
 
 The genome-level size reflects the true family size and is used as the primary size variable in most analyses. Using expressed size alone would underestimate family context: the largest expressed family has 28 members, but in reality those are only the expressed genes of a much larger family. 
@@ -535,7 +535,7 @@ The genome-level size reflects the true family size and is used as the primary s
 | Level     | Total duplicates | With HOG assignment | Without HOG (excluded) |
 | --------- | ---------------- | ------------------- | ---------------------- |
 | Genome    | 20,976           | 20,953              | 23                     |
-| Mapped    | 19,965           | 19,943              | 22                     |
+| Mapped    | 15,787           | 15,766              | 21                     |
 | Expressed | 9,329            | 9,319               | 10                     |
 
 The excluded transcripts have a valid OG but no HOG assignment. These are genes OrthoFinder placed in an orthogroup but flagged as phylogenetically misplaced during gene tree reconciliation. They are excluded from all family-level analyses and can be found in Phylogenetically_Misplaced_Genes in the OrthoFinder results directory in UPPMAX.
@@ -545,7 +545,7 @@ The excluded transcripts have a valid OG but no HOG assignment. These are genes 
 | Level     | Total families | Families ≥ 2 members | Families with 1 member | Max size | Median size |
 | --------- | -------------- | -------------------- | ---------------------- | -------- | ----------- |
 | Genome    | 12,173         | 4,247                | 7,926                  | 92       | 1           |
-| Mapped    | 12,173         | 4,153                | 8,020                  | 78       | 1           |
+| Mapped    | 11,491         | 3,507                | 7,984                  | 73       | 1           |
 | Expressed | 10,352         | 2,588                | 7,764                  | 28       | 1           |
 
 The median family size is 1 at all levels. This reflects that most HOGs in C. maculatus contain a single gene, either one conserved copy or one duplicated copy with no surviving paralogs. Multi-member families (size ≥ 2) are the biologically informative subset and the focus of all downstream analyses.
@@ -561,7 +561,7 @@ Most families are really small (less than 5 members) at all levels. The sizes of
 ### Proportion of mapped and expressed transcripts by genome family size 
 Bars show all transcripts per family (duplication + mrca_inferred) classified by expression level. The x-axis uses genome-level family size as the reference, so each bar reflects the true genomic context of that size class.
 
-![alt text](image-24.png)
+![alt text](image-24.png)  
 Most transcripts are mapped but not expressed across all family sizes. On average 24.1% of transcripts in a given size class are expressed. The proportion is highest in the smallest families which also has the most amount of transcripts within them. After size 15 there is much fewer transcripts in total making the estimates more noisy. 
 
 ### Transcript-level sex-bias by gene family size 
@@ -628,10 +628,9 @@ Age ranks were assigned as described in the Annotation section using gene tree t
 | Dataset              | Transcripts (duplication only) | Age rank coverage |
 |----------------------|--------------------------------|-------------------|
 | Full annotation      | 20,953                         | 100%              |
-| Mapped (pre-filter)  | 19,943                         | 100%              |
+| Mapped (pre-filter)  | 15,766                         | 100%              |
 | Expressed            | 9,319                          | 100%              |
 | Significantly DE     | 4,142                          | 100%              |
-
 
 ### Age rank distribution of duplicates across dataset levels
 ![alt text](image-19.png)
