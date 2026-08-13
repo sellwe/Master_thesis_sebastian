@@ -1,11 +1,11 @@
 #!/bin/bash
-#SBATCH -A uppmax2025-2-148
+#SBATCH -A uppmax2025-2-148 #change to the current UPPMAX settings (done before pelle)
 #SBATCH -p core
 #SBATCH -n 16
 #SBATCH -t 48:00:00
 #SBATCH -J run_eggnog
 #SBATCH --mail-type=ALL
-#SBATCH --mail-user=sebastian.ellwe.1520@student.uu.se
+#SBATCH --mail-user=sebastian.ellwe.1520@student.uu.se #change to your email 
 #SBATCH --output=%x.%j.out
 
 module load bioinfo-tools 

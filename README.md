@@ -1,5 +1,10 @@
 # Master_thesis_sebastian
 
+This repositry contains the scripts used for the thesis found here:  
+https://www.diva-portal.org/smash/record.jsf?dswid=-9750&pid=diva2%3A2076128&c=1&searchType=SIMPLE&language=en&query=sebastian+ellwe&af=%5B%5D&aq=%5B%5B%5D%5D&aq2=%5B%5B%5D%5D&aqe=%5B%5D&noOfRows=50&sortOrder=author_sort_asc&sortOrder2=title_sort_asc&onlyFullText=false&sf=all
+
+The code contains exact commands and parameters that I used. Remember to change the SLURM setting and hard coded paths to your own projects. 
+
 ## Repository Structure
 
 Master_thesis_sebastian/  

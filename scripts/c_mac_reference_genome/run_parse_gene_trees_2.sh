@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH -A uppmax2026-1-8
+#SBATCH -A uppmax2026-1-8 #change to the current UPPMAX settings (done before pelle)
 #SBATCH -p pelle
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH -t 06:00:00
-#SBATCH -J parse_gene_tree_birth_nodes_2
+#SBATCH -J parse_gene_tree_birth_nodes_2 
 #SBATCH --mail-type=ALL
 #SBATCH --output=%x.%j.out
 #SBATCH --mem=16G
