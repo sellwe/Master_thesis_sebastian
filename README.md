@@ -47,14 +47,16 @@ From the paper ["Y-Linked Copy Number Polymorphism of Target of Rapamycin Is Ass
 ### Annotations  
 Scripts titled _unfiltered are based on the non-isoform filtered annotation.
 
-**Source files:**  
+**Original source files:**  
 | Softlinked File Name | Source path |
 |------|-------------|
-| C_maculatus_annotation_nonfiltered.gtf | /proj/naiss2023-6-65/Milena/annotation_pipeline/only_orthodb_annotation/C_maculatus/braker/braker.gtf |
-| C_maculatus_annotation_isoform_filtered.gff | /proj/naiss2023-6-65/Milena/annotation_pipeline/only_orthodb_annotation/C_maculatus/braker/braker_isoform_filtered.gff |
-| braker_proteins.fa | /proj/naiss2023-6-65/Milena/annotation_pipeline/only_orthodb_annotation/C_maculatus/braker/braker.aa |
-| C_maculatus_assembly.fna | /proj/naiss2023-6-65/Milena/annotation_pipeline/only_orthodb_annotation/C_maculatus/assembly_genomic.fna.masked |
-| OrthoFinder results | /proj/naiss2023-6-65/Milena/gene_family_analysis/orthofinder_orthoDB_TE_filtered/Results_May27/ |
+| C_maculatus_annotation_nonfiltered.gtf | /proj/coleoptera-genomics-2025/snic2021-6-30/Milena/annotation_pipeline/only_orthodb_annotation/C_maculatus/braker/braker.gtf |
+| C_maculatus_annotation_isoform_filtered.gff | /proj/coleoptera-genomics-2025/snic2021-6-30/Milena/annotation_pipeline/only_orthodb_annotation/C_maculatus/braker/braker_isoform_filtered.gff |
+| braker_proteins.fa | /proj/coleoptera-genomics-2025/snic2021-6-30/Milena/annotation_pipeline/only_orthodb_annotation/C_maculatus/braker/braker.aa |
+| C_maculatus_assembly.fna | /proj/coleoptera-genomics-2025/snic2021-6-30/Milena/annotation_pipeline/only_orthodb_annotation/C_maculatus/assembly_genomic.fna.masked |
+| OrthoFinder results folder | /proj/coleoptera-genomics-2025/snic2021-6-30/Milena/gene_family_analysis/orthofinder_orthoDB_TE_filtered/Results_May27/ |
+
+(The softlinks in my repository be outdated since the move to Pelle, but the paths above points to the current location)
 
 <br>
 <details>
@@ -75,7 +77,9 @@ After the mapping softwares were finished a final gff3 file was created for merg
 </details> 
 <br>
 <details>
-<summary><b>Chromosomal locations:</b></summary>
+<summary><b>Chromosomal locations (future reference):</b></summary>
+
+I didnt use these in my project, but here is some information i gathered:
 
 Each transcript was assigned a chromosomal location based on known X, Y and autosomal contigs. Contigs shorter than 100 kb were excluded to only use "true" autosomes, consistent with the paper. Unassigned contigs are labeled U.    
 Sex chromosome contigs had previously been identified to:  
@@ -90,7 +94,7 @@ y_contigs <- c(
 
 **Location summary:**
 
-| Location | All transcripts | After expression filtering | Duplicates only | Expressed duplicates |
+| Location | All transcripts | After expression filtering | Paralogs only | Expressed paralogs |
 |---|---|---|---|---|
 | Autosomal | 28,651 | 16,630 | 16,177 | 8,574 |
 | X-linked | 1,827 | 719 | 1,063 | 281 |
@@ -111,6 +115,8 @@ Gene age ranks were assigned by traversing the OrthoFinder resolved gene trees o
 - Species Tree Node: Contains the entire phylogeny, species tree nodes (ex. N2), and branch lenghts. 
 - Duplications.tsv: Contains all duplication events in the phylogeny. Translates each orthogroups gene nodes (ex. n3) to the corresponding Species Tree nodes (ex. N2), positioning the families events in evolutionary history.  
 -  Revolved Gene Tree Files (one per orthogroup): For each gene in the tree, move one step from the leaf node and count the gene duplication node (ex. n3).   
+The original result files used stem from the OrhtoFinder run found in:  
+/proj/coleoptera-genomics-2025/snic2021-6-30/Milena/gene_family_analysis/orthofinder_orthoDB_TE_filtered/Results_May27/ on UPPMAX 
 
 If no duplication event is found for a gene, but it belongs to an orthogroup and has orthologs in other species, it gets the age rank of the MRCA of all species that share this orthogroup, which is the oldest documented existence of this gene. Note that intermediate gene loss can make a gene appear older than it is, but still more valuable than assigning everything to rank 1.  
 
@@ -136,13 +142,12 @@ Age ranks were mapped to nodes along the C_maculatus lineage in SpeciesTree from
 | N12                    | 0.697                | 0.036         | 8        |
 | C_maculatus (tip)      | 0.759                | 0.062         | 9        | 
 
+**Phylogeny with age ranks mapped onto each node**
 ![Phylogeny with age ranks mapped onto each node](images/phylogeny_with_age_ranks.png)
 
-
-
 **All duplication events in the C.mac lineage:**  
-![alt text](image-1.png)
-All recorded events from the DUplications.tsv file, transcripts here can appear many times. Already indicates that most duplication evens occurr in C. mac after the split with C. chinensis. 
+![All duplication events in the C.mac lineage:](images/appendix_h_all_dup_events.svg)
+All recorded events from the Duplications.tsv file, transcripts here can appear many times. Already indicates that most duplication evens occurr in C. mac after the split with C. chinensis. 
 
 **Note on Isoforms**  
 OrthoFinder was run on an isoform-filtered proteome, keeping the longest isoform per gene as a representative. This is most often the .t1 transcript but can be .t2, .t3 etc. 
@@ -198,11 +203,10 @@ Note the drop in rank 1 and 2 after filtering for duplication only shows where m
 
 Since this project focuses on paralogs and duplications only, age rank analyses are restricted to transcripts with birth_type = duplication.
 
-
-
 </details>
 <br>
-The structural annotation, eggNOG results and OrthoFinder output (N0.tsv) were merged in R to produce the full annotation table (**create_full_annotation_fixed.R**). 
+
+The structural annotation, eggNOG results and OrthoFinder results were merged in R to produce the full annotation table (**create_full_annotation_fixed_2.R**). 
 
 <br>
 <details>
@@ -210,7 +214,7 @@ The structural annotation, eggNOG results and OrthoFinder output (N0.tsv) were m
 
 
 ### Related species
-Out of curiosity, the same rank approach was applied to five related species using (**add_age_related_species.R**):  
+Out of curiosity, the same rank approach was applied to five related species using (**add_age_related_species_fixed.R**):  
 * Coccinella septempunctata
 * Tribolium castaneum
 * Acanthoscelides obtectus
@@ -218,7 +222,7 @@ Out of curiosity, the same rank approach was applied to five related species usi
 * Callosobruchus chinensis 
 
 All species annotation files (braker.gtf) from their respective folder in:  
-/proj/naiss2023-6-65/Milena/annotation_pipeline/only_orthodb_annotation/
+/proj/coleoptera-genomics-2025/snic2021-6-30/Milena/annotation_pipeline/only_orthodb_annotation/
 
 Script function: builds a lineage specific age table for each species by walking its path through the shared species tree, then joins gene tree birth nodes from transcript_birth_nodes.tsv to assign age ranks. Since transcript_birth_nodes.tsv covers all species in the phylogeny, no additional UPPMAX jobs were needed, and deeper age rank analyses with all species are available in the fututre. 
 
@@ -232,7 +236,7 @@ The same pattern is seen for C. septempunctata, A. obtectus and C. chinensis. T.
 
 ## RNA-Seq Data
 
-The dataset comes from the paper "Sex-Specific Dominance of Gene Expression in Seed Beetles" by Kaufmann et.al 2024. It provides sex-specific expression data across multple genotypes (will be accounted for). 
+The dataset comes from the paper ["Sex-Specific Dominance of Gene Expression in Seed Beetles"](https://academic.oup.com/mbe/article/41/12/msae244/7927672) by Kaufmann et.al 2024. It provides sex-specific expression data across multple genotypes (will be accounted for). 
 
 - 10 gen full sib inbred lines, Lomé Population  
 - Three pairwise crosses of six isogenic lines.  
@@ -241,18 +245,21 @@ The dataset comes from the paper "Sex-Specific Dominance of Gene Expression in S
 - 3 replicates per genotypes per sexes, 24 samples per cross, 72 samples in total.  
 - Each sample consists of RNA extracted from abdominal tissues from a pool of 6 virgin beetle abdomens.  
 
-The data was downloaded from https://www.ncbi.nlm.nih.gov/Traces/study/?acc=PRJEB70958&o=acc_s%3Aa with the script (**download_PRJEB70968.sh**).   
+The dataset [found here](https://www.ncbi.nlm.nih.gov/Traces/study/?acc=PRJEB70958&o=acc_s%3Aa) was downloaded with the script (**download_PRJEB70958.sh**).   
 
-Run FastQC and MultiQC (**run-fastqc_multiqc.sh**)  
+**Quality control scripts:**   
+Run FastQC and MultiQC (**run_fastqc_multiqc.sh**)  
 Run fastp for trimming (**run_fastp_multiqc.sh**)  
 Run fastqc and multiqc again to confirm improvements (**run_fastqc_multiqc_post_trim.sh**).
 
-### Metadata
+<br>
+<details>
+<summary><b>Metadata:</b></summary>
 
-The metadata was found from the same SRA website with accesion-nr PREJB70958.  
+The metadata was found from the same SRA website with accession-nr PREJB70958.  
 The original metadata from the study is found in **Philipp_dominance_metafile.xlsx** and **Philipp_dominance_notes_meta.pdf**.   
 
-Label-corrected metadata is in **dominance_meta_corrected.xlxs** (all 72 entries), and **dominance_meta_corrected_outlier_corrected.xlsx** and **dominance_meta_corrected_outlier_corrected.csv** (where the outliers are removed).   
+Label-corrected metadata is in **dominance_meta_corrected.xlxs** (all 72 entries), and **dominance_meta_corrected_outlier_corrected.xlsx** and **dominance_meta_corrected_outlier_corrected.csv** (where the 2 outliers are removed).   
 
 **Sex-correction:** Sample sexes were determined by linking original FASTQ filenames submitted to SRA (ex. TF-2581-3_S3_L001_R1_001.fastq.gz) to the TF ID in the original Excel file, which has the correct sexes in the Sex column.  
 
@@ -275,13 +282,16 @@ Label-corrected metadata is in **dominance_meta_corrected.xlxs** (all 72 entries
 Reciprocal crosses were collapsed into a single Genotype column (AB + BA = AB), as cross direction did not affect results in the original study. Genotype is treated as a background variable in the differential expression analysis.
 
 **Outlier correction:** After PCA visualization one sample (ERR12383283, DD) was changed from male to female due to clustering. Two samples were removed due to ambiguous sex:   
-ERR12383297 (male, FE) and   ERR12383303 (male, EF). 
+ERR12383297 (male, FE) and ERR12383303 (male, EF). 
 Three remaining samples are suspected of ambigous sex as they stray from the respective clusters in the PCA, but are kept (ERR12383254 (female, BA), ERR12383278 (male, AA), ERR12383310 (male, FF)). 
 
 Final sample count: 70 samples, of whom 37 are female, and 33 are male. 
 
-**Early PCA plot indicating outliers:**
-![alt text](<Screenshot 2025-12-12 140934.png>) 
+**Early PCA plot indicating outliers:**  
+![PCA plot showing sex-mismatched samples before correction](images/early_pca_indicating_outliers.png)
+
+</details>
+<br>
 
 # Mapping methods
 
