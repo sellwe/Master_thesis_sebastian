@@ -1,9 +1,6 @@
 # Master_thesis_sebastian
 
-This repositry contains the scripts used for the thesis found here:  
-https://www.diva-portal.org/smash/record.jsf?dswid=-9750&pid=diva2%3A2076128&c=1&searchType=SIMPLE&language=en&query=sebastian+ellwe&af=%5B%5D&aq=%5B%5B%5D%5D&aq2=%5B%5B%5D%5D&aqe=%5B%5D&noOfRows=50&sortOrder=author_sort_asc&sortOrder2=title_sort_asc&onlyFullText=false&sf=all
-
-The code contains exact commands and parameters that I used. Remember to change the SLURM setting and hard coded paths to your own projects. 
+This repositry contains the scripts used for the thesis [found here:](https://www.diva-portal.org/smash/record.jsf?dswid=-9750&pid=diva2%3A2076128&c=1&searchType=SIMPLE&language=en&query=sebastian+ellwe&af=%5B%5D&aq=%5B%5B%5D%5D&aq2=%5B%5B%5D%5D&aqe=%5B%5D&noOfRows=50&sortOrder=author_sort_asc&sortOrder2=title_sort_asc&onlyFullText=false&sf=all)
 
 ## Repository Structure
 
@@ -14,7 +11,8 @@ Master_thesis_sebastian/
 ├── analysis/ # Statistical analysis and visualization  
 │ ├── r/ # R scripts   
 │ └── python/ # Python scripts for plotting and additional analysis  
-├── metadata/ # Sample metadata and information  
+├── metadata/ # Sample metadata and information 
+├── images/   #
 ├── .gitignore # Files to exclude from version control  
 └── README.md # This file  
 
@@ -34,9 +32,9 @@ Some research questions to be answered:
 
 # Datasets
 
-## Reference Genome
+## Reference Genome 
 
-The reference genome comes from the paper "Y-Linked Copy Number Polymorphism of Target of Rapamycin Is Associated with Sexual Size Dimorphism in Seed Beetles" by Kaufmann et. al 2023. Male virgin C_maculatus abdominal tissue samples from the Lomé population. I am using the small male Y haplotype assembly from the paper, as it is more continuous, and the small Y haplotype is the most abundant haplotype in the population. 
+From the paper ["Y-Linked Copy Number Polymorphism of Target of Rapamycin Is Associated with Sexual Size Dimorphism in Seed Beetles"](https://academic.oup.com/mbe/article/40/8/msad167/7227908) by Kaufmann et. al 2023. Samples from male virgin C. macualtus abdominal tissues. The small male Y haplotype assembly used here. 
 
 **Summary:**
 | Metric        | Value   |
@@ -46,7 +44,7 @@ The reference genome comes from the paper "Y-Linked Copy Number Polymorphism of 
 | Repeats      | 72%     |
 | Y assembled  | 10 Mbp  |
 
-## Annotations  
+### Annotations  
 Scripts titled _unfiltered are based on the non-isoform filtered annotation.
 
 **Source files:**  
@@ -58,7 +56,10 @@ Scripts titled _unfiltered are based on the non-isoform filtered annotation.
 | C_maculatus_assembly.fna | /proj/naiss2023-6-65/Milena/annotation_pipeline/only_orthodb_annotation/C_maculatus/assembly_genomic.fna.masked |
 | OrthoFinder results | /proj/naiss2023-6-65/Milena/gene_family_analysis/orthofinder_orthoDB_TE_filtered/Results_May27/ |
 
-### Structural annotation:  
+<br>
+<details>
+<summary><b>Structural annotation:</b></summary>
+
 C_maculatus_annotation_nonfiltered.gtf was converted to a gff3 file using:   
 agat_convert_sp_gxf2gxf.pl \  
     --gxf C_maculatus_annotation_nonfiltered.gtf \  
@@ -67,11 +68,15 @@ agat_convert_sp_gxf2gxf.pl \
 Then, since STAR requires a gtf file to be run, this gff3 file was converted back to a .gtf file using:  
 gffread braker_unfiltered.gff3 -T -o C_maculatus_annotation_unfiltered_fixed.gtf 
 
-This standardizes BRAKER attribute formatting and ensures consistent transcript_id fields across all features. The resulting C_maculatus_annotation_unfiltered_fixed.gtf was used consistently for the STAR index and Salmon transcriptome.(why some scripts are named _consistent).  
+This standardizes BRAKER attribute formatting and ensures consistent transcript_id fields across all features. The resulting C_maculatus_annotation_unfiltered_fixed.gtf was used consistently for the STAR index and Salmon transcriptome (why some scripts are named _consistent).  
 
-After the mapping softwares were finished a final gff3 file was created for merging with the functional annotation and downstream comparative genomic analyses (gff is easier to handle) (**run_agat_gtf_to_gff3.sh**). 
+After the mapping softwares were finished a final gff3 file was created for merging with the functional annotation and downstream comparative genomic analyses (C_maculatus_annotation_unfiltered.gff3) (gff is easier to handle) (**run_agat_gtf_to_gff3.sh**). 
 
-Chromosomal locations: 
+</details> 
+<br>
+<details>
+<summary><b>Chromosomal locations:</b></summary>
+
 Each transcript was assigned a chromosomal location based on known X, Y and autosomal contigs. Contigs shorter than 100 kb were excluded to only use "true" autosomes, consistent with the paper. Unassigned contigs are labeled U.    
 Sex chromosome contigs had previously been identified to:  
 x_contigs <- c(
@@ -92,22 +97,16 @@ y_contigs <- c(
 | Y-linked | 334 | 76 | 249 | 47 |
 | Unassigned | 7,176 | 148 | 2,537 | 87 |
 
-**Multiple Isoform distribution:**  
-| Number of isoforms | Number of genes |
-|--------------------|-----------------|
-| 2                  | 1,989           |
-| 3                  | 201             |
-| 4                  | 28              |
-| 5                  | 6               |
+</details> 
+<br>
 
-2,224 genes have multiple isoforms in total, resulting in 2,499 extra transcripts in this data (non-representative isoforms).   
-
-### Functional annotation:  
+**Functional annotation:**    
 eggNOG-mapper was run on the BRAKER protein sequences to assign functional annotation including GO terms, KEGG pathways, COG categories and PFAM domains (**run_eggnog.sh**). 
 
-### Orthology Inference:    
-The structural annotation, eggNOG results and OrthoFinder output (N0.tsv) were merged in R to produce the full annotation table (**create_full_annotation_fixed.R**). 
 
+<details>
+<summary><b>Orthology Inference:</b></summary>
+  
 Gene age ranks were assigned by traversing the OrthoFinder resolved gene trees on UPPMAX (**parse_gene_trees_birth_nodes_2.py**, run via **run_parse_gene_trees_2.sh**). The script runs on the full OrthoFinder dataset and assigns a birth node to every gene across all species, which can be used for future studies of this phylogeny. Uses three different files:   
 - Species Tree Node: Contains the entire phylogeny, species tree nodes (ex. N2), and branch lenghts. 
 - Duplications.tsv: Contains all duplication events in the phylogeny. Translates each orthogroups gene nodes (ex. n3) to the corresponding Species Tree nodes (ex. N2), positioning the families events in evolutionary history.  
@@ -137,15 +136,26 @@ Age ranks were mapped to nodes along the C_maculatus lineage in SpeciesTree from
 | N12                    | 0.697                | 0.036         | 8        |
 | C_maculatus (tip)      | 0.759                | 0.062         | 9        | 
 
-**Phylogeny with age ranks:**
-![alt text](image-3.png)
+![Phylogeny with age ranks mapped onto each node](images/phylogeny_with_age_ranks.png)
+
+
 
 **All duplication events in the C.mac lineage:**  
 ![alt text](image-1.png)
 All recorded events from the DUplications.tsv file, transcripts here can appear many times. Already indicates that most duplication evens occurr in C. mac after the split with C. chinensis. 
 
 **Note on Isoforms**  
-OrthoFinder was run on an isoform-filtered proteome, keeping the longest isoform per gene as a representative. This is most often the .t1 transcript but can be .t2 or higher. Only the representiative isoform per gene recieves an Orthogroup, Hierarchical Orthogroup (HOG) and age rank data. All other isoforms retain NA for these column and are excluded from paralog analyses by the HOG and age rank filters.  
+OrthoFinder was run on an isoform-filtered proteome, keeping the longest isoform per gene as a representative. This is most often the .t1 transcript but can be .t2, .t3 etc. 
+
+**Multiple isoform distribution:**  
+| Number of isoforms | Number of genes |
+|--------------------|-----------------|
+| 2                  | 1,989           |
+| 3                  | 201             |
+| 4                  | 28              |
+| 5                  | 6               |
+
+2,224 genes have multiple isoforms in total, resulting in 2,499 extra transcripts in this data (non-representative isoforms). Only the representiative isoform per gene recieves an Orthogroup, Hierarchical Orthogroup (HOG) and age rank data. All other isoforms retain NA for these column and are excluded from paralog analyses by the HOG and age rank filters.  
 
 To confirm that combining the structural non-isoform filtered and isoformiltered OrthoFinder data does not introduce any non-independencies in later analyses, three checks was run: 
 
@@ -154,8 +164,6 @@ To confirm that combining the structural non-isoform filtered and isoformiltered
 | Genes with multiple HOG-assigned isoforms | 0 |
 | Genes with multiple age-rank-assigned isoforms | 0 |
 | Genes with multiple isoforms in full structural annotation | 2,224 |
-
-2,224 genes have have than one isoform, resulting in 2,499 extra rows in the data. But none of these exra isoforms were assigned into a gene family or got an age rank. No gene contributes two independent data points to any paralog analysis.
 
 **Birth type distribution in C.mac**  
 | Birth type                                      | With HOG | Without HOG | Total  |
@@ -190,6 +198,17 @@ Note the drop in rank 1 and 2 after filtering for duplication only shows where m
 
 Since this project focuses on paralogs and duplications only, age rank analyses are restricted to transcripts with birth_type = duplication.
 
+
+
+</details>
+<br>
+The structural annotation, eggNOG results and OrthoFinder output (N0.tsv) were merged in R to produce the full annotation table (**create_full_annotation_fixed.R**). 
+
+<br>
+<details>
+<summary><b>Related species:</b></summary>
+
+
 ### Related species
 Out of curiosity, the same rank approach was applied to five related species using (**add_age_related_species.R**):  
 * Coccinella septempunctata
@@ -208,6 +227,8 @@ Duplicated transcript distributions:
 ![alt text](image-4.png)
 
 The same pattern is seen for C. septempunctata, A. obtectus and C. chinensis. T.castaneum and B. siliquastri does not share the pattern. Hypothesis being that large and repetitive genomes lead to gene family expansion through TEs. 
+
+</details>
 
 ## RNA-Seq Data
 

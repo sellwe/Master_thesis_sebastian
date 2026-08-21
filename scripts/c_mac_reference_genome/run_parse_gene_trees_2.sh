@@ -6,6 +6,7 @@
 #SBATCH -t 06:00:00
 #SBATCH -J parse_gene_tree_birth_nodes_2 
 #SBATCH --mail-type=ALL
+#SBATCH --mail-user=sebastian.ellwe.1520@student.uu.se #change to your email 
 #SBATCH --output=%x.%j.out
 #SBATCH --mem=16G
 

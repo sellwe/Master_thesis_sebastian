@@ -43,8 +43,8 @@ In R: species_tree_birth_node will be merged with node_age_table to get
 age_rank. birth_type shows how each age was determined.
 
 Output columns:
-  transcript_id          : e.g. g6090.t1 (matches annotation)
-  gene_id                : e.g. g6090 (matches annotation)
+  transcript_id          : e.g. g6090.t1 (to match annotation)
+  gene_id                : e.g. g6090 (to match annotation)
   gene_id_raw            : full OrthoFinder gene ID
   species                : species prefix
   orthogroup             : OG identifier
@@ -61,8 +61,10 @@ import io
 from collections import defaultdict
 from Bio import Phylo
 
-# -- Paths ---------------------------------------------------------------------
-RESULTS_DIR  = "/proj/naiss2023-6-65/Sebastian/data/orthofinder/Results_May27"
+# -- Paths to Milenaas OrthoFinder run---------------------------------------------------------------------
+# note that the links to the original folder name might have changed since the move to pelle
+# original folder: /proj/coleoptera-genomics-2025/snic2021-6-30/Milena/gene_family_analysis/orthofinder_orthoDB_TE_filtered/Results_May27
+RESULTS_DIR  = "/proj/naiss2023-6-65/Sebastian/data/orthofinder/Results_May27" 
 TREE_DIR     = os.path.join(RESULTS_DIR, "Resolved_Gene_Trees")
 DUP_FILE     = os.path.join(RESULTS_DIR, "Gene_Duplication_Events", "Duplications.tsv")
 SP_TREE_FILE = os.path.join(RESULTS_DIR, "Species_Tree",
@@ -76,7 +78,7 @@ SEP = "_filtered_proteinfasta_TE_filtered_"
 def get_species(gene_id):
     """
     Extracts the full species prefix from an OrthoFinder gene ID.
-    C_maculatus_filtered_proteinfasta_TE_filtered_C_maculatus_g6090.t1_1
+    Ex: C_maculatus_filtered_proteinfasta_TE_filtered_C_maculatus_g6090.t1_1
     -> C_maculatus_filtered_proteinfasta_TE_filtered
     The species prefix matches the tip label in the species tree.
     """
@@ -88,7 +90,7 @@ def get_species(gene_id):
 
 def clean_transcript_id(gene_id):
     """
-    C_maculatus_filtered_proteinfasta_TE_filtered_C_maculatus_g6090.t1_1
+    Ex: C_maculatus_filtered_proteinfasta_TE_filtered_C_maculatus_g6090.t1_1
     -> g6090.t1
     Same as the R annotation script.
     """
@@ -112,7 +114,9 @@ def clean_transcript_id(gene_id):
 
 
 def get_gene_id(transcript_id):
-    """g6090.t1 -> g6090"""
+    """
+    g6090.t1 -> g6090
+    """
     return transcript_id.split('.')[0]
 
 
